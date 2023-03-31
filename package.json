@@ -1,0 +1,28 @@
+{
+  "name": "type-assurer",
+  "version": "0.0.1",
+  "description": "TypeScript library that provides shorthand type assertions and type guard functions for multiple types.",
+  "repository": "git@github.com:hacomono-lib/type-assurer.git",
+  "author": "uyamanaka <ushio.yamanaka@hacomono.co.jp>",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "vitest",
+    "build": "tsup",
+    "test": "vitest run --coverage",
+    "lint": "eslint --ext .ts .",
+    "format": "prettier --write . --ignore-path=.eslintignore",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.2",
+    "vitest": "^0.29.8"
+  }
+}
