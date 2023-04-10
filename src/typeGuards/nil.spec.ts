@@ -1,5 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { test, expect } from 'vitest'
-import { isNil, assertNil, ensureNil, isNotNil, assertNotNil, ensureNotNil } from '..'
+import {
+  isNil,
+  assertNil,
+  isNotNil,
+  assertNotNil,
+  ensureNotNil,
+  fallbackNotNil
+} from '..'
 
 test('isNil', () => {
   expect(isNil(null)).toBe(true)
@@ -19,16 +27,6 @@ test('assertNil', () => {
   expect(() => assertNil(false)).toThrow()
   expect(() => assertNil({})).toThrow()
   expect(() => assertNil([])).toThrow()
-})
-
-test('ensureNil', () => {
-  expect(ensureNil(null)).toBe(null)
-  expect(ensureNil(undefined)).toBe(undefined)
-  expect(() => ensureNil(0)).toThrow()
-  expect(() => ensureNil('')).toThrow()
-  expect(() => ensureNil(false)).toThrow()
-  expect(() => ensureNil({})).toThrow()
-  expect(() => ensureNil([])).toThrow()
 })
 
 test('isNotNil', () => {
@@ -59,4 +57,14 @@ test('ensureNotNil', () => {
   expect(ensureNotNil(false)).toBe(false)
   expect(ensureNotNil({})).toBe({})
   expect(ensureNotNil([])).toBe([])
+})
+
+test('fallbackNotNil', () => {
+  expect(fallbackNotNil(null, 'fallback')).toBe('fallback')
+  expect(fallbackNotNil(undefined, 'fallback')).toBe('fallback')
+  expect(fallbackNotNil(0, 'fallback')).toBe(0)
+  expect(fallbackNotNil('', 'fallback')).toBe('')
+  expect(fallbackNotNil(false, 'fallback')).toBe(false)
+  expect(fallbackNotNil({}, 'fallback')).toBe({})
+  expect(fallbackNotNil([], 'fallback')).toBe([])
 })

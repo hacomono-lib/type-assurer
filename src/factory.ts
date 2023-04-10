@@ -1,51 +1,53 @@
-
-export type TypeErrorMessage = string | ((target: unknown) => string)
+import {
+  AssertedType,
+  GuardedType,
+  InvertedTypeAssert,
+  InvertedTypeAssertOf,
+  InvertedTypeEnsure,
+  InvertedTypeEnsureOf,
+  InvertedTypeFallback,
+  InvertedTypeGuard,
+  Not,
+  TypeAssert,
+  TypeAssertOf,
+  TypeEnsure,
+  TypeEnsureOf,
+  TypeErrorMessage,
+  TypeFallback,
+  TypeGuard
+} from './type'
 
 function createErrorMessage(value: unknown, message: TypeErrorMessage): string {
-  if (typeof message === "function") {
+  if (typeof message === 'function') {
     return message(value)
   }
   return message
 }
 
 /**
- *
+ * @description create a type guard from a type predicate
+ * @template T
+ * @typeParam type guard
+ * @param guard {T} type guard function
+ * @returns {T} type guard
+ * @example
+ * ```ts
+ * const isString = createGuard((arg: unknown): arg is string => typeof arg === 'string')
+ * ```
  */
-export interface PartialTypeGuard<T, U extends T> {
-  (target: T): target is U
-}
+export function createGuard<T extends TypeGuard>(guard: T): T
 
 /**
- *
+ * @description create a type guard from a type predicate
+ * @template T
+ * @typeParam T - guarded type
+ * @param guard {T} type guard predicate
+ * @returns {TypeGuard<T>} type guard
  */
-export type TypeGuard<T> = PartialTypeGuard<unknown, T>
+export function createGuard<T>(guard: (arg: unknown) => arg is T): TypeGuard<T>
 
-/**
- *
- */
-type GuardedType<T extends PartialTypeGuard<any, unknown>> = T extends PartialTypeGuard<any, infer U> ? U : never
-
-/**
- *
- * @param guard
- */
-export function createGuard<T extends TypeGuard<any>>(guard: T): T;
-
-/**
- *
- * @param guard
- */
-export function createGuard<T>(guard: (arg: unknown) => boolean): TypeGuard<T>;
-
-export function createGuard(guard: (arg: unknown) => boolean): TypeGuard<any> {
-  return guard as TypeGuard<any>
-}
-
-/**
- *
- */
-export interface Not<T extends TypeGuard<any>> {
-  <U>(target: U): target is Exclude<U, GuardedType<T>>
+export function createGuard(guard: (arg: unknown) => boolean): TypeGuard {
+  return guard as TypeGuard<unknown>
 }
 
 /**
@@ -53,61 +55,56 @@ export interface Not<T extends TypeGuard<any>> {
  * @param guard
  * @returns
  */
-export function not<T extends TypeGuard<any>>(guard: T): Not<T> {
+export function not<T extends TypeGuard<unknown>>(guard: T): Not<T> {
   return ((target: unknown) => !guard(target)) as Not<T>
 }
 
-/**
- *
- */
-export interface PartialTypeAssert<T, U extends T> {
-  (target: T, message?: TypeErrorMessage): asserts target is U
-}
+export function createAssertion<T extends TypeGuard>(
+  guard: T,
+  message: TypeErrorMessage
+): TypeAssertOf<T>
 
-/**
- *
- */
-export type TypeAssert<T> = PartialTypeAssert<unknown, T>
+export function createAssertion<T extends TypeGuard>(
+  guard: Not<T>,
+  message: TypeErrorMessage
+): InvertedTypeAssertOf<T>
 
-/**
- *
- */
-type AssertedType<T extends PartialTypeAssert<any, unknown>> = T extends PartialTypeAssert<any, infer U> ? U : never
-
-/**
- *
- * @param guard
- * @param message
- * @returns
- */
-export function createAssertion<T extends TypeGuard<any>>(guard: T, message: TypeErrorMessage): TypeAssert<GuardedType<T>> {
-  return (target: unknown, overrideMessage?: TypeErrorMessage) => {
+export function createAssertion(
+  guard: TypeGuard | InvertedTypeGuard,
+  message: TypeErrorMessage
+): TypeAssert | InvertedTypeAssert {
+  return ((target: unknown, overrideMessage?: TypeErrorMessage) => {
     if (!guard(target)) {
       throw new TypeError(createErrorMessage(target, overrideMessage ?? message))
     }
-  }
+  }) as TypeAssert | InvertedTypeAssert
 }
 
-/**
- *
- */
-export interface PartialTypeEnsure<T, U extends T> {
-  <A extends T>(target: A, message?: TypeErrorMessage): A extends U ? U : never
-}
+export function createEnsure<T extends TypeGuard>(assert: TypeAssertOf<T>): TypeEnsureOf<T>
 
-/**
- *
- */
-export type TypeEnsure<T> = PartialTypeEnsure<unknown, T>
+export function createEnsure<T extends TypeGuard>(
+  assert: InvertedTypeAssertOf<T>
+): InvertedTypeEnsureOf<T>
 
-/**
- *
- * @param assert
- * @returns
- */
-export function createEnsure<T extends TypeAssert<any>>(assert: T): TypeEnsure<AssertedType<T>> {
-  return (target: unknown, overrideMessage?: TypeErrorMessage) => {
+export function createEnsure(
+  assert: TypeAssert | InvertedTypeAssert
+): TypeEnsure | InvertedTypeEnsure {
+  return ((target: unknown, overrideMessage?: TypeErrorMessage) => {
     assert(target, overrideMessage)
-    return target as AssertedType<T>
-  }
+    return target
+  }) as TypeEnsure | InvertedTypeEnsure
+}
+
+export function createFallback<T extends TypeGuard>(guard: T): TypeFallback<GuardedType<T>>
+export function createFallback<T extends TypeGuard>(
+  guard: Not<T>
+): InvertedTypeFallback<GuardedType<T>>
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createFallback(
+  guard: TypeGuard | InvertedTypeGuard
+): TypeFallback | InvertedTypeFallback {
+  return ((target: unknown, fallback: unknown) => (guard(target) ? target : fallback)) as
+    | TypeFallback
+    | InvertedTypeFallback
 }

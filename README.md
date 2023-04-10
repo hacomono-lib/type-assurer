@@ -12,7 +12,6 @@ npm install type-assurer
 
 ### required settings
 
-
 ### basic usage
 
 `type-assurer` provides three types of guard functions:
@@ -24,39 +23,39 @@ npm install type-assurer
 `isNotNil` provides a TypeScript type guard function. It can be used to narrow down a type with a boolean check.
 
 ```ts
-import { isNotNil } from 'type-assurer';
+import { isNotNil } from 'type-assurer'
 
-declare const value: string | undefined;
+declare const value: string | undefined
 
 if (isNotNil(value)) {
   // `value` is narrowed down to `string` here
-  console.log(value.toUpperCase());
+  console.log(value.toUpperCase())
 }
 ```
 
 `assertsNotNil` provides a shorthand for a TypeScript type assertion function. It checks that the value is not null or undefined, and throws a TypeError if it is.
 
 ```ts
-import { assertsNotNil } from 'type-assurer';
+import { assertsNotNil } from 'type-assurer'
 
 function greet(name: string | undefined) {
-  assertsNotNil(name);
-  console.log(`Hello, ${name}!`);
+  assertsNotNil(name)
+  console.log(`Hello, ${name}!`)
 }
 
-greet('Alice');
-greet(undefined); // Throws a TypeError
+greet('Alice')
+greet(undefined) // Throws a TypeError
 ```
 
 `ensureNotNil` performs an assertion and throws a TypeError if the argument is null or undefined. Otherwise, it returns the same value as the argument.
 
 ```ts
-import { ensureNotNil } from 'type-assurer';
+import { ensureNotNil } from 'type-assurer'
 
-declare function getValue(): string | undefined;
+declare function getValue(): string | undefined
 
-const value = ensureNotNil(getValue()); // Throws a TypeError if `getValue()` returns `undefined`
-console.log(value.toUpperCase());
+const value = ensureNotNil(getValue()) // Throws a TypeError if `getValue()` returns `undefined`
+console.log(value.toUpperCase())
 ```
 
 ## Api
@@ -91,7 +90,6 @@ Description: Returns true if the value is not null or undefined, otherwise retur
 
 Type: `<T>(value: T | null | undefined, message?: string | (() => string)) => asserts value is T`
 Description: Throws a TypeError with the given message if the value is null or undefined.
-
 
 #### `ensureNotNil`
 
