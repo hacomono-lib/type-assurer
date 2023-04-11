@@ -1,5 +1,4 @@
 import {
-  AssertedType,
   GuardedType,
   InvertedTypeAssert,
   InvertedTypeAssertOf,
@@ -100,7 +99,6 @@ export function createFallback<T extends TypeGuard>(
   guard: Not<T>
 ): InvertedTypeFallback<GuardedType<T>>
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createFallback(
   guard: TypeGuard | InvertedTypeGuard
 ): TypeFallback | InvertedTypeFallback {
