@@ -15,7 +15,8 @@
   "scripts": {
     "dev": "vitest",
     "build": "tsup",
-    "test": "vitest run --coverage",
+    "test": "vitest --run --coverage",
+    "typecheck": "vitest typecheck --run",
     "lint": "eslint --ext .ts .",
     "format": "prettier --write . --ignore-path=.eslintignore",
     "prepublishOnly": "npm run build"
@@ -23,16 +24,22 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
+    "@vitest/coverage-c8": "^0.30.0",
+    "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-turbo": "latest",
     "eslint-plugin-import": "^2.27.5",
-    "eslint": "^8.37.0",
     "prettier": "^2.8.7",
     "tsup": "^6.7.0",
     "typescript": "^5.0.2",
-    "vitest": "^0.29.8"
+    "vitest": "^0.30.0"
   },
   "peerDependencies": {
     "typescript": ">= 4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
   }
 }

@@ -46,7 +46,7 @@ export interface TypeAssert<T = unknown> extends Branded<'type_assert'> {
  *
  */
 export interface InvertedTypeAssert<T = unknown> extends Branded<'inverted_type_assert'> {
-  <U>(target: T | U, message?: TypeErrorMessage): asserts target is U
+  <U>(target: U | T, message?: TypeErrorMessage): asserts target is U
 }
 
 /**

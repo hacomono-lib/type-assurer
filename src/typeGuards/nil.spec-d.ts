@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, assertType } from 'vitest'
-import { isNil, assertNil, isNotNil, assertNotNil, ensureNotNil, fallbackNotNil } from '..'
+import { isNil, assertNil, assertNotNil, ensureNotNil } from '..'
 
 function getter<T>(value: T): () => T {
   return () => value
@@ -21,11 +21,19 @@ test('isNil types', () => {
     assertType<string>(targetUndef)
   }
 
-  const targetConstString = 'string' as 'string' | null
+  const targetConstString = 'string' as null | 'string'
   if (isNil(targetConstString)) {
     assertType<null>(targetConstString)
   } else {
     assertType<'string'>(targetConstString)
+  }
+
+  const targetUnknown = 'string' as unknown
+
+  if (isNil(targetUnknown)) {
+    assertType<null | undefined>(targetUnknown)
+  } else {
+    assertType<unknown>(targetUnknown)
   }
 })
 
@@ -41,29 +49,10 @@ test('assertNil types', () => {
   const targetConstString = 'string' as 'string' | null
   assertNil(targetConstString)
   assertType<null>(targetConstString)
-})
 
-test('isNotNil types', () => {
-  const targetNull = null as null | string
-  if (isNotNil(targetNull)) {
-    assertType<string>(targetNull)
-  } else {
-    assertType<null>(targetNull)
-  }
-
-  const targetUndef = undefined as undefined | string
-  if (isNotNil(targetUndef)) {
-    assertType<string>(targetUndef)
-  } else {
-    assertType<undefined>(targetUndef)
-  }
-
-  const targetConstString = 'string' as 'string' | null
-  if (isNotNil(targetConstString)) {
-    assertType<'string'>(targetConstString)
-  } else {
-    assertType<null>(targetConstString)
-  }
+  const targetUnknown = 'string' as unknown
+  assertNil(targetUnknown)
+  assertType<null | undefined>(targetUnknown)
 })
 
 test('assertNotNil types', () => {
@@ -92,17 +81,4 @@ test('ensureNotNil types', () => {
 
   const getTargetConstString = getter<'string' | null>('string')
   assertType<'string'>(ensureNotNil(getTargetConstString()))
-})
-
-test('fallbackNotNil types', () => {
-  const getTargetNull = getter<null>(null)
-  assertType<string>(fallbackNotNil(getTargetNull(), 'string'))
-  // @ts-expect-error
-  assertType<string>(fallbackNotNil(getTargetNull(), null))
-
-  const getTargetNumber = getter<number>(1)
-  assertType<number>(fallbackNotNil(getTargetNumber(), 'string'))
-
-  const getTargetUnion = getter<string | null>('string')
-  assertType<string>(fallbackNotNil(getTargetUnion(), 'string'))
 })

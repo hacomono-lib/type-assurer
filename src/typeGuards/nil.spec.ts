@@ -3,10 +3,8 @@ import { test, expect } from 'vitest'
 import {
   isNil,
   assertNil,
-  isNotNil,
   assertNotNil,
   ensureNotNil,
-  fallbackNotNil
 } from '..'
 
 test('isNil', () => {
@@ -29,16 +27,6 @@ test('assertNil', () => {
   expect(() => assertNil([])).toThrow()
 })
 
-test('isNotNil', () => {
-  expect(isNotNil(null)).toBe(false)
-  expect(isNotNil(undefined)).toBe(false)
-  expect(isNotNil(0)).toBe(true)
-  expect(isNotNil('')).toBe(true)
-  expect(isNotNil(false)).toBe(true)
-  expect(isNotNil({})).toBe(true)
-  expect(isNotNil([])).toBe(true)
-})
-
 test('assertNotNil', () => {
   expect(() => assertNotNil(null)).toThrow()
   expect(() => assertNotNil(undefined)).toThrow()
@@ -55,16 +43,6 @@ test('ensureNotNil', () => {
   expect(ensureNotNil(0)).toBe(0)
   expect(ensureNotNil('')).toBe('')
   expect(ensureNotNil(false)).toBe(false)
-  expect(ensureNotNil({})).toBe({})
-  expect(ensureNotNil([])).toBe([])
-})
-
-test('fallbackNotNil', () => {
-  expect(fallbackNotNil(null, 'fallback')).toBe('fallback')
-  expect(fallbackNotNil(undefined, 'fallback')).toBe('fallback')
-  expect(fallbackNotNil(0, 'fallback')).toBe(0)
-  expect(fallbackNotNil('', 'fallback')).toBe('')
-  expect(fallbackNotNil(false, 'fallback')).toBe(false)
-  expect(fallbackNotNil({}, 'fallback')).toBe({})
-  expect(fallbackNotNil([], 'fallback')).toBe([])
+  expect(ensureNotNil({})).toStrictEqual({})
+  expect(ensureNotNil([])).toStrictEqual([])
 })
