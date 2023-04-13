@@ -1,112 +1,131 @@
 # type-assurer
 
-type-assurer is a TypeScript library that provides shorthand type assertions and type guard functions for multiple types.
+`type-assurer` is a TypeScript-first type checking library, providing compatibility with lodash's type guard functions while ensuring type safety. Designed with ESModules in mind, it allows for tree-shaking to minimize bundle sizes.
+
+## Features
+
+- Compatible with lodash type guard functions
+- TypeScript-first implementation with accurate type inference
+- ESModule ready for tree-shaking and bundle size optimization
+- No external dependencies
+- A collection of 7 type guard functions:
+  a. isString - Similar to lodash's type guard functions
+  b. assertString - Provides TypeScript's type assertion feature
+  c. ensureString - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
+  d. fallbackString - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
+  - The reversed versions of the above b, c, and d
+  - Generator provided for custom type guards for non-primitive types
 
 ## Installation
 
-```sh
+```bash
 npm install type-assurer
 ```
 
 ## Usage
 
-### required settings
+The library provides 7 utility functions for each type guard. In this example, we'll use `isString` as the base type guard function. The same pattern can be followed to implement other lodash-compatible type guards like `isNull`, `isNumber`, etc.
 
-### basic usage
+Note that `fallbackNotNil` can be replaced with the `??` operator. Functions that can be simplified using standard JavaScript expressions, like this example, are not targeted for implementation.
 
-`type-assurer` provides three types of guard functions:
+### isString
 
-- `isNotNil`: Provides a TypeScript type guard function
-- `assertNotNil`: Provides a TypeScript type assertion function
-- `ensureNotNil`: Performs an assertion and throws a TypeError. Otherwise, it returns the same value as the argument.
+This is a simple type guard function that checks if a given value is a string.
 
-`isNotNil` provides a TypeScript type guard function. It can be used to narrow down a type with a boolean check.
+```typescript
+import { isString } from "type-assurer";
 
-```ts
-import { isNotNil } from 'type-assurer'
+declare const value: unknown;
 
-declare const value: string | undefined
-
-if (isNotNil(value)) {
-  // `value` is narrowed down to `string` here
-  console.log(value.toUpperCase())
+if (isString(value)) {
+  console.log(`This is a string: ${value}`);
+} else {
+  console.log("This is not a string");
 }
 ```
 
-`assertsNotNil` provides a shorthand for a TypeScript type assertion function. It checks that the value is not null or undefined, and throws a TypeError if it is.
+### assertString
 
-```ts
-import { assertsNotNil } from 'type-assurer'
+This function asserts that a given value is a string, and throws an error with a custom message if it's not.
 
-function greet(name: string | undefined) {
-  assertsNotNil(name)
-  console.log(`Hello, ${name}!`)
-}
+```typescript
+import { assertString } from "type-assurer";
 
-greet('Alice')
-greet(undefined) // Throws a TypeError
+declare const value: unknown;
+
+assertString(value, "Value must be a string"); 
+// No error if value is a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-`ensureNotNil` performs an assertion and throws a TypeError if the argument is null or undefined. Otherwise, it returns the same value as the argument.
+### ensureString
 
-```ts
-import { ensureNotNil } from 'type-assurer'
+This function evaluates a value and returns it if it passes the type guard (in this case, if it's a string). If the value doesn't pass the type guard, an error is thrown.
 
-declare function getValue(): string | undefined
+```typescript
+import { ensureString } from "type-assurer";
 
-const value = ensureNotNil(getValue()) // Throws a TypeError if `getValue()` returns `undefined`
-console.log(value.toUpperCase())
+declare function getValue(): unknown;
+
+const ensuredString: string = ensureString(getValue(), "Value must be a string"); 
+// No error if getValue returns a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-## Api
+### fallbackString
 
-### `isNil`, `assertNil`, `ensureNil`
+This function evaluates a value and returns it if it passes the type guard (in this case, if it's a string). If the value doesn't pass the type guard, it returns the provided fallback value.
 
-#### `isNil`
+```typescript
+import { fallbackString } from "type-assurer";
 
-Type: `(value: unknown) => value is null | undefined`
-Description: Returns true if the value is null or undefined, otherwise returns false.
+declare function getValue(): unknown;
 
-#### `assertNil`
+const stringWithFallback: string = fallbackString(getValue(), "default"); 
+// Returns value if it's a string, otherwise returns the fallbackValue
+```
 
-Type: `(value: unknown, message?: string | (() => string)) => asserts value is null | undefined`
-Description: Throws a TypeError with the given message if the value is not null or undefined.
+### assertNotString
 
-#### `ensureNil`
+This function asserts that a given value is not a string, and throws an error with a custom message if it is.
 
-Type: `(value: unknown, message?: string | (() => string)) => null | undefined`
-Description: Performs an assertion and throws a TypeError if the value is not null or undefined.
+```typescript
+import { assertNotString } from "type-assurer";
 
-### `isNotNil`, `assertNotNil`, `ensureNotNil`
+declare const value: unknown;
 
-(埋めてください)
+assertNotString(value, "Value must not be a string"); 
+// No error if value is not a string, otherwise throws an error with the message "Value must not be a string"
+```
 
-#### `isNotNil`
+### ensureNotString
 
-Type: `<T>(value: T | null | undefined) => value is T`
-Description: Returns true if the value is not null or undefined, otherwise returns false.
+This function evaluates a value and returns it if it doesn't pass the type guard (in this case, if it's not a string). If the value passes the type guard, an error is thrown.
 
-#### `assertNotNil`
+```typescript
+import { ensureNotString } from "type-assurer";
 
-Type: `<T>(value: T | null | undefined, message?: string | (() => string)) => asserts value is T`
-Description: Throws a TypeError with the given message if the value is null or undefined.
+declare function getValue(): string | number;
 
-#### `ensureNotNil`
+const ensuredNotString: number = ensureNotString(getValue(), "Value must not be a string"); 
+// No error if getValue returns not a string, otherwise throws an errort with the message "Value must not be a string"
+```
 
-Type: `<T>(value: T | null | undefined, message?: string | (() => string)) => T`
-Description: Performs an assertion and throws a TypeError if the value is null or undefined. Otherwise, it returns the same value as the argument.
+### fallbackNotString
 
-### TODO
+This function evaluates a value and returns it if it doesn't pass the type guard (in this case, if it's not a string). If the value passes the type guard, it returns the provided fallback value.
 
-- String
-- Number
-- Boolean
-- Array
-- Empty
-- Symbol
-- Function
-- more...
+```typescript
+import { fallbackNotString } from "type-assurer";
+
+declare function getValue(): string | number;
+
+const notStringWithFallback: number = fallbackNotString(getValue(), -3); 
+// Returns value if it's not a string, otherwise returns the fallbackValue
+```
+
+## Contributing
+
+Contributions are welcome! Please submit a pull request or open an issue to discuss any proposed changes or feature requests.
 
 ## License
 
-This project is [MIT licensed.](./LICENSE)
+MIT
