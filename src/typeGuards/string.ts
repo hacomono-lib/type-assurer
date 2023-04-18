@@ -18,6 +18,7 @@ import {
  * if (isString(target)) {
  *  // target is string
  * }
+ * ```
  */
 export const isString = createGuard(
   (target: unknown): target is string => typeof target === 'string'
