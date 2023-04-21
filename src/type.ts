@@ -11,7 +11,7 @@ type Branded<T extends string> = {
  * @description type guard
  */
 export interface TypeGuard<T = unknown> extends Branded<'type_guard'> {
-  (target: unknown): target is T
+  <U extends T>(target: unknown): target is U
 }
 
 /**

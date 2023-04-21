@@ -15,8 +15,10 @@
   "scripts": {
     "dev": "vitest",
     "build": "tsup",
-    "test": "vitest --run --coverage",
-    "typecheck": "vitest typecheck --run",
+    "test": "run-p test:*",
+    "test:spec": "vitest --run --coverage",
+    "test:spec-d": "vitest typecheck --run",
+    "test:type": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint --ext .ts .",
     "format": "prettier --write . --ignore-path=.eslintignore",
     "prepublishOnly": "npm run build"
@@ -32,7 +34,8 @@
     "prettier": "^2.8.7",
     "tsup": "^6.7.0",
     "typescript": "^5.0.2",
-    "vitest": "^0.30.0"
+    "vitest": "^0.30.0",
+    "yarn-run-all": "latest"
   },
   "peerDependencies": {
     "typescript": ">= 4.0.0"

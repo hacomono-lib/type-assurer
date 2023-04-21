@@ -1,48 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { test, expect } from 'vitest'
+import { test } from 'vitest'
 import {
   isNil,
   assertNil,
   assertNotNil,
   ensureNotNil,
 } from '..'
+import { ValueType, testAssert, testEnsure, testGuard } from '../lib/test'
+
+const pass = [ValueType.Null, ValueType.Undefined]
 
 test('isNil', () => {
-  expect(isNil(null)).toBe(true)
-  expect(isNil(undefined)).toBe(true)
-  expect(isNil(0)).toBe(false)
-  expect(isNil('')).toBe(false)
-  expect(isNil(false)).toBe(false)
-  expect(isNil({})).toBe(false)
-  expect(isNil([])).toBe(false)
+  testGuard(isNil, { pass })
 })
 
 test('assertNil', () => {
-  expect(() => assertNil(null)).not.toThrow()
-  expect(() => assertNil(undefined)).not.toThrow()
-  expect(() => assertNil(0)).toThrow()
-  expect(() => assertNil('')).toThrow()
-  expect(() => assertNil(false)).toThrow()
-  expect(() => assertNil({})).toThrow()
-  expect(() => assertNil([])).toThrow()
+  testAssert(assertNil, { pass })
 })
 
 test('assertNotNil', () => {
-  expect(() => assertNotNil(null)).toThrow()
-  expect(() => assertNotNil(undefined)).toThrow()
-  expect(() => assertNotNil(0)).not.toThrow()
-  expect(() => assertNotNil('')).not.toThrow()
-  expect(() => assertNotNil(false)).not.toThrow()
-  expect(() => assertNotNil({})).not.toThrow()
-  expect(() => assertNotNil([])).not.toThrow()
+  testAssert(assertNotNil, { pass, negative: true })
 })
 
 test('ensureNotNil', () => {
-  expect(() => ensureNotNil(null)).toThrow()
-  expect(() => ensureNotNil(undefined)).toThrow()
-  expect(ensureNotNil(0)).toBe(0)
-  expect(ensureNotNil('')).toBe('')
-  expect(ensureNotNil(false)).toBe(false)
-  expect(ensureNotNil({})).toStrictEqual({})
-  expect(ensureNotNil([])).toStrictEqual([])
+  testEnsure(ensureNotNil, { pass, negative: true })
 })
