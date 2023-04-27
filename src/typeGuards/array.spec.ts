@@ -1,33 +1,32 @@
 import { test } from 'vitest'
+import expected from 'lodash/isArray.js'
 import { assertNotArray, assertArray, ensureNotArray, ensureArray, fallbackNotArray, fallbackArray, isArray } from './array'
-import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '../lib/test'
-
-const pass = [ValueType.Array]
+import { testAssert, testEnsure, testFallback, testGuard } from '../lib/test'
 
 test('isArray', () => {
-  testGuard(isArray, { pass })
+  testGuard(isArray, expected)
 })
 
 test('assertArray', () => {
-  testAssert(assertArray, { pass })
+  testAssert(assertArray, expected)
 })
 
 test('ensureArray', () => {
-  testEnsure(ensureArray, { pass })
+  testEnsure(ensureArray, expected)
 })
 
 test('fallbackArray', () => {
-  testFallback(fallbackArray, { pass, fallbackValue: ['fallback'] })
+  testFallback(fallbackArray, expected, { fallbackValue: ['fallback'] })
 })
 
 test('assertNotArray', () => {
-  testAssert(assertNotArray, { pass, negative: true })
+  testAssert(assertNotArray, expected, { negative: true })
 })
 
 test('ensureNotArray', () => {
-  testEnsure(ensureNotArray, { pass, negative: true })
+  testEnsure(ensureNotArray, expected, { negative: true })
 })
 
 test('fallbackNotArray', () => {
-  testFallback(fallbackNotArray, { pass, negative: true, fallbackValue: 'fallback' })
+  testFallback(fallbackNotArray, expected, { negative: true, fallbackValue: 'fallback' })
 })

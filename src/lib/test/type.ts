@@ -1,10 +1,6 @@
 export enum ValueType {
 
   /**
-   * @description alias of `True`, `False`
-   */
-  Boolean = 'boolean',
-  /**
    * @description `true`
    */
   True = 'true',
@@ -23,11 +19,6 @@ export enum ValueType {
    * @description `undefined`
    */
   Undefined = 'undefined',
-
-  /**
-   * @description alias of `PositiveNumber`, `PositiveInfinity`, `Zero`, `NegativeNumber`, `NegativeInfinity`, `NaN`
-   */
-  Number = 'number',
 
   /**
    * @description `1`
@@ -56,11 +47,6 @@ export enum ValueType {
   NegativeInfinity = 'negativeInfinity',
 
   /**
-   * @description alias of `PositiveBigInt`, `NegativeBigInt`
-   */
-  BigInt = 'bigint',
-
-  /**
    * @description `BigInt(1)`
    */
   PositiveBigInt = 'positiveBigint',
@@ -76,29 +62,19 @@ export enum ValueType {
   NaN = 'NaN',
 
   /**
+   * @description `'foo'`
+   */
+  String = 'string',
+
+  /**
    * @description `''`
    */
   EmptyString = 'emptyString',
 
   /**
-   * @description `'foo'`
-   */
-  NotEmptyString = 'notEmptyString',
-
-  /**
-   * @description alias of `EmptyString`, `NonEmptyString`
-   */
-  String = 'string',
-
-  /**
-   * @description alias of `EmptyArray`, `NonEmptyArray`, `BlankArray`
-   */
-  Array = 'array',
-
-  /**
    * @description `[1, 2, 3]`
    */
-  NonEmptyArray = 'nonEmptyArray',
+  Array = 'array',
 
   /**
    * @description `[]`
@@ -116,14 +92,9 @@ export enum ValueType {
   ArrayLike = 'arrayLike',
 
   /**
-   * @description alias of `EmptyObject`, `NonEmptyObject`, `Symbol`, `Proxy`, `Promise`, `PromiseLike`, `Date`, `Error`
-   */
-  Object = 'object',
-
-  /**
    * @description `{ foo: 'bar' }`
    */
-  NotEmptyObject = 'notEmptyObject',
+  Object = 'object',
 
   /**
    * @description `{ }`
@@ -131,14 +102,14 @@ export enum ValueType {
   EmptyObject = 'emptyObject',
 
   /**
-   * @description alias of `NormalFunction`, `AsyncFunction`, `GeneratorFunction`, `AsyncGeneratorFunction`
+   * @description `{ foo: [Circular] }`
    */
-  Function = 'function',
+  RecursiveObject = 'recursiveObject',
 
   /**
    * @description `() => void 0`
    */
-  NormalFunction = 'normalFunction',
+  Function = 'function',
 
   /**
    * @description `async () => void 0`
@@ -195,8 +166,9 @@ export enum ValueType {
    */
   ClassInstance = 'classInstance',
 
+
   /**
-   * @description alias of `EmptyMap`, `NotEmptyMap`
+   * @description `new Map([['foo', 'bar']])`
    */
   Map = 'map',
 
@@ -206,12 +178,7 @@ export enum ValueType {
   EmptyMap = 'emptyMap',
 
   /**
-   * @description `new Map([['foo', 'bar']])`
-   */
-  NotEmptyMap = 'notEmptyMap',
-
-  /**
-   * @description alias of `EmptyWeakMap`, `NotEmptyWeakMap`
+   * @description `new WeakMap([[{}, 'bar']])`
    */
   WeakMap = 'weakMap',
 
@@ -221,12 +188,7 @@ export enum ValueType {
   EmptyWeakMap = 'emptyWeakMap',
 
   /**
-   * @description `new WeakMap([[{}, 'bar']])`
-   */
-  NotEmptyWeakMap = 'notEmptyWeakMap',
-
-  /**
-   * @description alias of `EmptySet`, `NotEmptySet`
+   * @description `new Set(['foo'])`
    */
   Set = 'set',
 
@@ -236,12 +198,7 @@ export enum ValueType {
   EmptySet = 'emptySet',
 
   /**
-   * @description `new Set(['foo'])`
-   */
-  NotEmptySet = 'notEmptySet',
-
-  /**
-   * @description alias of `EmptyWeakSet`, `NotEmptyWeakSet`
+   * @description `new WeakSet([{}])`
    */
   WeakSet = 'weakSet',
 
@@ -249,9 +206,4 @@ export enum ValueType {
    * @description `new WeakSet()`
    */
   EmptyWeakSet = 'emptyWeakSet',
-
-  /**
-   * @description `new WeakSet([{}])`
-   */
-  NotEmptyWeakSet = 'notEmptyWeakSet',
 }

@@ -1,62 +1,73 @@
 import { expect } from 'vitest'
-import type { InvertedTypeAssert, InvertedTypeEnsure, InvertedTypeFallback, TypeAssert, TypeEnsure, TypeFallback, TypeGuard } from '../..'
-import { type TestOption, fixTypes, generators } from './value'
+import { InvertedTypeAssert, InvertedTypeEnsure, InvertedTypeFallback, TypeAssert, TypeEnsure, TypeFallback, TypeGuard } from '../..'
+import { type TestOption, allTypes, getGenerator } from './value'
 
-export function testGuard(guard: TypeGuard, opt: TestOption): void {
-  const { pass, fail } = fixTypes(opt.pass)
+type ExpectGuard = (v: unknown) => boolean
 
-  for (const type of pass) {
-    const generate = generators[type] as () => unknown
-    expect(guard(generate())).toBe(opt.negative ? false : true)
-  }
+function xor(a: boolean | null | undefined, b: boolean | null | undefined): boolean {
+  return (a as boolean && !b as boolean) || (!a as boolean && b as boolean)
+}
 
-  for (const type of fail) {
-    const generate = generators[type] as () => unknown
-    expect(guard(generate())).toBe(opt.negative ? true : false)
+/**
+ * specifies TypeGuard function retuens should be same as lodash function
+ *
+ * @param actualGuard set TypeGuard function
+ * @param expectGuard set lodash function
+ * @param opt
+ */
+export function testGuard(actualGuard: TypeGuard, expectGuard: ExpectGuard): void {
+  for (const type of allTypes()) {
+    const generate = getGenerator(type)
+    expect(actualGuard(generate())).toBe(expectGuard(generate()))
   }
 }
 
-export function testAssert(assert: TypeAssert | InvertedTypeAssert, opt: TestOption): void {
-  const { pass, fail } = fixTypes(opt.pass)
+/**
+ * specifies TypeAssert of InvertedTypeAssert function should throw or not that same as lodash function condition
+ *
+ * @param actualAssert set TypeAssert function (if opt.negative is true, set InvertedTypeAssert function)
+ * @param expectGuard set lodash function
+ * @param opt
+ */
+export function testAssert(actualAssert: TypeAssert | InvertedTypeAssert, expectGuard: ExpectGuard, opt: TestOption = {}): void {
+  for (const type of allTypes()) {
+    const generate = getGenerator(type)
 
-  for (const type of pass) {
-    const generate = generators[type] as () => unknown
-    if (opt.negative) {
-      expect(() => assert(generate())).toThrow()
-    } else {
-      expect(() => assert(generate())).not.toThrow()
-    }
-  }
+    if (xor(expectGuard(generate()), opt.negative)) {
+      // (lodash.isString: true, negative: false) or (lodash.isString: false, negative: true)
+      // assertString should not throw
 
-  for (const type of fail) {
-    const generate = generators[type] as () => unknown
-    if (opt.negative) {
-      expect(() => assert(generate())).not.toThrow()
+      expect(() => actualAssert(generate())).not.toThrow()
     } else {
-      expect(() => assert(generate())).toThrow()
+      // (lodash.isString: true, negative: true) or (lodash.isString: false, negative: false)
+      // assertString should throw
+
+      expect(() => actualAssert(generate())).toThrow()
     }
   }
 }
 
-export function testEnsure(ensure: TypeEnsure | InvertedTypeEnsure, opt: TestOption): void {
-  const { pass, fail } = fixTypes(opt.pass)
+/**
+ * specifies TypeEnsure of InvertedTypeEnsure function should return or throw that same as lodash function condition
+ *
+ * @param ensure set TypeEnsure function (if opt.negative is true, set InvertedTypeEnsure function)
+ * @param expectGuard set lodash function
+ * @param opt
+ */
+export function testEnsure(ensure: TypeEnsure | InvertedTypeEnsure, expectGuard: ExpectGuard, opt: TestOption = {}): void {
+  for (const type of allTypes()) {
+    const generate = getGenerator(type)
 
-  for (const type of pass) {
-    const generate = generators[type] as () => unknown
-    if (opt.negative) {
-      expect(() => ensure(generate())).toThrow()
-    } else {
+    if (xor(expectGuard(generate()), opt.negative)) {
+      // (lodash.isString: true, negative: false) or (lodash.isString: false, negative: true)
+      // ensureString should not throw and return value that same as argument
+
       const value = generate()
       expect(ensure(value)).toEqual(value)
-    }
-  }
-
-  for (const type of fail) {
-    const generate = generators[type] as () => unknown
-    if (opt.negative) {
-      const value = generate()
-      expect(ensure(value)).toEqual(value)
     } else {
+      // (lodash.isString: true, negative: true) or (lodash.isString: false, negative: false)
+      // ensureString should throw
+
       expect(() => ensure(generate())).toThrow()
     }
   }
@@ -66,22 +77,28 @@ export function testEnsure(ensure: TypeEnsure | InvertedTypeEnsure, opt: TestOpt
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyFunction = (...args: any[]) => any
 
-export function testFallback(fallback: TypeFallback | InvertedTypeFallback, opt: TestOption & { fallbackValue: unknown }): void;
+/**
+ * specifies TypeFallback of InvertedTypeFallback function should return that same as lodash function condition
+ *
+ * @param fallback set TypeFallback function (if opt.negative is true, set InvertedTypeFallback function)
+ * @param expectGuard set lodash function
+ * @param opt
+ */
+export function testFallback(fallback: TypeFallback | InvertedTypeFallback, expectGuard: ExpectGuard, opt: TestOption & { fallbackValue: unknown }): void;
 
-
-// TypeFallback | InvertedTypeFallback の型安全化が大変なので、 any で対応
-export function testFallback(fallback: AnyFunction, opt: TestOption & { fallbackValue: unknown }): void {
-  const { pass, fail } = fixTypes(opt.pass)
-
-  for (const type of pass) {
-    const generate = generators[type] as () => unknown
+// TypeFallback | InvertedTypeFallback is difficult to type safe, so use AnyFunction
+export function testFallback(fallback: AnyFunction, expectGuard: ExpectGuard, opt: TestOption & { fallbackValue: unknown }): void {
+  for (const type of allTypes()) {
+    const generate = getGenerator(type)
     const value = generate()
-    expect(fallback(value, opt.fallbackValue)).toBe(opt.negative ? opt.fallbackValue : value)
-  }
 
-  for (const type of fail) {
-    const generate = generators[type] as () => unknown
-    const value = generate()
-    expect(fallback(value, opt.fallbackValue)).toBe(opt.negative ? value : opt.fallbackValue)
+    // (lodash.isString: true, negative: false) or (lodash.isString: false, negative: true)
+    // fallbackString should return value that same as first argument
+
+    // (lodash.isString: true, negative: true) or (lodash.isString: false, negative: false)
+    // fallbackString should return fallback value
+
+    const expected = xor(expectGuard(generate()), opt.negative) ? value : opt.fallbackValue
+    expect(fallback(value, opt.fallbackValue)).toEqual(expected)
   }
 }
