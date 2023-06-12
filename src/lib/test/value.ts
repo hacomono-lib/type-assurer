@@ -21,6 +21,7 @@ const generators = {
   [ValueType.EmptyArray]: () => [],
   [ValueType.BlankArray]: () => Array(3),
   [ValueType.ArrayLike]: () => ({ length: 3 }),
+  [ValueType.ArrayBuffer]: () => new ArrayBuffer(8),
   [ValueType.Object]: () => ({ foo: 'bar' }),
   [ValueType.EmptyObject]: () => ({}),
   [ValueType.RecursiveObject]: () => {

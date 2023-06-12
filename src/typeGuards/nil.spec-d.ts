@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, assertType } from 'vitest'
-import { isNil, assertNil, assertNotNil, ensureNotNil } from '..'
+import { isNil, assertNil, assertNotNil, ensureNotNil } from './nil'
 
 function getter<T>(value: T): () => T {
   return () => value

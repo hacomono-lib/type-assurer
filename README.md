@@ -13,7 +13,7 @@
   b. assertString - Provides TypeScript's type assertion feature
   c. ensureString - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
   d. fallbackString - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
-  - The reversed versions of the above b, c, and d
+  - The reversed versions
   - Generator provided for custom type guards for non-primitive types
 
 ## Installation
@@ -24,13 +24,13 @@ npm install type-assurer
 
 ## Usage
 
-The library provides 7 utility functions for each type guard. In this example, we'll use `isString` as the base type guard function. The same pattern can be followed to implement other lodash-compatible type guards like `isNull`, `isNumber`, etc.
+The library provides 8 utility functions for each type guard, such as `isString`, `isNull`, etc.
 
-Note that `fallbackNotNil` can be replaced with the `??` operator. Functions that can be simplified using standard JavaScript expressions, like this example, are not targeted for implementation.
+And, note that `fallbackNotNil` can be replaced with the `??` operator. Functions that can be simplified using standard JavaScript expressions, like this example, are not targeted for implementation.
 
-### isString
+### is, isNot
 
-This is a simple type guard function that checks if a given value is a string.
+Functions such as `is` simply provide type guards that can be used in conditional branches.
 
 ```typescript
 import { isString } from "type-assurer";
@@ -44,9 +44,23 @@ if (isString(value)) {
 }
 ```
 
-### assertString
+Functions such as `isNot` are useful in cases that require a type guard function as an argument, such as Array.prototype.filter.
 
-This function asserts that a given value is a string, and throws an error with a custom message if it's not.
+```typescript
+import { isNotNil } from 'type-assurer';
+
+declare const values: string | null
+
+const result = values.filter(isNotNil)
+//    ^? string[]
+```
+
+### assert, assertNot
+
+Functions with names like `assert` `assertNot` are type assertion functions.
+If the type check does not pass, it throws a TypeError.
+
+The second argument can contain an error message.
 
 ```typescript
 import { assertString } from "type-assurer";
@@ -57,69 +71,37 @@ assertString(value, "Value must be a string");
 // No error if value is a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-### ensureString
+### ensure, ensureNot
 
-This function evaluates a value and returns it if it passes the type guard (in this case, if it's a string). If the value doesn't pass the type guard, an error is thrown.
+Functions with names like `ensure` `ensureNot` are type assertion functions, but return the same value if the type check passes.
+It is convenient to write type assertions on a single line.
+
+The second argument can contain an error message.
 
 ```typescript
 import { ensureString } from "type-assurer";
 
-declare function getValue(): unknown;
+declare function fetchData(): Promise<string | undefined>;
 
-const ensuredString: string = ensureString(getValue(), "Value must be a string"); 
-// No error if getValue returns a string, otherwise throws an error with the message "Value must be a string"
+const value = ensureString(await fetchData(), "Value must be a string"); 
+//    ^? string
+// No error if fetchData returns a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-### fallbackString
+### fallback, fallbackNot
 
-This function evaluates a value and returns it if it passes the type guard (in this case, if it's a string). If the value doesn't pass the type guard, it returns the provided fallback value.
+Functions like `fallback` `fallbackNot` are type modification functions.
+
+They return the same value if the type check passes, otherwise they return the fallback value specified in the second argument.
 
 ```typescript
 import { fallbackString } from "type-assurer";
 
-declare function getValue(): unknown;
+declare function fetchData(): Promise<string | undefined>;
 
-const stringWithFallback: string = fallbackString(getValue(), "default"); 
+const value = fallbackString(await fetchData(), "default"); 
+//    ^? string
 // Returns value if it's a string, otherwise returns the fallbackValue
-```
-
-### assertNotString
-
-This function asserts that a given value is not a string, and throws an error with a custom message if it is.
-
-```typescript
-import { assertNotString } from "type-assurer";
-
-declare const value: unknown;
-
-assertNotString(value, "Value must not be a string"); 
-// No error if value is not a string, otherwise throws an error with the message "Value must not be a string"
-```
-
-### ensureNotString
-
-This function evaluates a value and returns it if it doesn't pass the type guard (in this case, if it's not a string). If the value passes the type guard, an error is thrown.
-
-```typescript
-import { ensureNotString } from "type-assurer";
-
-declare function getValue(): string | number;
-
-const ensuredNotString: number = ensureNotString(getValue(), "Value must not be a string"); 
-// No error if getValue returns not a string, otherwise throws an errort with the message "Value must not be a string"
-```
-
-### fallbackNotString
-
-This function evaluates a value and returns it if it doesn't pass the type guard (in this case, if it's not a string). If the value passes the type guard, it returns the provided fallback value.
-
-```typescript
-import { fallbackNotString } from "type-assurer";
-
-declare function getValue(): string | number;
-
-const notStringWithFallback: number = fallbackNotString(getValue(), -3); 
-// Returns value if it's not a string, otherwise returns the fallbackValue
 ```
 
 ## Contributing

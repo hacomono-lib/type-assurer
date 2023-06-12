@@ -72,7 +72,21 @@ export const ensureArray: TypeEnsureOf<IsArray> = createEnsure(assertArray)
  */
 export const fallbackArray: TypeFallbackOf<IsArray> = createFallback(isArray)
 
-const isNotArray = not(isArray)
+/**
+ * Checks if a value is not an array.
+ *
+ * In an if statement, it is simpler to use ! operator is simpler,
+ * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
+ * @param target The value to check.
+ * @returns True if the value is not an array, false otherwise.
+ * @example
+ * ```ts
+ * const targets = getTargets() // Array<string[] | string>
+ * const results = targets.filter(isNotArray)
+ * // results is string[]
+ * ```
+ */
+export const isNotArray = not(isArray)
 
 /**
  * Asserts that a value is not an array.

@@ -72,8 +72,21 @@ export const ensureString: TypeEnsureOf<IsString> = createEnsure(assertString)
  */
 export const fallbackString: TypeFallbackOf<IsString> = createFallback(isString)
 
-// isNotString is not needed because it is not useful. use ! operator instead.
-const isNotString = not(isString)
+/**
+ * Checks if a value is not a string.
+ *
+ * In an if statement, it is simpler to use ! operator is simpler,
+ * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
+ * @param target The value to check.
+ * @returns True if the value is not a string, false otherwise.
+ * @example
+ * ```ts
+ * const targets = getTargets() // Array<string | number>
+ * const result = targets.filter(isNotString)
+ * // result is number[]
+ * ```
+ */
+export const isNotString = not(isString)
 
 /**
  * Asserts that a value is not a string.

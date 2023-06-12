@@ -87,9 +87,14 @@ export enum ValueType {
   BlankArray = 'spacedArray',
 
   /**
-   * @description `{ length: 3 }`
+   * @description `document.body.children`
    */
   ArrayLike = 'arrayLike',
+
+  /**
+   * @description `new ArrayBuffer(8)`
+   */
+  ArrayBuffer = 'arrayBuffer',
 
   /**
    * @description `{ foo: 'bar' }`

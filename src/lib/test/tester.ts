@@ -1,11 +1,20 @@
 import { expect } from 'vitest'
-import { InvertedTypeAssert, InvertedTypeEnsure, InvertedTypeFallback, TypeAssert, TypeEnsure, TypeFallback, TypeGuard } from '../..'
+import {
+  InvertedTypeAssert,
+  InvertedTypeEnsure,
+  InvertedTypeFallback,
+  TypeAssert,
+  TypeEnsure,
+  TypeFallback,
+  TypeGuard,
+  Not
+} from '../..'
 import { type TestOption, allTypes, getGenerator } from './value'
 
 type ExpectGuard = (v: unknown) => boolean
 
 function xor(a: boolean | null | undefined, b: boolean | null | undefined): boolean {
-  return (a as boolean && !b as boolean) || (!a as boolean && b as boolean)
+  return ((a as boolean) && (!b as boolean)) || ((!a as boolean) && (b as boolean))
 }
 
 /**
@@ -15,10 +24,18 @@ function xor(a: boolean | null | undefined, b: boolean | null | undefined): bool
  * @param expectGuard set lodash function
  * @param opt
  */
-export function testGuard(actualGuard: TypeGuard, expectGuard: ExpectGuard): void {
+export function testGuard(
+  actualGuard: TypeGuard | Not<TypeGuard>,
+  expectGuard: ExpectGuard,
+  opt: TestOption = {}
+): void {
   for (const type of allTypes()) {
     const generate = getGenerator(type)
-    expect(actualGuard(generate())).toBe(expectGuard(generate()))
+    if (opt.negative) {
+      expect(actualGuard(generate())).not.toBe(expectGuard(generate()))
+    } else {
+      expect(actualGuard(generate())).toBe(expectGuard(generate()))
+    }
   }
 }
 
@@ -29,7 +46,11 @@ export function testGuard(actualGuard: TypeGuard, expectGuard: ExpectGuard): voi
  * @param expectGuard set lodash function
  * @param opt
  */
-export function testAssert(actualAssert: TypeAssert | InvertedTypeAssert, expectGuard: ExpectGuard, opt: TestOption = {}): void {
+export function testAssert(
+  actualAssert: TypeAssert | InvertedTypeAssert,
+  expectGuard: ExpectGuard,
+  opt: TestOption = {}
+): void {
   for (const type of allTypes()) {
     const generate = getGenerator(type)
 
@@ -54,7 +75,11 @@ export function testAssert(actualAssert: TypeAssert | InvertedTypeAssert, expect
  * @param expectGuard set lodash function
  * @param opt
  */
-export function testEnsure(ensure: TypeEnsure | InvertedTypeEnsure, expectGuard: ExpectGuard, opt: TestOption = {}): void {
+export function testEnsure(
+  ensure: TypeEnsure | InvertedTypeEnsure,
+  expectGuard: ExpectGuard,
+  opt: TestOption = {}
+): void {
   for (const type of allTypes()) {
     const generate = getGenerator(type)
 
@@ -73,7 +98,6 @@ export function testEnsure(ensure: TypeEnsure | InvertedTypeEnsure, expectGuard:
   }
 }
 
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyFunction = (...args: any[]) => any
 
@@ -84,10 +108,18 @@ type AnyFunction = (...args: any[]) => any
  * @param expectGuard set lodash function
  * @param opt
  */
-export function testFallback(fallback: TypeFallback | InvertedTypeFallback, expectGuard: ExpectGuard, opt: TestOption & { fallbackValue: unknown }): void;
+export function testFallback(
+  fallback: TypeFallback | InvertedTypeFallback,
+  expectGuard: ExpectGuard,
+  opt: TestOption & { fallbackValue: unknown }
+): void
 
 // TypeFallback | InvertedTypeFallback is difficult to type safe, so use AnyFunction
-export function testFallback(fallback: AnyFunction, expectGuard: ExpectGuard, opt: TestOption & { fallbackValue: unknown }): void {
+export function testFallback(
+  fallback: AnyFunction,
+  expectGuard: ExpectGuard,
+  opt: TestOption & { fallbackValue: unknown }
+): void {
   for (const type of allTypes()) {
     const generate = getGenerator(type)
     const value = generate()
