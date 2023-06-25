@@ -1,3 +1,4 @@
 export * from './typeGuards'
-export type * from './type'
-export { createGuard, createAssertion, createEnsure, createFallback, not } from './factory'
+export type * from './lib/type'
+export { TypeAssertionError, errorMessage } from './lib/error'
+export { createGuard, createAssertion, createEnsure, createFallback, not } from './lib/factory'
