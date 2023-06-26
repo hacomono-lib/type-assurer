@@ -18,7 +18,7 @@ export interface TypeGuard<T = unknown> extends Branded<'type_guard'> {
  * @description inverted type guard
  */
 export interface InvertedTypeGuard<T = unknown> extends Branded<'inverted_type_guard'> {
-  <U>(target: T | U): target is U
+  <U>(target: T | U): target is Exclude<U, T>
 }
 
 /**
@@ -46,7 +46,7 @@ export interface TypeAssert<T = unknown> extends Branded<'type_assert'> {
  *
  */
 export interface InvertedTypeAssert<T = unknown> extends Branded<'inverted_type_assert'> {
-  <U>(target: U | T, message?: TypeErrorMessage): asserts target is U
+  <U>(target: U | T, message?: TypeErrorMessage): asserts target is Exclude<U, T>
 }
 
 /**
