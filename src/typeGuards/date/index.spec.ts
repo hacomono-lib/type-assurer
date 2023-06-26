@@ -1,36 +1,36 @@
-import { test } from 'vitest'
+import { describe } from 'vitest'
 import expected from 'lodash/isDate.js'
 import { assertNotDate, assertDate, ensureNotDate, ensureDate, fallbackNotDate, fallbackDate, isDate, isNotDate } from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
-test('isDate', () => {
+describe('isDate', () => {
   testGuard(isDate, expected)
 })
 
-test('assertDate', () => {
+describe('assertDate', () => {
   testAssert(assertDate, expected)
 })
 
-test('ensureDate', () => {
+describe('ensureDate', () => {
   testEnsure(ensureDate, expected)
 })
 
-test('fallbackDate', () => {
+describe('fallbackDate', () => {
   testFallback(fallbackDate, expected, { fallbackValue: [new Date()] })
 })
 
-test('isNotDate', () => {
+describe('isNotDate', () => {
   testGuard(isNotDate, expected, { negative: true })
 })
 
-test('assertNotDate', () => {
+describe('assertNotDate', () => {
   testAssert(assertNotDate, expected, { negative: true })
 })
 
-test('ensureNotDate', () => {
+describe('ensureNotDate', () => {
   testEnsure(ensureNotDate, expected, { negative: true })
 })
 
-test('fallbackNotDate', () => {
+describe('fallbackNotDate', () => {
   testFallback(fallbackNotDate, expected, { negative: true, fallbackValue: 'fallback' })
 })

@@ -9,8 +9,6 @@ import {
   TypeGuard
 } from '../../lib/type'
 import { errorMessage } from '../../lib/error'
-import { isArray } from '..'
-
 
 /**
  * Checks if a value is an Object (excluding null, arrays, functions, and undefined).
@@ -25,7 +23,7 @@ import { isArray } from '..'
  * ```
  */
 export const isObject = (<T extends Record<string, unknown>>(target: unknown): target is T => {
-  return !!target && typeof target === 'object' && !isArray(target)
+  return typeof target === 'object'
 }) as TypeGuard<object>
 
 type IsObject = typeof isObject

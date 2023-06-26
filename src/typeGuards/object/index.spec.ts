@@ -1,36 +1,36 @@
-import { test } from 'vitest'
+import { describe } from 'vitest'
 import expected from 'lodash/isObject.js'
 import { assertNotObject, assertObject, ensureNotObject, ensureObject, fallbackNotObject, fallbackObject, isObject, isNotObject } from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
-test('isObject', () => {
+describe('isObject', () => {
   testGuard(isObject, expected)
 })
 
-test('assertObject', () => {
+describe('assertObject', () => {
   testAssert(assertObject, expected)
 })
 
-test('ensureObject', () => {
+describe('ensureObject', () => {
   testEnsure(ensureObject, expected)
 })
 
-test('fallbackObject', () => {
+describe('fallbackObject', () => {
   testFallback(fallbackObject, expected, { fallbackValue: [{ foo: 'bar' }] })
 })
 
-test('isNotObject', () => {
+describe('isNotObject', () => {
   testGuard(isNotObject, expected, { negative: true })
 })
 
-test('assertNotObject', () => {
+describe('assertNotObject', () => {
   testAssert(assertNotObject, expected, { negative: true })
 })
 
-test('ensureNotObject', () => {
+describe('ensureNotObject', () => {
   testEnsure(ensureNotObject, expected, { negative: true })
 })
 
-test('fallbackNotObject', () => {
+describe('fallbackNotObject', () => {
   testFallback(fallbackNotObject, expected, { negative: true, fallbackValue: 'fallback' })
 })

@@ -1,36 +1,36 @@
-import { test } from 'vitest'
+import { describe } from 'vitest'
 import expected from 'lodash/isString.js'
 import { assertNotString, assertString, ensureNotString, ensureString, fallbackNotString, fallbackString, isString, isNotString } from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
-test('isString', () => {
+describe('isString', () => {
   testGuard(isString, expected)
 })
 
-test('assertString', () => {
+describe('assertString', () => {
   testAssert(assertString, expected)
 })
 
-test('ensureString', () => {
+describe('ensureString', () => {
   testEnsure(ensureString, expected)
 })
 
-test('fallbackString', () => {
+describe('fallbackString', () => {
   testFallback(fallbackString, expected, { fallbackValue: 'fallback' })
 })
 
-test('isNotString', () => {
+describe('isNotString', () => {
   testGuard(isNotString, expected, { negative: true })
 })
 
-test('assertNotString', () => {
+describe('assertNotString', () => {
   testAssert(assertNotString, expected, { negative: true })
 })
 
-test('ensureNotString', () => {
+describe('ensureNotString', () => {
   testEnsure(ensureNotString, expected, { negative: true })
 })
 
-test('fallbackNotString', () => {
+describe('fallbackNotString', () => {
   testFallback(fallbackNotString, expected, { negative: true, fallbackValue: 123 })
 })

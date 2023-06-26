@@ -1,4 +1,4 @@
-import { test } from 'vitest'
+import { describe } from 'vitest'
 import expected from 'lodash/isBoolean.js'
 import {
   assertNotBoolean,
@@ -12,34 +12,34 @@ import {
 } from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
-test('isBoolean', () => {
+describe('isBoolean', () => {
   testGuard(isBoolean, expected)
 })
 
-test('assertBoolean', () => {
+describe('assertBoolean', () => {
   testAssert(assertBoolean, expected)
 })
 
-test('ensureBoolean', () => {
+describe('ensureBoolean', () => {
   testEnsure(ensureBoolean, expected)
 })
 
-test('fallbackBoolean', () => {
+describe('fallbackBoolean', () => {
   testFallback(fallbackBoolean, expected, { fallbackValue: [false] })
 })
 
-test('isNotBoolean', () => {
+describe('isNotBoolean', () => {
   testGuard(isNotBoolean, expected, { negative: true })
 })
 
-test('assertNotBoolean', () => {
+describe('assertNotBoolean', () => {
   testAssert(assertNotBoolean, expected, { negative: true })
 })
 
-test('ensureNotBoolean', () => {
+describe('ensureNotBoolean', () => {
   testEnsure(ensureNotBoolean, expected, { negative: true })
 })
 
-test('fallbackNotBoolean', () => {
+describe('fallbackNotBoolean', () => {
   testFallback(fallbackNotBoolean, expected, { negative: true, fallbackValue: 'fallback' })
 })

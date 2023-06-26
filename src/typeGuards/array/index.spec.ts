@@ -1,4 +1,4 @@
-import { test } from 'vitest'
+import { describe } from 'vitest'
 import expected from 'lodash/isArray.js'
 import {
   assertNotArray,
@@ -12,34 +12,34 @@ import {
 } from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
-test('isArray', () => {
+describe('isArray', () => {
   testGuard(isArray, expected)
 })
 
-test('isNotArray', () => {
+describe('isNotArray', () => {
   testGuard(isNotArray, expected, { negative: true })
 })
 
-test('assertArray', () => {
+describe('assertArray', () => {
   testAssert(assertArray, expected)
 })
 
-test('assertNotArray', () => {
+describe('assertNotArray', () => {
   testAssert(assertNotArray, expected, { negative: true })
 })
 
-test('ensureArray', () => {
+describe('ensureArray', () => {
   testEnsure(ensureArray, expected)
 })
 
-test('ensureNotArray', () => {
+describe('ensureNotArray', () => {
   testEnsure(ensureNotArray, expected, { negative: true })
 })
 
-test('fallbackArray', () => {
+describe('fallbackArray', () => {
   testFallback(fallbackArray, expected, { fallbackValue: ['fallback'] })
 })
 
-test('fallbackNotArray', () => {
+describe('fallbackNotArray', () => {
   testFallback(fallbackNotArray, expected, { negative: true, fallbackValue: 'fallback' })
 })

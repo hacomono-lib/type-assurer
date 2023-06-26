@@ -60,12 +60,6 @@ const generators = {
 
 Object.freeze(generators)
 
-export type FactoryType = {
-  [K in ValueType]: (typeof generators)[K] extends ValueFactory ? K : never
-}[ValueType]
-
-export type AliasType = Exclude<ValueType, FactoryType>
-
 export function allTypes(): ValueType[] {
   return Object.values(ValueType)
 }

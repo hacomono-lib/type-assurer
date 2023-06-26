@@ -1,36 +1,36 @@
-import { test } from 'vitest'
+import { describe } from 'vitest'
 import expected from 'lodash/isNumber.js'
 import { assertNotNumber, assertNumber, ensureNotNumber, ensureNumber, fallbackNotNumber, fallbackNumber, isNumber, isNotNumber } from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
-test('isNumber', () => {
+describe('isNumber', () => {
   testGuard(isNumber, expected)
 })
 
-test('assertNumber', () => {
+describe('assertNumber', () => {
   testAssert(assertNumber, expected)
 })
 
-test('ensureNumber', () => {
+describe('ensureNumber', () => {
   testEnsure(ensureNumber, expected)
 })
 
-test('fallbackNumber', () => {
+describe('fallbackNumber', () => {
   testFallback(fallbackNumber, expected, { fallbackValue: [123] })
 })
 
-test('isNotNumber', () => {
+describe('isNotNumber', () => {
   testGuard(isNotNumber, expected, { negative: true })
 })
 
-test('assertNotNumber', () => {
+describe('assertNotNumber', () => {
   testAssert(assertNotNumber, expected, { negative: true })
 })
 
-test('ensureNotNumber', () => {
+describe('ensureNotNumber', () => {
   testEnsure(ensureNotNumber, expected, { negative: true })
 })
 
-test('fallbackNotNumber', () => {
+describe('fallbackNotNumber', () => {
   testFallback(fallbackNotNumber, expected, { negative: true, fallbackValue: 'fallback' })
 })

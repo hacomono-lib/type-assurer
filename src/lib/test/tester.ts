@@ -1,4 +1,4 @@
-import { expect } from 'vitest'
+import { expect, test } from 'vitest'
 import {
   InvertedTypeAssert,
   InvertedTypeEnsure,
@@ -24,19 +24,15 @@ function xor(a: boolean | null | undefined, b: boolean | null | undefined): bool
  * @param expectGuard set lodash function
  * @param opt
  */
-export function testGuard(
-  actualGuard: TypeGuard | Not<TypeGuard>,
-  expectGuard: ExpectGuard,
-  opt: TestOption = {}
-): void {
-  for (const type of allTypes()) {
+export function testGuard(actualGuard: TypeGuard | Not<TypeGuard>, expectGuard: ExpectGuard, opt: TestOption = {}): void {
+  test.each(allTypes())('test value type: %s', (type) => {
     const generate = getGenerator(type)
     if (opt.negative) {
       expect(actualGuard(generate())).not.toBe(expectGuard(generate()))
     } else {
       expect(actualGuard(generate())).toBe(expectGuard(generate()))
     }
-  }
+  })
 }
 
 /**
@@ -51,7 +47,7 @@ export function testAssert(
   expectGuard: ExpectGuard,
   opt: TestOption = {}
 ): void {
-  for (const type of allTypes()) {
+  test.each(allTypes())('test value type: %s', (type) => {
     const generate = getGenerator(type)
 
     if (xor(expectGuard(generate()), opt.negative)) {
@@ -65,7 +61,7 @@ export function testAssert(
 
       expect(() => actualAssert(generate())).toThrow()
     }
-  }
+  })
 }
 
 /**
@@ -80,7 +76,7 @@ export function testEnsure(
   expectGuard: ExpectGuard,
   opt: TestOption = {}
 ): void {
-  for (const type of allTypes()) {
+  test.each(allTypes())('test value type: %s', (type) => {
     const generate = getGenerator(type)
 
     if (xor(expectGuard(generate()), opt.negative)) {
@@ -95,7 +91,7 @@ export function testEnsure(
 
       expect(() => ensure(generate())).toThrow()
     }
-  }
+  })
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -120,7 +116,7 @@ export function testFallback(
   expectGuard: ExpectGuard,
   opt: TestOption & { fallbackValue: unknown }
 ): void {
-  for (const type of allTypes()) {
+  test.each(allTypes())('test value type: %s', (type) => {
     const generate = getGenerator(type)
     const value = generate()
 
@@ -132,5 +128,5 @@ export function testFallback(
 
     const expected = xor(expectGuard(generate()), opt.negative) ? value : opt.fallbackValue
     expect(fallback(value, opt.fallbackValue)).toEqual(expected)
-  }
+  })
 }
