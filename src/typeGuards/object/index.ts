@@ -23,7 +23,8 @@ import { errorMessage } from '../../lib/error'
  * ```
  */
 export const isObject = (<T extends Record<string, unknown>>(target: unknown): target is T => {
-  return typeof target === 'object'
+  const type = typeof target
+  return target !== null && ['object', 'function'].includes(type)
 }) as TypeGuard<object>
 
 type IsObject = typeof isObject
