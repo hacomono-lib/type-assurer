@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/node-init
+      - uses: ./.github/actions/init-node
         with:
           node_auth_token: ${{ secrets.GITHUB_TOKEN }}
 
