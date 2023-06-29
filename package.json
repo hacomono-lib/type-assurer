@@ -1,9 +1,12 @@
 {
   "name": "type-assurer",
   "version": "0.0.1",
-  "description": "TypeScript library that provides shorthand type assertions and type guard functions for multiple types.",
-  "repository": "git@github.com:hacomono-lib/type-assurer.git",
-  "author": "uyamanaka <ushio.yamanaka@hacomono.co.jp>",
+  "description": "type-assurer: TypeScript library that provides shorthand type assertions and type guard functions for multiple types.",
+  "repository": {
+    "url": "https://github.com/hacomono-lib/type-assurer",
+    "type": "git"
+  },
+  "author": "mew-ton <mxl_usmarc@slmail.mewton.jp>",
   "license": "MIT",
   "type": "module",
   "files": [
