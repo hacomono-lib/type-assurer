@@ -1,5 +1,6 @@
 ---
 name: Release
+run-name: Release
 
 permissions:
   contents: write
@@ -15,6 +16,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   release:
+    name: "Release"
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
