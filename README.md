@@ -33,21 +33,21 @@ And, note that `fallbackNotNil` can be replaced with the `??` operator. Function
 Functions such as `is` simply provide type guards that can be used in conditional branches.
 
 ```typescript
-import { isString } from "type-assurer";
+import { isString } from 'type-assurer'
 
-declare const value: unknown;
+declare const value: unknown
 
 if (isString(value)) {
-  console.log(`This is a string: ${value}`);
+  console.log(`This is a string: ${value}`)
 } else {
-  console.log("This is not a string");
+  console.log('This is not a string')
 }
 ```
 
 Functions such as `isNot` are useful in cases that require a type guard function as an argument, such as Array.prototype.filter.
 
 ```typescript
-import { isNotNil } from 'type-assurer';
+import { isNotNil } from 'type-assurer'
 
 declare const values: string | null
 
@@ -63,11 +63,11 @@ If the type check does not pass, it throws a TypeError.
 The second argument can contain an error message.
 
 ```typescript
-import { assertString } from "type-assurer";
+import { assertString } from 'type-assurer'
 
-declare const value: unknown;
+declare const value: unknown
 
-assertString(value, "Value must be a string"); 
+assertString(value, 'Value must be a string')
 // No error if value is a string, otherwise throws an error with the message "Value must be a string"
 ```
 
@@ -79,11 +79,11 @@ It is convenient to write type assertions on a single line.
 The second argument can contain an error message.
 
 ```typescript
-import { ensureString } from "type-assurer";
+import { ensureString } from 'type-assurer'
 
-declare function fetchData(): Promise<string | undefined>;
+declare function fetchData(): Promise<string | undefined>
 
-const value = ensureString(await fetchData(), "Value must be a string"); 
+const value = ensureString(await fetchData(), 'Value must be a string')
 //    ^? string
 // No error if fetchData returns a string, otherwise throws an error with the message "Value must be a string"
 ```
@@ -95,11 +95,11 @@ Functions like `fallback` `fallbackNot` are type modification functions.
 They return the same value if the type check passes, otherwise they return the fallback value specified in the second argument.
 
 ```typescript
-import { fallbackString } from "type-assurer";
+import { fallbackString } from 'type-assurer'
 
-declare function fetchData(): Promise<string | undefined>;
+declare function fetchData(): Promise<string | undefined>
 
-const value = fallbackString(await fetchData(), "default"); 
+const value = fallbackString(await fetchData(), 'default')
 //    ^? string
 // Returns value if it's a string, otherwise returns the fallbackValue
 ```

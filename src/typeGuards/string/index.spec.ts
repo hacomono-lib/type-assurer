@@ -1,6 +1,15 @@
 import { describe } from 'vitest'
 import expected from 'lodash/isString.js'
-import { assertNotString, assertString, ensureNotString, ensureString, fallbackNotString, fallbackString, isString, isNotString } from '.'
+import {
+  assertNotString,
+  assertString,
+  ensureNotString,
+  ensureString,
+  fallbackNotString,
+  fallbackString,
+  isString,
+  isNotString
+} from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
 describe('isString', () => {

@@ -22,7 +22,8 @@ import { errorMessage } from '../../lib/error'
  * }
  * ```
  */
-export const isDate = ((target: unknown): target is Date => target instanceof Date) as TypeGuard<Date>
+export const isDate = ((target: unknown): target is Date =>
+  target instanceof Date) as TypeGuard<Date>
 
 type IsDate = typeof isDate
 
@@ -39,10 +40,7 @@ type IsDate = typeof isDate
  * ```
  */
 
-export const assertDate: TypeAssertOf<IsDate> = createAssertion(
-  isDate,
-  errorMessage('Date')
-)
+export const assertDate: TypeAssertOf<IsDate> = createAssertion(isDate, errorMessage('Date'))
 
 /**
  * Ensures that a value is an Date.

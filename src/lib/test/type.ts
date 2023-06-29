@@ -1,5 +1,4 @@
 export enum ValueType {
-
   /**
    * @description `true`
    */
@@ -29,7 +28,6 @@ export enum ValueType {
    * @description `Infinity`
    */
   PositiveInfinity = 'positiveInfinity',
-
 
   /**
    * @description `0`
@@ -171,7 +169,6 @@ export enum ValueType {
    */
   ClassInstance = 'classInstance',
 
-
   /**
    * @description `new Map([['foo', 'bar']])`
    */
@@ -210,5 +207,5 @@ export enum ValueType {
   /**
    * @description `new WeakSet()`
    */
-  EmptyWeakSet = 'emptyWeakSet',
+  EmptyWeakSet = 'emptyWeakSet'
 }

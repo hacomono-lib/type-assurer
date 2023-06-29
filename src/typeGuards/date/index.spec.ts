@@ -1,6 +1,15 @@
 import { describe } from 'vitest'
 import expected from 'lodash/isDate.js'
-import { assertNotDate, assertDate, ensureNotDate, ensureDate, fallbackNotDate, fallbackDate, isDate, isNotDate } from '.'
+import {
+  assertNotDate,
+  assertDate,
+  ensureNotDate,
+  ensureDate,
+  fallbackNotDate,
+  fallbackDate,
+  isDate,
+  isNotDate
+} from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
 describe('isDate', () => {

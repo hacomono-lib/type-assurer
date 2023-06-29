@@ -22,8 +22,6 @@ export function errorMessage(
     }
   }
   return (actualValue) => {
-    return `Expected a ${expectedType}, but received ${actualTypeOf(
-      actualValue
-    )}.`
+    return `Expected a ${expectedType}, but received ${actualTypeOf(actualValue)}.`
   }
 }

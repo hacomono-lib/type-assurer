@@ -71,5 +71,3 @@ export function getGenerator(type: ValueType): () => unknown {
 export interface TestOption {
   negative?: boolean
 }
-
-

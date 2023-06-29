@@ -20,7 +20,7 @@ describe('fallbackNumber type tests', () => {
 
   test('uncorrect fallback types', () => {
     // @ts-expect-error
-    fallbackNumber('string', "1")
+    fallbackNumber('string', '1')
   })
 })
 

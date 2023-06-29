@@ -24,7 +24,11 @@ function xor(a: boolean | null | undefined, b: boolean | null | undefined): bool
  * @param expectGuard set lodash function
  * @param opt
  */
-export function testGuard(actualGuard: TypeGuard | Not<TypeGuard>, expectGuard: ExpectGuard, opt: TestOption = {}): void {
+export function testGuard(
+  actualGuard: TypeGuard | Not<TypeGuard>,
+  expectGuard: ExpectGuard,
+  opt: TestOption = {}
+): void {
   test.each(allTypes())('test value type: %s', (type) => {
     const generate = getGenerator(type)
     if (opt.negative) {

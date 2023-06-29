@@ -39,10 +39,7 @@ type IsArray = typeof isArray
  * ```
  */
 
-export const assertArray: TypeAssertOf<IsArray> = createAssertion(
-  isArray,
-  errorMessage('array')
-)
+export const assertArray: TypeAssertOf<IsArray> = createAssertion(isArray, errorMessage('array'))
 
 /**
  * Ensures that a value is an array.

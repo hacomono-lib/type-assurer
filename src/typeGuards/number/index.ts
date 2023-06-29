@@ -22,7 +22,8 @@ import { errorMessage } from '../../lib/error'
  * }
  * ```
  */
-export const isNumber = ( (target: unknown): target is number => typeof target === 'number') as TypeGuard<number>
+export const isNumber = ((target: unknown): target is number =>
+  typeof target === 'number') as TypeGuard<number>
 
 type IsNumber = typeof isNumber
 

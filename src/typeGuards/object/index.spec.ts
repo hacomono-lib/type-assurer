@@ -1,6 +1,15 @@
 import { describe } from 'vitest'
 import expected from 'lodash/isObject.js'
-import { assertNotObject, assertObject, ensureNotObject, ensureObject, fallbackNotObject, fallbackObject, isObject, isNotObject } from '.'
+import {
+  assertNotObject,
+  assertObject,
+  ensureNotObject,
+  ensureObject,
+  fallbackNotObject,
+  fallbackObject,
+  isObject,
+  isNotObject
+} from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
 describe('isObject', () => {

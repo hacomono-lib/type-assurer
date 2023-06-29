@@ -22,7 +22,8 @@ import { errorMessage } from '../../lib/error'
  * }
  * ```
  */
-export const isBoolean = ((target: unknown): target is boolean => typeof target === 'boolean') as TypeGuard<boolean>
+export const isBoolean = ((target: unknown): target is boolean =>
+  typeof target === 'boolean') as TypeGuard<boolean>
 
 type IsBoolean = typeof isBoolean
 

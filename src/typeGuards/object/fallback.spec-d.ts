@@ -15,7 +15,9 @@ describe('fallbackObject type tests', () => {
 
   test('guard definite types 3', () => {
     const targetConstObject = {} as { foo?: string } | Date | unknown[]
-    assertType<{ foo?: string } | Date | unknown[]>(fallbackObject(targetConstObject, { foo: 'bar' }))
+    assertType<{ foo?: string } | Date | unknown[]>(
+      fallbackObject(targetConstObject, { foo: 'bar' })
+    )
   })
 
   test('guard unknown types', () => {

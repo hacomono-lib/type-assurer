@@ -1,6 +1,15 @@
 import { describe } from 'vitest'
 import expected from 'lodash/isNumber.js'
-import { assertNotNumber, assertNumber, ensureNotNumber, ensureNumber, fallbackNotNumber, fallbackNumber, isNumber, isNotNumber } from '.'
+import {
+  assertNotNumber,
+  assertNumber,
+  ensureNotNumber,
+  ensureNumber,
+  fallbackNotNumber,
+  fallbackNumber,
+  isNumber,
+  isNotNumber
+} from '.'
 import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
 
 describe('isNumber', () => {

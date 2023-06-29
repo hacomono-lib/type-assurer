@@ -22,9 +22,8 @@ import {
  * }
  * ```
  */
-export const isString = (
-  (target: unknown): target is string => typeof target === 'string'
-) as TypeGuard<string>
+export const isString = ((target: unknown): target is string =>
+  typeof target === 'string') as TypeGuard<string>
 
 type IsString = typeof isString
 

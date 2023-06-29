@@ -22,7 +22,13 @@ describe('isObject type tests', () => {
   })
 
   test('guard definite types 3', () => {
-    const targetConstObject = {} as { foo?: string } | Date | unknown[] | null | (() => void) | undefined
+    const targetConstObject = {} as
+      | { foo?: string }
+      | Date
+      | unknown[]
+      | null
+      | (() => void)
+      | undefined
     if (isObject(targetConstObject)) {
       assertType<{ foo?: string } | Date | unknown[] | (() => void)>(targetConstObject)
     } else {
@@ -60,7 +66,13 @@ describe('isNotObject type tests', () => {
   })
 
   test('guard definite types 3', () => {
-    const targetConstObject = {} as { foo?: string } | Date | unknown[] | null | (() => void) | undefined
+    const targetConstObject = {} as
+      | { foo?: string }
+      | Date
+      | unknown[]
+      | null
+      | (() => void)
+      | undefined
     if (isNotObject(targetConstObject)) {
       assertType<null | undefined>(targetConstObject)
     } else {

@@ -14,7 +14,9 @@ import { InvertedTypeAssertOf, InvertedTypeEnsureOf, TypeAssertOf, TypeGuard } f
  * }
  * ```
  */
-export const isNil = ((target: unknown): target is null | undefined => target == null) as TypeGuard<null | undefined>
+export const isNil = ((target: unknown): target is null | undefined => target == null) as TypeGuard<
+  null | undefined
+>
 
 type IsNil = typeof isNil
 

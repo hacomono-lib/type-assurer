@@ -59,4 +59,3 @@ describe('isNotNumber type tests', () => {
     }
   })
 })
-
