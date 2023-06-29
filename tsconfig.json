@@ -34,5 +34,6 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "useDefineForClassFields": true
-  }
+  },
+  "include": ["src/**/*"],
 }

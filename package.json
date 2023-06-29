@@ -1,9 +1,12 @@
 {
   "name": "type-assurer",
   "version": "0.0.1",
-  "description": "TypeScript library that provides shorthand type assertions and type guard functions for multiple types.",
-  "repository": "git@github.com:hacomono-lib/type-assurer.git",
-  "author": "uyamanaka <ushio.yamanaka@hacomono.co.jp>",
+  "description": "type-assurer: TypeScript library that provides shorthand type assertions and type guard functions for multiple types.",
+  "repository": {
+    "url": "https://github.com/hacomono-lib/type-assurer",
+    "type": "git"
+  },
+  "author": "mew-ton <mxl_usmarc@slmail.mewton.jp>",
   "license": "MIT",
   "type": "module",
   "files": [
@@ -15,24 +18,28 @@
   "scripts": {
     "dev": "vitest",
     "build": "tsup",
-    "test": "vitest --run --coverage",
-    "typecheck": "vitest typecheck --run",
+    "test": "run-p test:*",
+    "test:spec": "vitest --run",
+    "test:spec-d": "vitest typecheck --run",
+    "test:type": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint --ext .ts .",
     "format": "prettier --write . --ignore-path=.eslintignore",
-    "prepublishOnly": "npm run build"
+    "dedup": "yarn-deduplicate --strategy fewer"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.195",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
-    "@vitest/coverage-c8": "^0.30.0",
-    "eslint": "^8.37.0",
+    "eslint": "^8.43.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-config-turbo": "latest",
     "eslint-plugin-import": "^2.27.5",
-    "prettier": "^2.8.7",
-    "tsup": "^6.7.0",
-    "typescript": "^5.0.2",
-    "vitest": "^0.30.0"
+    "lodash": "^4.17.21",
+    "prettier": "^2.8.8",
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6",
+    "vitest": "^0.32.2",
+    "yarn-deduplicate": "^6.0.2",
+    "yarn-run-all": "latest"
   },
   "peerDependencies": {
     "typescript": ">= 4.0.0"

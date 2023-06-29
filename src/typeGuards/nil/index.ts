@@ -1,5 +1,6 @@
-import { createAssertion, createEnsure, createGuard, not } from '../factory'
-import { InvertedTypeAssertOf, InvertedTypeEnsureOf, TypeAssertOf } from '../type'
+import { errorMessage } from '../../lib/error'
+import { createAssertion, createEnsure, not } from '../../lib/factory'
+import { InvertedTypeAssertOf, InvertedTypeEnsureOf, TypeAssertOf, TypeGuard } from '../../lib/type'
 
 /**
  * Checks if a value is null or undefined.
@@ -13,7 +14,9 @@ import { InvertedTypeAssertOf, InvertedTypeEnsureOf, TypeAssertOf } from '../typ
  * }
  * ```
  */
-export const isNil = createGuard((target: unknown): target is null | undefined => target == null)
+export const isNil = ((target: unknown): target is null | undefined => target == null) as TypeGuard<
+  null | undefined
+>
 
 type IsNil = typeof isNil
 
@@ -31,7 +34,7 @@ type IsNil = typeof isNil
  */
 export const assertNil: TypeAssertOf<IsNil> = createAssertion(
   isNil,
-  (target) => `Expected value is null or undefined, but got ${JSON.stringify(target)}.`
+  errorMessage('null or undefined')
 )
 
 /**
@@ -46,18 +49,21 @@ export declare const ensureNil: never
  */
 export declare const fallbackNil: never
 
-// isNotNil is not needed because it is not useful. use ! operator instead.
 /**
- * `isNotNil` is not needed because it is not useful.
- * @deprecated
+ * Checks if a value is not null or undefined.
+ *
+ * In an if statement, it is simpler to use ! operator is simpler,
+ * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
+ * @param target The value to check.
+ * @returns True if the value is not null or undefined, false otherwise.
  * @example
  * ```ts
- * const target = getTarget() // undefined | string
- * if (!isNil(target)) { // use ! operator instead
- *  // target is string
- * }
+ * const targets = getTargets() // Array<undefined | string>
+ * const result = targets.filter(isNotNil)
+ * // result is string[]
+ * ```
  */
-export declare const isNotNil: never
+export const isNotNil = not(isNil)
 
 /**
  * Asserts that a value is not null or undefined.
@@ -72,8 +78,8 @@ export declare const isNotNil: never
  * ```
  */
 export const assertNotNil: InvertedTypeAssertOf<IsNil> = createAssertion(
-  not(isNil),
-  (target) => `Expected value is not null or undefined, but got ${target}.`
+  isNotNil,
+  errorMessage('null or undefined', { not: true })
 )
 
 /**
@@ -93,7 +99,7 @@ export const ensureNotNil: InvertedTypeEnsureOf<IsNil> = createEnsure(assertNotN
 
 /**
  * `fallbackNotNil` is not needed because it is not useful.
- * @deprecated
+ * @deprecated use ?? operator instead
  * @example
  * ```ts
  * const target = getTarget() // undefined | string

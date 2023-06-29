@@ -1,112 +1,113 @@
 # type-assurer
 
-type-assurer is a TypeScript library that provides shorthand type assertions and type guard functions for multiple types.
+`type-assurer` is a TypeScript-first type checking library, providing compatibility with lodash's type guard functions while ensuring type safety. Designed with ESModules in mind, it allows for tree-shaking to minimize bundle sizes.
+
+## Features
+
+- Compatible with lodash type guard functions
+- TypeScript-first implementation with accurate type inference
+- ESModule ready for tree-shaking and bundle size optimization
+- No external dependencies
+- A collection of 7 type guard functions:
+  a. isString - Similar to lodash's type guard functions
+  b. assertString - Provides TypeScript's type assertion feature
+  c. ensureString - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
+  d. fallbackString - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
+  - The reversed versions
+  - Generator provided for custom type guards for non-primitive types
 
 ## Installation
 
-```sh
+```bash
 npm install type-assurer
 ```
 
 ## Usage
 
-### required settings
+The library provides 8 utility functions for each type guard, such as `isString`, `isNull`, etc.
 
-### basic usage
+And, note that `fallbackNotNil` can be replaced with the `??` operator. Functions that can be simplified using standard JavaScript expressions, like this example, are not targeted for implementation.
 
-`type-assurer` provides three types of guard functions:
+### is, isNot
 
-- `isNotNil`: Provides a TypeScript type guard function
-- `assertNotNil`: Provides a TypeScript type assertion function
-- `ensureNotNil`: Performs an assertion and throws a TypeError. Otherwise, it returns the same value as the argument.
+Functions such as `is` simply provide type guards that can be used in conditional branches.
 
-`isNotNil` provides a TypeScript type guard function. It can be used to narrow down a type with a boolean check.
+```typescript
+import { isString } from 'type-assurer'
 
-```ts
+declare const value: unknown
+
+if (isString(value)) {
+  console.log(`This is a string: ${value}`)
+} else {
+  console.log('This is not a string')
+}
+```
+
+Functions such as `isNot` are useful in cases that require a type guard function as an argument, such as Array.prototype.filter.
+
+```typescript
 import { isNotNil } from 'type-assurer'
 
-declare const value: string | undefined
+declare const values: string | null
 
-if (isNotNil(value)) {
-  // `value` is narrowed down to `string` here
-  console.log(value.toUpperCase())
-}
+const result = values.filter(isNotNil)
+//    ^? string[]
 ```
 
-`assertsNotNil` provides a shorthand for a TypeScript type assertion function. It checks that the value is not null or undefined, and throws a TypeError if it is.
+### assert, assertNot
 
-```ts
-import { assertsNotNil } from 'type-assurer'
+Functions with names like `assert` `assertNot` are type assertion functions.
+If the type check does not pass, it throws a TypeError.
 
-function greet(name: string | undefined) {
-  assertsNotNil(name)
-  console.log(`Hello, ${name}!`)
-}
+The second argument can contain an error message.
 
-greet('Alice')
-greet(undefined) // Throws a TypeError
+```typescript
+import { assertString } from 'type-assurer'
+
+declare const value: unknown
+
+assertString(value, 'Value must be a string')
+// No error if value is a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-`ensureNotNil` performs an assertion and throws a TypeError if the argument is null or undefined. Otherwise, it returns the same value as the argument.
+### ensure, ensureNot
 
-```ts
-import { ensureNotNil } from 'type-assurer'
+Functions with names like `ensure` `ensureNot` are type assertion functions, but return the same value if the type check passes.
+It is convenient to write type assertions on a single line.
 
-declare function getValue(): string | undefined
+The second argument can contain an error message.
 
-const value = ensureNotNil(getValue()) // Throws a TypeError if `getValue()` returns `undefined`
-console.log(value.toUpperCase())
+```typescript
+import { ensureString } from 'type-assurer'
+
+declare function fetchData(): Promise<string | undefined>
+
+const value = ensureString(await fetchData(), 'Value must be a string')
+//    ^? string
+// No error if fetchData returns a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-## Api
+### fallback, fallbackNot
 
-### `isNil`, `assertNil`, `ensureNil`
+Functions like `fallback` `fallbackNot` are type modification functions.
 
-#### `isNil`
+They return the same value if the type check passes, otherwise they return the fallback value specified in the second argument.
 
-Type: `(value: unknown) => value is null | undefined`
-Description: Returns true if the value is null or undefined, otherwise returns false.
+```typescript
+import { fallbackString } from 'type-assurer'
 
-#### `assertNil`
+declare function fetchData(): Promise<string | undefined>
 
-Type: `(value: unknown, message?: string | (() => string)) => asserts value is null | undefined`
-Description: Throws a TypeError with the given message if the value is not null or undefined.
+const value = fallbackString(await fetchData(), 'default')
+//    ^? string
+// Returns value if it's a string, otherwise returns the fallbackValue
+```
 
-#### `ensureNil`
+## Contributing
 
-Type: `(value: unknown, message?: string | (() => string)) => null | undefined`
-Description: Performs an assertion and throws a TypeError if the value is not null or undefined.
-
-### `isNotNil`, `assertNotNil`, `ensureNotNil`
-
-(埋めてください)
-
-#### `isNotNil`
-
-Type: `<T>(value: T | null | undefined) => value is T`
-Description: Returns true if the value is not null or undefined, otherwise returns false.
-
-#### `assertNotNil`
-
-Type: `<T>(value: T | null | undefined, message?: string | (() => string)) => asserts value is T`
-Description: Throws a TypeError with the given message if the value is null or undefined.
-
-#### `ensureNotNil`
-
-Type: `<T>(value: T | null | undefined, message?: string | (() => string)) => T`
-Description: Performs an assertion and throws a TypeError if the value is null or undefined. Otherwise, it returns the same value as the argument.
-
-### TODO
-
-- String
-- Number
-- Boolean
-- Array
-- Empty
-- Symbol
-- Function
-- more...
+Contributions are welcome! Please submit a pull request or open an issue to discuss any proposed changes or feature requests.
 
 ## License
 
-This project is [MIT licensed.](./LICENSE)
+MIT

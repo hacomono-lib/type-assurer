@@ -5,7 +5,6 @@ const config = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'turbo',
     'prettier'
   ],
   globals: {

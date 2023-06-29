@@ -16,6 +16,8 @@ import {
   TypeGuard
 } from './type'
 
+import { TypeAssertionError } from './error'
+
 function createErrorMessage(value: unknown, message: TypeErrorMessage): string {
   if (typeof message === 'function') {
     return message(value)
@@ -74,7 +76,7 @@ export function createAssertion(
 ): TypeAssert | InvertedTypeAssert {
   return ((target: unknown, overrideMessage?: TypeErrorMessage) => {
     if (!guard(target)) {
-      throw new TypeError(createErrorMessage(target, overrideMessage ?? message))
+      throw new TypeAssertionError(createErrorMessage(target, overrideMessage ?? message), target)
     }
   }) as TypeAssert | InvertedTypeAssert
 }

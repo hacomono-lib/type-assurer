@@ -1,12 +1,14 @@
-import { createAssertion, createEnsure, createFallback, createGuard, not } from '../factory'
+import { errorMessage } from '../../lib/error'
+import { createAssertion, createEnsure, createFallback, not } from '../../lib/factory'
 import {
   InvertedTypeAssertOf,
   InvertedTypeEnsureOf,
   InvertedTypeFallbackOf,
   TypeAssertOf,
   TypeEnsureOf,
-  TypeFallbackOf
-} from '../type'
+  TypeFallbackOf,
+  TypeGuard
+} from '../../lib/type'
 
 /**
  * Checks if a value is a string.
@@ -18,10 +20,10 @@ import {
  * if (isString(target)) {
  *  // target is string
  * }
+ * ```
  */
-export const isString = createGuard(
-  (target: unknown): target is string => typeof target === 'string'
-)
+export const isString = ((target: unknown): target is string =>
+  typeof target === 'string') as TypeGuard<string>
 
 type IsString = typeof isString
 
@@ -39,7 +41,7 @@ type IsString = typeof isString
  */
 export const assertString: TypeAssertOf<IsString> = createAssertion(
   isString,
-  (target) => `Expected value to be a string, but got ${JSON.stringify(target)}.`
+  errorMessage('string')
 )
 
 /**
@@ -71,8 +73,21 @@ export const ensureString: TypeEnsureOf<IsString> = createEnsure(assertString)
  */
 export const fallbackString: TypeFallbackOf<IsString> = createFallback(isString)
 
-// isNotString is not needed because it is not useful. use ! operator instead.
-const isNotString = not(isString)
+/**
+ * Checks if a value is not a string.
+ *
+ * In an if statement, it is simpler to use ! operator is simpler,
+ * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
+ * @param target The value to check.
+ * @returns True if the value is not a string, false otherwise.
+ * @example
+ * ```ts
+ * const targets = getTargets() // Array<string | number>
+ * const result = targets.filter(isNotString)
+ * // result is number[]
+ * ```
+ */
+export const isNotString = not(isString)
 
 /**
  * Asserts that a value is not a string.
@@ -88,7 +103,7 @@ const isNotString = not(isString)
  */
 export const assertNotString: InvertedTypeAssertOf<IsString> = createAssertion(
   isNotString,
-  (target) => `Expected value to not be a string, but got ${JSON.stringify(target)}.`
+  errorMessage('string', { not: true })
 )
 
 /**
