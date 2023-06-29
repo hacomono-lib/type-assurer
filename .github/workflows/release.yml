@@ -23,7 +23,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install dependencies
-      uses: ./.github/actions/install-dependencies-and-cache
+      uses: ./.github/actions/init-node
 
     - name: Build
       uses: ./.github/actions/build-and-cache
