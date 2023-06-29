@@ -23,20 +23,22 @@
     "test:spec-d": "vitest typecheck --run",
     "test:type": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint --ext .ts .",
-    "format": "prettier --write . --ignore-path=.eslintignore"
+    "format": "prettier --write . --ignore-path=.eslintignore",
+    "dedup": "yarn-deduplicate --strategy fewer"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.194",
+    "@types/lodash": "^4.14.195",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
-    "eslint": "^8.37.0",
+    "eslint": "^8.43.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "lodash": "^4.17.21",
-    "prettier": "^2.8.7",
-    "tsup": "^6.7.0",
-    "typescript": "^5.0.2",
-    "vitest": "^0.30.0",
+    "prettier": "^2.8.8",
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6",
+    "vitest": "^0.32.2",
+    "yarn-deduplicate": "^6.0.2",
     "yarn-run-all": "latest"
   },
   "peerDependencies": {
