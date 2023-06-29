@@ -8,8 +8,8 @@ runs:
   steps:
     - uses: actions/setup-node@v3
       with:
-        node-version-file: package.json
         cache: yarn
+        node-version: 18
 
     - name: cache node_modules
       id: cache_node_modules
