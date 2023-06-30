@@ -27,6 +27,7 @@
     "dedup": "yarn-deduplicate --strategy fewer"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.2",
     "@types/lodash": "^4.14.195",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
