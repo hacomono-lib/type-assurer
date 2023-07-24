@@ -16,6 +16,7 @@ runs:
       uses: actions/cache@v3
       with:
         path: |
+          ./.yarn/cache
           ./node_modules
         key: node-modules-${{ runner.os }}-${{ hashFiles('./yarn.lock') }}
         restore-keys: |
@@ -24,5 +25,5 @@ runs:
           node-modules--
 
     - if: steps.cache_node_modules.outputs.cache-hit != 'true'
-      run: yarn --ignore-scripts --frozen-lockfile --check-files --non-interactive
+      run: yarn --immutable
       shell: bash

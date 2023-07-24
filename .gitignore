@@ -102,3 +102,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
