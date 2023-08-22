@@ -1,5 +1,8 @@
 # type-assurer
 
+[![Release](https://github.com/hacomono-lib/type-assurer/actions/workflows/release.yml/badge.svg)](https://github.com/hacomono-lib/type-assurer/actions/workflows/release.yml)
+[![Test](https://github.com/hacomono-lib/type-assurer/actions/workflows/test.yml/badge.svg)](https://github.com/hacomono-lib/type-assurer/actions/workflows/test.yml)
+
 `type-assurer` is a TypeScript-first type checking library, providing compatibility with lodash's type guard functions while ensuring type safety. Designed with ESModules in mind, it allows for tree-shaking to minimize bundle sizes.
 
 ## Features
