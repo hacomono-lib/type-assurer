@@ -10,9 +10,22 @@ permissions:
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - ".github/workflows/test.yml"
+      - ".gitignore"
+      - "src"
+      - "package.json"
+      - "tsconfig.json"
+      - "tsup.config.ts"
+      - "vitest.config.ts"
+      - "yarn.lock"
 
 jobs:
   init__node:
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'renovate') == false ||
+      (contains(github.event.pull_request.labels.*.name, 'renovate') &&
+        contains(github.event.pull_request.labels.*.name, 'renovate:lint') == false)
     name: "Initialize: node"
     runs-on: ubuntu-latest
     steps:
