@@ -1,5 +1,11 @@
 # type-assurer
 
+## 0.1.1
+
+### Patch Changes
+
+- [#57](https://github.com/hacomono-lib/type-assurer/pull/57) [`836fa11`](https://github.com/hacomono-lib/type-assurer/commit/836fa11258f8dcf95cae60db95adc63785bc22a9) Thanks [@mew-ton](https://github.com/mew-ton)! - fix: 間違って消してしまったので、復活させるためにちょっと修正いれる。
+
 ## 0.1.0
 
 ### Minor Changes
