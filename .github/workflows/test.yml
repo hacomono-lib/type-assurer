@@ -23,9 +23,9 @@ on:
 jobs:
   init__node:
     if: |
-      contains(github.event.pull_request.labels.*.name, 'renovate') == false ||
       (contains(github.event.pull_request.labels.*.name, 'renovate') &&
-        contains(github.event.pull_request.labels.*.name, 'renovate:lint') == false)
+        contains(github.event.pull_request.labels.*.name, 'renovate:npm')) ||
+      !contains(github.event.pull_request.labels.*.name, 'renovate')
     name: "Initialize: node"
     runs-on: ubuntu-latest
     steps:
