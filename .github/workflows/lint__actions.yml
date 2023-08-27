@@ -1,0 +1,30 @@
+---
+name: Lint Code Base (GitHub Actions)
+run-name: "Lint code base on \"${{ github.event.pull_request.title }}\" by ${{ github.actor }}"
+
+permissions:
+  contents: read
+  packages: read
+  pull-requests: write
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - .github/workflows
+      - .github/actions
+
+jobs:
+  actionlint:
+    name: "Lint: GitHub Actions"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: github actions lint
+        uses: reviewdog/action-actionlint@v1
+        with:
+          filter_mode: diff_context
+          fail_on_error: true
+          reporter: github-pr-review
+          github_token: ${{ secrets.GITHUB_TOKEN }}
