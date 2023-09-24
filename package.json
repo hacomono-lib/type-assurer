@@ -36,7 +36,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.2",
-    "@types/lodash": "^4.14.198",
+    "@types/lodash": "^4.14.199",
     "@typescript-eslint/eslint-plugin": "^6.7.0",
     "@typescript-eslint/parser": "^6.7.0",
     "eslint": "^8.49.0",
