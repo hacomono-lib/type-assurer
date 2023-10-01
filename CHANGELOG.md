@@ -1,5 +1,11 @@
 # type-assurer
 
+## 0.1.2
+
+### Patch Changes
+
+- [#66](https://github.com/hacomono-lib/type-assurer/pull/66) [`2092d88`](https://github.com/hacomono-lib/type-assurer/commit/2092d8853046ca125c0c486ef9a02ad2b1ad3ba2) Thanks [@mew-ton](https://github.com/mew-ton)! - chore: Save time running github actions.
+
 ## 0.1.1
 
 ### Patch Changes
