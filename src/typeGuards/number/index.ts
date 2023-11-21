@@ -58,7 +58,7 @@ export const assertNumber: TypeAssertOf<IsNumber> = createAssertion(
  * // result is number
  * ```
  */
-export const ensureNumber: TypeEnsureOf<IsNumber> = createEnsure(assertNumber)
+export const ensureNumber: TypeEnsureOf<IsNumber> = createEnsure(isNumber, errorMessage('number'))
 
 /**
  * Fallbacks to a default value if the value is not an number.
@@ -102,7 +102,7 @@ export const isNotNumber = not(isNumber)
  * ```
  */
 export const assertNotNumber: InvertedTypeAssertOf<IsNumber> = createAssertion(
-  isNotNumber,
+  not(isNumber),
   errorMessage('number', { not: true })
 )
 
@@ -119,7 +119,7 @@ export const assertNotNumber: InvertedTypeAssertOf<IsNumber> = createAssertion(
  * // result is string
  * ```
  */
-export const ensureNotNumber: InvertedTypeEnsureOf<IsNumber> = createEnsure(assertNotNumber)
+export const ensureNotNumber: InvertedTypeEnsureOf<IsNumber> = createEnsure(not(isNumber), errorMessage('number', { not: true }))
 
 /**
  * Fallbacks to a default value if the value is not an number.
@@ -133,4 +133,4 @@ export const ensureNotNumber: InvertedTypeEnsureOf<IsNumber> = createEnsure(asse
  * // result is string
  * ```
  */
-export const fallbackNotNumber: InvertedTypeFallbackOf<IsNumber> = createFallback(isNotNumber)
+export const fallbackNotNumber: InvertedTypeFallbackOf<IsNumber> = createFallback(not(isNumber))

@@ -57,7 +57,7 @@ export const assertString: TypeAssertOf<IsString> = createAssertion(
  * // result is string
  * ```
  */
-export const ensureString: TypeEnsureOf<IsString> = createEnsure(assertString)
+export const ensureString: TypeEnsureOf<IsString> = createEnsure(isString, errorMessage('string'))
 
 /**
  * Returns a fallback value if a value is not a string.
@@ -102,7 +102,7 @@ export const isNotString = not(isString)
  * ```
  */
 export const assertNotString: InvertedTypeAssertOf<IsString> = createAssertion(
-  isNotString,
+  not(isString),
   errorMessage('string', { not: true })
 )
 
@@ -119,7 +119,7 @@ export const assertNotString: InvertedTypeAssertOf<IsString> = createAssertion(
  * // result is number
  * ```
  */
-export const ensureNotString: InvertedTypeEnsureOf<IsString> = createEnsure(assertNotString)
+export const ensureNotString: InvertedTypeEnsureOf<IsString> = createEnsure(not(isString), errorMessage('string', { not: true }))
 
 /**
  * Returns a fallback value if a value is a string.
@@ -133,4 +133,4 @@ export const ensureNotString: InvertedTypeEnsureOf<IsString> = createEnsure(asse
  * // result is number | -1
  * ```
  */
-export const fallbackNotString: InvertedTypeFallbackOf<IsString> = createFallback(isNotString)
+export const fallbackNotString: InvertedTypeFallbackOf<IsString> = createFallback(not(isString))
