@@ -78,7 +78,7 @@ export const isNotNil = not(isNil)
  * ```
  */
 export const assertNotNil: InvertedTypeAssertOf<IsNil> = createAssertion(
-  isNotNil,
+  not(isNil),
   errorMessage('null or undefined', { not: true })
 )
 
@@ -95,7 +95,7 @@ export const assertNotNil: InvertedTypeAssertOf<IsNil> = createAssertion(
  * // result is string
  * ```
  */
-export const ensureNotNil: InvertedTypeEnsureOf<IsNil> = createEnsure(assertNotNil)
+export const ensureNotNil: InvertedTypeEnsureOf<IsNil> = createEnsure(not(isNil), errorMessage('null or undefined', { not: true }))
 
 /**
  * `fallbackNotNil` is not needed because it is not useful.

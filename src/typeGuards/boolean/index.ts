@@ -1,5 +1,5 @@
 import { createAssertion, createEnsure, createFallback, not } from '../../lib/factory'
-import {
+import type {
   InvertedTypeAssertOf,
   InvertedTypeEnsureOf,
   InvertedTypeFallbackOf,
@@ -58,7 +58,10 @@ export const assertBoolean: TypeAssertOf<IsBoolean> = createAssertion(
  * // result is boolean
  * ```
  */
-export const ensureBoolean: TypeEnsureOf<IsBoolean> = createEnsure(assertBoolean)
+export const ensureBoolean: TypeEnsureOf<IsBoolean> = createEnsure(
+  isBoolean,
+  errorMessage('boolean')
+)
 
 /**
  * Fallbacks to a default value if the value is not an boolean.
@@ -102,7 +105,7 @@ export const isNotBoolean = not(isBoolean)
  * ```
  */
 export const assertNotBoolean: InvertedTypeAssertOf<IsBoolean> = createAssertion(
-  isNotBoolean,
+  not(isBoolean),
   errorMessage('boolean', { not: true })
 )
 
@@ -119,7 +122,10 @@ export const assertNotBoolean: InvertedTypeAssertOf<IsBoolean> = createAssertion
  * // result is string
  * ```
  */
-export const ensureNotBoolean: InvertedTypeEnsureOf<IsBoolean> = createEnsure(assertNotBoolean)
+export const ensureNotBoolean: InvertedTypeEnsureOf<IsBoolean> = createEnsure(
+  not(isBoolean),
+  errorMessage('boolean', { not: true })
+)
 
 /**
  * Fallbacks to a default value if the value is not an boolean.
@@ -133,4 +139,4 @@ export const ensureNotBoolean: InvertedTypeEnsureOf<IsBoolean> = createEnsure(as
  * // result is string
  * ```
  */
-export const fallbackNotBoolean: InvertedTypeFallbackOf<IsBoolean> = createFallback(isNotBoolean)
+export const fallbackNotBoolean: InvertedTypeFallbackOf<IsBoolean> = createFallback(not(isBoolean))

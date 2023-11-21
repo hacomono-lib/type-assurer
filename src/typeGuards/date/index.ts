@@ -55,7 +55,7 @@ export const assertDate: TypeAssertOf<IsDate> = createAssertion(isDate, errorMes
  * // result is Date
  * ```
  */
-export const ensureDate: TypeEnsureOf<IsDate> = createEnsure(assertDate)
+export const ensureDate: TypeEnsureOf<IsDate> = createEnsure(isDate, errorMessage('Date'))
 
 /**
  * Fallbacks to a default value if the value is not an Date.
@@ -99,7 +99,7 @@ export const isNotDate = not(isDate)
  * ```
  */
 export const assertNotDate: InvertedTypeAssertOf<IsDate> = createAssertion(
-  isNotDate,
+  not(isDate),
   errorMessage('Date', { not: true })
 )
 
@@ -116,7 +116,7 @@ export const assertNotDate: InvertedTypeAssertOf<IsDate> = createAssertion(
  * // result is string
  * ```
  */
-export const ensureNotDate: InvertedTypeEnsureOf<IsDate> = createEnsure(assertNotDate)
+export const ensureNotDate: InvertedTypeEnsureOf<IsDate> = createEnsure(not(isDate), errorMessage('Date', { not: true }))
 
 /**
  * Fallbacks to a default value if the value is not an Date.
@@ -130,4 +130,4 @@ export const ensureNotDate: InvertedTypeEnsureOf<IsDate> = createEnsure(assertNo
  * // result is string
  * ```
  */
-export const fallbackNotDate: InvertedTypeFallbackOf<IsDate> = createFallback(isNotDate)
+export const fallbackNotDate: InvertedTypeFallbackOf<IsDate> = createFallback(not(isDate))
