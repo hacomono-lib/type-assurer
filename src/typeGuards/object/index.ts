@@ -60,7 +60,7 @@ export const assertObject: TypeAssertOf<IsObject> = createAssertion(
  * // result is Object
  * ```
  */
-export const ensureObject: TypeEnsureOf<IsObject> = createEnsure(assertObject)
+export const ensureObject: TypeEnsureOf<IsObject> = createEnsure(isObject, errorMessage('object'))
 
 /**
  * Fallbacks to a default value if the value is not an Object.
@@ -104,7 +104,7 @@ export const isNotObject = not(isObject)
  * ```
  */
 export const assertNotObject: InvertedTypeAssertOf<IsObject> = createAssertion(
-  isNotObject,
+  not(isObject),
   errorMessage('object', { not: true })
 )
 
@@ -121,7 +121,7 @@ export const assertNotObject: InvertedTypeAssertOf<IsObject> = createAssertion(
  * // result is string
  * ```
  */
-export const ensureNotObject: InvertedTypeEnsureOf<IsObject> = createEnsure(assertNotObject)
+export const ensureNotObject: InvertedTypeEnsureOf<IsObject> = createEnsure(not(isObject), errorMessage('object', { not: true }))
 
 /**
  * Fallbacks to a default value if the value is not an Object.
@@ -135,4 +135,4 @@ export const ensureNotObject: InvertedTypeEnsureOf<IsObject> = createEnsure(asse
  * // result is string
  * ```
  */
-export const fallbackNotObject: InvertedTypeFallbackOf<IsObject> = createFallback(isNotObject)
+export const fallbackNotObject: InvertedTypeFallbackOf<IsObject> = createFallback(not(isObject))

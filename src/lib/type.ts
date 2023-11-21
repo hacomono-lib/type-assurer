@@ -36,14 +36,21 @@ export type GuardedType<T extends TypeGuard | InvertedTypeGuard> = T extends Typ
   : never
 
 /**
- *
+ * @description type assertion.
  */
 export interface TypeAssert<T = unknown> extends Branded<'type_assert'> {
   (target: unknown, message?: TypeErrorMessage): asserts target is T
 }
 
 /**
- *
+ * @description assert function. but it does not assert types.
+ */
+export interface VoidAssert extends Branded<'void_assert'> {
+  (target: unknown, message?: TypeErrorMessage): void
+}
+
+/**
+ * @description inverted type assertion.
  */
 export interface InvertedTypeAssert<T = unknown> extends Branded<'inverted_type_assert'> {
   <U>(target: U | T, message?: TypeErrorMessage): asserts target is Exclude<U, T>
@@ -60,14 +67,14 @@ export type TypeAssertOf<T extends TypeGuard> = TypeAssert<GuardedType<T>>
 export type InvertedTypeAssertOf<T extends TypeGuard> = InvertedTypeAssert<GuardedType<T>>
 
 /**
- *
+ * @description type ensure.
  */
 export interface TypeEnsure<T = unknown> extends Branded<'type_ensurer'> {
   <U>(target: U, message?: TypeErrorMessage): U extends T ? U : never
 }
 
 /**
- *
+ * @description inverted type ensure.
  */
 export interface InvertedTypeEnsure<T = unknown> extends Branded<'inverted_type_ensurer'> {
   <U>(target: U | T, message?: TypeErrorMessage): U extends T ? never : U
@@ -91,14 +98,14 @@ export interface PartialFallback<T, U extends T> {
 }
 
 /**
- *
+ * @description type fallback.
  */
 export interface TypeFallback<T = unknown> extends Branded<'type_fallback'> {
   <U, V extends T>(target: U, fallback: V): U extends T ? U : V
 }
 
 /**
- *
+ * @description inverted type fallback.
  */
 export interface InvertedTypeFallback<T = unknown> extends Branded<'inverted_type_fallback'> {
   <U, V>(target: U, fallback: Exclude<V, T>): U extends T ? V : U
