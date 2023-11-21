@@ -54,7 +54,7 @@ export const assertArray: TypeAssertOf<IsArray> = createAssertion(isArray, error
  * // result is string[]
  * ```
  */
-export const ensureArray: TypeEnsureOf<IsArray> = createEnsure(assertArray)
+export const ensureArray: TypeEnsureOf<IsArray> = createEnsure(isArray, errorMessage('array'))
 
 /**
  * Fallbacks to a default value if the value is not an array.
@@ -98,7 +98,7 @@ export const isNotArray = not(isArray)
  * ```
  */
 export const assertNotArray: InvertedTypeAssertOf<IsArray> = createAssertion(
-  isNotArray,
+  not(isArray),
   errorMessage('array', { not: true })
 )
 
@@ -115,7 +115,7 @@ export const assertNotArray: InvertedTypeAssertOf<IsArray> = createAssertion(
  * // result is string
  * ```
  */
-export const ensureNotArray: InvertedTypeEnsureOf<IsArray> = createEnsure(assertNotArray)
+export const ensureNotArray: InvertedTypeEnsureOf<IsArray> = createEnsure(not(isArray), errorMessage('array', { not: true }))
 
 /**
  * Fallbacks to a default value if the value is not an array.
@@ -129,4 +129,4 @@ export const ensureNotArray: InvertedTypeEnsureOf<IsArray> = createEnsure(assert
  * // result is string
  * ```
  */
-export const fallbackNotArray: InvertedTypeFallbackOf<IsArray> = createFallback(isNotArray)
+export const fallbackNotArray: InvertedTypeFallbackOf<IsArray> = createFallback(not(isArray))
