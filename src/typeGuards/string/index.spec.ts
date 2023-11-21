@@ -10,36 +10,36 @@ import {
   isString,
   isNotString
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
 
 describe('isString', () => {
-  testGuard(isString, expected)
+  testEquivalentGuard(isString, expected)
 })
 
 describe('assertString', () => {
-  testAssert(assertString, expected)
+  testEquivalentAssert(assertString, expected)
 })
 
 describe('ensureString', () => {
-  testEnsure(ensureString, expected)
+  testEquivalentEnsure(ensureString, expected)
 })
 
 describe('fallbackString', () => {
-  testFallback(fallbackString, expected, { fallbackValue: 'fallback' })
+  testEquivalentFallback(fallbackString, expected, { fallbackValue: 'fallback' })
 })
 
 describe('isNotString', () => {
-  testGuard(isNotString, expected, { negative: true })
+  testEquivalentGuard(isNotString, expected, { negative: true })
 })
 
 describe('assertNotString', () => {
-  testAssert(assertNotString, expected, { negative: true })
+  testEquivalentAssert(assertNotString, expected, { negative: true })
 })
 
 describe('ensureNotString', () => {
-  testEnsure(ensureNotString, expected, { negative: true })
+  testEquivalentEnsure(ensureNotString, expected, { negative: true })
 })
 
 describe('fallbackNotString', () => {
-  testFallback(fallbackNotString, expected, { negative: true, fallbackValue: 123 })
+  testEquivalentFallback(fallbackNotString, expected, { negative: true, fallbackValue: 123 })
 })

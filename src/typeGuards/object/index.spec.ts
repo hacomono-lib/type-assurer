@@ -10,36 +10,36 @@ import {
   isObject,
   isNotObject
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
 
 describe('isObject', () => {
-  testGuard(isObject, expected)
+  testEquivalentGuard(isObject, expected)
 })
 
 describe('assertObject', () => {
-  testAssert(assertObject, expected)
+  testEquivalentAssert(assertObject, expected)
 })
 
 describe('ensureObject', () => {
-  testEnsure(ensureObject, expected)
+  testEquivalentEnsure(ensureObject, expected)
 })
 
 describe('fallbackObject', () => {
-  testFallback(fallbackObject, expected, { fallbackValue: [{ foo: 'bar' }] })
+  testEquivalentFallback(fallbackObject, expected, { fallbackValue: [{ foo: 'bar' }] })
 })
 
 describe('isNotObject', () => {
-  testGuard(isNotObject, expected, { negative: true })
+  testEquivalentGuard(isNotObject, expected, { negative: true })
 })
 
 describe('assertNotObject', () => {
-  testAssert(assertNotObject, expected, { negative: true })
+  testEquivalentAssert(assertNotObject, expected, { negative: true })
 })
 
 describe('ensureNotObject', () => {
-  testEnsure(ensureNotObject, expected, { negative: true })
+  testEquivalentEnsure(ensureNotObject, expected, { negative: true })
 })
 
 describe('fallbackNotObject', () => {
-  testFallback(fallbackNotObject, expected, { negative: true, fallbackValue: 'fallback' })
+  testEquivalentFallback(fallbackNotObject, expected, { negative: true, fallbackValue: 'fallback' })
 })

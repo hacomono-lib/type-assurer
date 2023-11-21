@@ -2,24 +2,24 @@
 import { describe } from 'vitest'
 import expected from 'lodash/isNil.js'
 import { isNil, assertNil, assertNotNil, ensureNotNil, isNotNil } from '.'
-import { testAssert, testEnsure, testGuard } from '../../lib/test'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentGuard } from '../../lib/test'
 
 describe('isNil', () => {
-  testGuard(isNil, expected)
+  testEquivalentGuard(isNil, expected)
 })
 
 describe('assertNil', () => {
-  testAssert(assertNil, expected)
+  testEquivalentAssert(assertNil, expected)
 })
 
 describe('assertNotNil', () => {
-  testAssert(assertNotNil, expected, { negative: true })
+  testEquivalentAssert(assertNotNil, expected, { negative: true })
 })
 
 describe('ensureNotNil', () => {
-  testEnsure(ensureNotNil, expected, { negative: true })
+  testEquivalentEnsure(ensureNotNil, expected, { negative: true })
 })
 
 describe('isNotNil', () => {
-  testGuard(isNotNil, expected, { negative: true })
+  testEquivalentGuard(isNotNil, expected, { negative: true })
 })

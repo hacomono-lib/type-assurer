@@ -5,6 +5,9 @@ type ValueFactory = () => unknown
 const generators = {
   [ValueType.True]: () => true,
   [ValueType.False]: () => false,
+  [ValueType.BooleanObject]: () => new Boolean(true),
+  [ValueType.BooleanParsableTrue]: () => 'true',
+  [ValueType.BooleanParsableFalse]: () => 'false',
   [ValueType.Null]: () => null,
   [ValueType.Undefined]: () => undefined,
   [ValueType.PositiveNumber]: () => 1,
@@ -12,24 +15,59 @@ const generators = {
   [ValueType.Zero]: () => 0,
   [ValueType.NegativeNumber]: () => -1,
   [ValueType.NegativeInfinity]: () => -Infinity,
+  [ValueType.NumberObject]: () => new Number(1),
   [ValueType.PositiveBigInt]: () => BigInt(1),
   [ValueType.NegativeBigInt]: () => BigInt(-1),
   [ValueType.NaN]: () => NaN,
+  [ValueType.NumberParsablePositiveInt]: () => '123',
+  [ValueType.NumberParsableNegativeInt]: () => '-123',
+  [ValueType.NumberParsablePositiveFloat]: () => '123.456',
+  [ValueType.NumberParsableNegativeFloat]: () => '-123.456',
   [ValueType.String]: () => 'foo',
   [ValueType.EmptyString]: () => '',
+  [ValueType.StringObject]: () => new String('foo'),
+  [ValueType.JsonParsableNumber]: () => '123',
+  [ValueType.JsonParsableTrue]: () => 'true',
+  [ValueType.JsonParsableFalse]: () => 'false',
+  [ValueType.JsonParsableNull]: () => 'null',
+  [ValueType.JsonParsableString]: () => '"foo"',
+  [ValueType.JsonParsableObject]: () => '{"foo":"bar"}',
+  [ValueType.JsonParsableComplexObject]: () => '{"foo":{"bar":"baz"}, "qux": [1,2,3]}',
+  [ValueType.JsonParsableEmptyObject]: () => '{}',
+  [ValueType.JsonParsableArray]: () => '[1,2,3]',
+  [ValueType.JsonParsableEmptyArray]: () => '[]',
   [ValueType.Array]: () => [1, 2, 3],
   [ValueType.EmptyArray]: () => [],
   [ValueType.BlankArray]: () => Array(3),
   [ValueType.ArrayLike]: () => ({ length: 3 }),
   [ValueType.ArrayBuffer]: () => new ArrayBuffer(8),
+  [ValueType.Uint8Array]: () => new Uint8Array([1, 2, 3]),
+  [ValueType.Uint8ClampedArray]: () => new Uint8ClampedArray([1, 2, 3]),
+  [ValueType.Uint16Array]: () => new Uint16Array([1, 2, 3]),
+  [ValueType.Uint32Array]: () => new Uint32Array([1, 2, 3]),
+  [ValueType.Int8Array]: () => new Int8Array([1, 2, 3]),
+  [ValueType.Int16Array]: () => new Int16Array([1, 2, 3]),
+  [ValueType.Int32Array]: () => new Int32Array([1, 2, 3]),
+  [ValueType.Float32Array]: () => new Float32Array([1, 2, 3]),
+  [ValueType.Float64Array]: () => new Float64Array([1, 2, 3]),
+  [ValueType.BigInt64Array]: () => new BigInt64Array([1n, 2n, 3n]),
+  [ValueType.BigUint64Array]: () => new BigUint64Array([1n, 2n, 3n]),
+  [ValueType.SharedArrayBuffer]: () => new SharedArrayBuffer(8),
+  [ValueType.DataView]: () => new DataView(new ArrayBuffer(8)),
+  [ValueType.EmptyDataView]: () => new DataView(new ArrayBuffer(0)),
+  [ValueType.Buffer]: () => Buffer.from('foo'),
+  [ValueType.EmptyBuffer]: () => Buffer.alloc(0),
   [ValueType.Object]: () => ({ foo: 'bar' }),
   [ValueType.EmptyObject]: () => ({}),
+  [ValueType.BlankObject]: () => Object.create(null),
   [ValueType.RecursiveObject]: () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const obj: any = {}
     obj.foo = obj
     return obj as {}
   },
+  [ValueType.ResourceObject]: () => ({ [Symbol.dispose]: () => void 0 }),
+  [ValueType.RegExp]: () => /foo/,
   [ValueType.Proxy]: () => new Proxy({}, {}),
   [ValueType.Promise]: () => new Promise(() => void 0),
   [ValueType.PromiseLike]: () => ({ then: () => void 0 }),
@@ -60,8 +98,19 @@ const generators = {
 
 Object.freeze(generators)
 
+/**
+ * Returns a list of all ValueTypes.
+ */
 export function allTypes(): ValueType[] {
   return Object.values(ValueType)
+}
+
+/**
+ * Returns a list of ValueTypes that you want to test by specifying expect targets.
+ * Here, Value Types that generate the same value (equivalent by '===') as the specified expect types are skipped.
+ */
+export function testTypes(expectTargets: ValueType[]): ValueType[] {
+
 }
 
 export function getGenerator(type: ValueType): () => unknown {

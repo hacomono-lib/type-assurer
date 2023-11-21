@@ -10,36 +10,36 @@ import {
   isNumber,
   isNotNumber
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
 
 describe('isNumber', () => {
-  testGuard(isNumber, expected)
+  testEquivalentGuard(isNumber, expected)
 })
 
 describe('assertNumber', () => {
-  testAssert(assertNumber, expected)
+  testEquivalentAssert(assertNumber, expected)
 })
 
 describe('ensureNumber', () => {
-  testEnsure(ensureNumber, expected)
+  testEquivalentEnsure(ensureNumber, expected)
 })
 
 describe('fallbackNumber', () => {
-  testFallback(fallbackNumber, expected, { fallbackValue: [123] })
+  testEquivalentFallback(fallbackNumber, expected, { fallbackValue: [123] })
 })
 
 describe('isNotNumber', () => {
-  testGuard(isNotNumber, expected, { negative: true })
+  testEquivalentGuard(isNotNumber, expected, { negative: true })
 })
 
 describe('assertNotNumber', () => {
-  testAssert(assertNotNumber, expected, { negative: true })
+  testEquivalentAssert(assertNotNumber, expected, { negative: true })
 })
 
 describe('ensureNotNumber', () => {
-  testEnsure(ensureNotNumber, expected, { negative: true })
+  testEquivalentEnsure(ensureNotNumber, expected, { negative: true })
 })
 
 describe('fallbackNotNumber', () => {
-  testFallback(fallbackNotNumber, expected, { negative: true, fallbackValue: 'fallback' })
+  testEquivalentFallback(fallbackNotNumber, expected, { negative: true, fallbackValue: 'fallback' })
 })

@@ -10,36 +10,36 @@ import {
   isBoolean,
   isNotBoolean
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
 
 describe('isBoolean', () => {
-  testGuard(isBoolean, expected)
+  testEquivalentGuard(isBoolean, expected)
 })
 
 describe('assertBoolean', () => {
-  testAssert(assertBoolean, expected)
+  testEquivalentAssert(assertBoolean, expected)
 })
 
 describe('ensureBoolean', () => {
-  testEnsure(ensureBoolean, expected)
+  testEquivalentEnsure(ensureBoolean, expected)
 })
 
 describe('fallbackBoolean', () => {
-  testFallback(fallbackBoolean, expected, { fallbackValue: [false] })
+  testEquivalentFallback(fallbackBoolean, expected, { fallbackValue: [false] })
 })
 
 describe('isNotBoolean', () => {
-  testGuard(isNotBoolean, expected, { negative: true })
+  testEquivalentGuard(isNotBoolean, expected, { negative: true })
 })
 
 describe('assertNotBoolean', () => {
-  testAssert(assertNotBoolean, expected, { negative: true })
+  testEquivalentAssert(assertNotBoolean, expected, { negative: true })
 })
 
 describe('ensureNotBoolean', () => {
-  testEnsure(ensureNotBoolean, expected, { negative: true })
+  testEquivalentEnsure(ensureNotBoolean, expected, { negative: true })
 })
 
 describe('fallbackNotBoolean', () => {
-  testFallback(fallbackNotBoolean, expected, { negative: true, fallbackValue: 'fallback' })
+  testEquivalentFallback(fallbackNotBoolean, expected, { negative: true, fallbackValue: 'fallback' })
 })
