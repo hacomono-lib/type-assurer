@@ -2,6 +2,13 @@ import { ValueType } from './type'
 
 type ValueFactory = () => unknown
 
+// WeakMap, WeakSet 用のキー
+const persistentObject1 = { key: 1 }
+Object.freeze(persistentObject1)
+
+const persistentObject2 = { key: 2 }
+Object.freeze(persistentObject2)
+
 const generators = {
   [ValueType.True]: () => true,
   [ValueType.False]: () => false,
@@ -23,6 +30,8 @@ const generators = {
   [ValueType.NumberParsableNegativeInt]: () => '-123',
   [ValueType.NumberParsablePositiveFloat]: () => '123.456',
   [ValueType.NumberParsableNegativeFloat]: () => '-123.456',
+  [ValueType.NumberParsablePositiveInfinity]: () => 'Infinity',
+  [ValueType.NumberParsableNegativeInfinity]: () => '-Infinity',
   [ValueType.String]: () => 'foo',
   [ValueType.EmptyString]: () => '',
   [ValueType.StringObject]: () => new String('foo'),
@@ -67,21 +76,36 @@ const generators = {
     return obj as {}
   },
   [ValueType.ResourceObject]: () => ({ [Symbol.dispose]: () => void 0 }),
+  [ValueType.JsonifiableObject]: () => ({
+    foo: 'bar',
+    baz: { toJSON: (k: string | number) => `${k}` }
+  }),
+  [ValueType.JsonifiableObjectInArray]: () => [{ toJSON: (k: string | number) => `${k}` }],
   [ValueType.RegExp]: () => /foo/,
   [ValueType.Proxy]: () => new Proxy({}, {}),
   [ValueType.Promise]: () => new Promise(() => void 0),
-  [ValueType.PromiseLike]: () => ({ then: () => void 0 }),
+  [ValueType.ThenableObject]: () => ({ then: () => void 0 }),
+  [ValueType.ThenableFunction]: () => {
+    const fn = () => void 0
+    fn.then = () => void 0
+    return fn
+  },
+  [ValueType.ThenableInstance]: () =>
+    new (class Foo {
+      then() {}
+    })(),
+  [ValueType.Awaited]: async () => await Promise.resolve(),
   [ValueType.Date]: () => new Date(),
   [ValueType.Error]: () => new Error(),
   [ValueType.Class]: () => class Foo {},
   [ValueType.ClassInstance]: () => new (class Foo {})(),
   [ValueType.Map]: () => new Map([['foo', 'bar']]),
   [ValueType.EmptyMap]: () => new Map(),
-  [ValueType.WeakMap]: () => new WeakMap([[{}, 'bar']]),
+  [ValueType.WeakMap]: () => new WeakMap([[persistentObject1, 'bar']]),
   [ValueType.EmptyWeakMap]: () => new WeakMap(),
   [ValueType.Set]: () => new Set([1, 2, 3]),
   [ValueType.EmptySet]: () => new Set(),
-  [ValueType.WeakSet]: () => new WeakSet([{}, {}]),
+  [ValueType.WeakSet]: () => new WeakSet([persistentObject1, persistentObject2]),
   [ValueType.EmptyWeakSet]: () => new WeakSet(),
   [ValueType.Function]: () => () => void 0,
   [ValueType.AsyncFunction]: () => async () => void 0,
@@ -105,12 +129,39 @@ export function allTypes(): ValueType[] {
   return Object.values(ValueType)
 }
 
+export interface PickTypesOption {
+  parsableString?: boolean
+  typedArray?: boolean
+}
+
 /**
  * Returns a list of ValueTypes that you want to test by specifying expect targets.
  * Here, Value Types that generate the same value (equivalent by '===') as the specified expect types are skipped.
  */
-export function testTypes(expectTargets: ValueType[]): ValueType[] {
+export function testTypes(expectTargets: ValueType[], opt: PickTypesOption = {}): ValueType[] {
+  const targetTypes = allTypes().filter((t) => {
+    let result = true
 
+    if (!opt.parsableString) {
+      result &&= !t.includes('Parsable')
+    }
+
+    if (!opt.typedArray) {
+      result &&= !(/^uint|int|float|bigInt|bigUint/.test(t) && t.endsWith('Array'))
+    }
+
+    return result
+  })
+
+  const cachedValues = targetTypes.reduce(
+    (acc, t): Partial<Record<ValueType, unknown>> => ({ ...acc, [t]: getGenerator(t)() }),
+    {}
+  ) as Record<ValueType, unknown>
+
+  return targetTypes.filter(
+    (t) =>
+      expectTargets.includes(t) || !expectTargets.some((e) => cachedValues[t] === cachedValues[e])
+  )
 }
 
 export function getGenerator(type: ValueType): () => unknown {

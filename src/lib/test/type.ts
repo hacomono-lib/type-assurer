@@ -100,6 +100,16 @@ export enum ValueType {
   NumberParsableNegativeFloat = 'numberParsableNegativeFloat',
 
   /**
+   * @description `'Infinity'`
+   */
+  NumberParsablePositiveInfinity = 'numberParsablePositiveInfinity',
+
+  /**
+   * @description `'-Infinity'`
+   */
+  NumberParsableNegativeInfinity = 'numberParsableNegativeInfinity',
+
+  /**
    * @description `'foo'`
    */
   String = 'string',
@@ -295,6 +305,16 @@ export enum ValueType {
   ResourceObject = 'resourceObject',
 
   /**
+   * @description `{ foo: 'bar', baz: { toJSON: (k) => `${k}` } }`
+   */
+  JsonifiableObject = 'jsonifiableObject',
+
+  /**
+   * @description `[{ toJSON: (k) => `${k}` }]`
+   */
+  JsonifiableObjectInArray = 'jsonifiableObjectInArray',
+
+  /**
    * @description `/foo/`
    */
   RegExp = 'regExp',
@@ -337,7 +357,22 @@ export enum ValueType {
   /**
    * @description `{ then: () => void 0 }`
    */
-  PromiseLike = 'promiseLike',
+  ThenableObject = 'thenableObject',
+
+  /**
+   * @description `{ const f = () => void 0; f.then = () => void 0; return f; }`
+   */
+  ThenableFunction = 'thenableFunction',
+
+  /**
+   * @description `new class { then() { } }`
+   */
+  ThenableInstance = 'thenableInstance',
+
+  /**
+   * @description `await Promise.resolve()`
+   */
+  Awaited = 'awaited',
 
   /**
    * @description `new Date()`

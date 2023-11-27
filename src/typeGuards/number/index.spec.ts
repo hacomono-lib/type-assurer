@@ -1,5 +1,4 @@
 import { describe } from 'vitest'
-import expected from 'lodash/isNumber.js'
 import {
   assertNotNumber,
   assertNumber,
@@ -10,36 +9,46 @@ import {
   isNumber,
   isNotNumber
 } from '.'
-import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
+import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { ValueType } from '../../lib/test/type'
+
+const expected = [
+  ValueType.PositiveNumber,
+  ValueType.NegativeNumber,
+  ValueType.Zero,
+  ValueType.PositiveInfinity,
+  ValueType.NegativeInfinity,
+  ValueType.NaN
+]
 
 describe('isNumber', () => {
-  testEquivalentGuard(isNumber, expected)
+  testGuard(isNumber, expected)
 })
 
 describe('assertNumber', () => {
-  testEquivalentAssert(assertNumber, expected)
+  testAssert(assertNumber, expected)
 })
 
 describe('ensureNumber', () => {
-  testEquivalentEnsure(ensureNumber, expected)
+  testEnsure(ensureNumber, expected)
 })
 
 describe('fallbackNumber', () => {
-  testEquivalentFallback(fallbackNumber, expected, { fallbackValue: [123] })
+  testFallback(fallbackNumber, expected, { fallbackValue: [123] })
 })
 
 describe('isNotNumber', () => {
-  testEquivalentGuard(isNotNumber, expected, { negative: true })
+  testGuard(isNotNumber, expected, { negative: true })
 })
 
 describe('assertNotNumber', () => {
-  testEquivalentAssert(assertNotNumber, expected, { negative: true })
+  testAssert(assertNotNumber, expected, { negative: true })
 })
 
 describe('ensureNotNumber', () => {
-  testEquivalentEnsure(ensureNotNumber, expected, { negative: true })
+  testEnsure(ensureNotNumber, expected, { negative: true })
 })
 
 describe('fallbackNotNumber', () => {
-  testEquivalentFallback(fallbackNotNumber, expected, { negative: true, fallbackValue: 'fallback' })
+  testFallback(fallbackNotNumber, expected, { negative: true, fallbackValue: 'fallback' })
 })

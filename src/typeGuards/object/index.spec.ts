@@ -1,5 +1,4 @@
 import { describe } from 'vitest'
-import expected from 'lodash/isObject.js'
 import {
   assertNotObject,
   assertObject,
@@ -10,36 +9,72 @@ import {
   isObject,
   isNotObject
 } from '.'
-import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
+import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { ValueType } from '../../lib/test/type'
+
+const expected = [
+  ValueType.BooleanObject,
+  ValueType.NumberObject,
+  ValueType.StringObject,
+  ValueType.ArrayLike,
+  ValueType.ArrayBuffer,
+  ValueType.SharedArrayBuffer,
+  ValueType.DataView,
+  ValueType.EmptyDataView,
+  ValueType.Buffer,
+  ValueType.EmptyBuffer,
+  ValueType.Object,
+  ValueType.EmptyObject,
+  ValueType.BlankObject,
+  ValueType.RecursiveObject,
+  ValueType.ResourceObject,
+  ValueType.RegExp,
+  ValueType.Proxy,
+  ValueType.Promise,
+  ValueType.ThenableObject,
+  ValueType.ThenableInstance,
+  ValueType.Awaited,
+  ValueType.Date,
+  ValueType.Error,
+  ValueType.ClassInstance,
+  ValueType.Map,
+  ValueType.EmptyMap,
+  ValueType.WeakMap,
+  ValueType.EmptyWeakMap,
+  ValueType.Set,
+  ValueType.EmptySet,
+  ValueType.WeakSet,
+  ValueType.EmptyWeakSet
+]
 
 describe('isObject', () => {
-  testEquivalentGuard(isObject, expected)
+  testGuard(isObject, expected)
 })
 
 describe('assertObject', () => {
-  testEquivalentAssert(assertObject, expected)
+  testAssert(assertObject, expected)
 })
 
 describe('ensureObject', () => {
-  testEquivalentEnsure(ensureObject, expected)
+  testEnsure(ensureObject, expected)
 })
 
 describe('fallbackObject', () => {
-  testEquivalentFallback(fallbackObject, expected, { fallbackValue: [{ foo: 'bar' }] })
+  testFallback(fallbackObject, expected, { fallbackValue: [{ foo: 'bar' }] })
 })
 
 describe('isNotObject', () => {
-  testEquivalentGuard(isNotObject, expected, { negative: true })
+  testGuard(isNotObject, expected, { negative: true })
 })
 
 describe('assertNotObject', () => {
-  testEquivalentAssert(assertNotObject, expected, { negative: true })
+  testAssert(assertNotObject, expected, { negative: true })
 })
 
 describe('ensureNotObject', () => {
-  testEquivalentEnsure(ensureNotObject, expected, { negative: true })
+  testEnsure(ensureNotObject, expected, { negative: true })
 })
 
 describe('fallbackNotObject', () => {
-  testEquivalentFallback(fallbackNotObject, expected, { negative: true, fallbackValue: 'fallback' })
+  testFallback(fallbackNotObject, expected, { negative: true, fallbackValue: 'fallback' })
 })

@@ -1,5 +1,4 @@
 import { describe } from 'vitest'
-import expected from 'lodash/isBoolean.js'
 import {
   assertNotBoolean,
   assertBoolean,
@@ -10,36 +9,39 @@ import {
   isBoolean,
   isNotBoolean
 } from '.'
-import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
+import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { ValueType } from '../../lib/test/type'
+
+const expected = [ValueType.True, ValueType.False]
 
 describe('isBoolean', () => {
-  testEquivalentGuard(isBoolean, expected)
+  testGuard(isBoolean, expected)
 })
 
 describe('assertBoolean', () => {
-  testEquivalentAssert(assertBoolean, expected)
+  testAssert(assertBoolean, expected)
 })
 
 describe('ensureBoolean', () => {
-  testEquivalentEnsure(ensureBoolean, expected)
+  testEnsure(ensureBoolean, expected)
 })
 
 describe('fallbackBoolean', () => {
-  testEquivalentFallback(fallbackBoolean, expected, { fallbackValue: [false] })
+  testFallback(fallbackBoolean, expected, { fallbackValue: [false] })
 })
 
 describe('isNotBoolean', () => {
-  testEquivalentGuard(isNotBoolean, expected, { negative: true })
+  testGuard(isNotBoolean, expected, { negative: true })
 })
 
 describe('assertNotBoolean', () => {
-  testEquivalentAssert(assertNotBoolean, expected, { negative: true })
+  testAssert(assertNotBoolean, expected, { negative: true })
 })
 
 describe('ensureNotBoolean', () => {
-  testEquivalentEnsure(ensureNotBoolean, expected, { negative: true })
+  testEnsure(ensureNotBoolean, expected, { negative: true })
 })
 
 describe('fallbackNotBoolean', () => {
-  testEquivalentFallback(fallbackNotBoolean, expected, { negative: true, fallbackValue: 'fallback' })
+  testFallback(fallbackNotBoolean, expected, { negative: true, fallbackValue: 'fallback' })
 })

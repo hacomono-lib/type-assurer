@@ -3,16 +3,15 @@
 [![Release](https://github.com/hacomono-lib/type-assurer/actions/workflows/release.yml/badge.svg)](https://github.com/hacomono-lib/type-assurer/actions/workflows/release.yml)
 [![Test](https://github.com/hacomono-lib/type-assurer/actions/workflows/test.yml/badge.svg)](https://github.com/hacomono-lib/type-assurer/actions/workflows/test.yml)
 
-`type-assurer` is a TypeScript-first type checking library, providing compatibility with lodash's type guard functions while ensuring type safety. Designed with ESModules in mind, it allows for tree-shaking to minimize bundle sizes.
+`type-assurer` is a TypeScript-first type checking library. Designed with ESModules in mind, it allows for tree-shaking to minimize bundle sizes.
 
 ## Features
 
-- Compatible with lodash type guard functions
 - TypeScript-first implementation with accurate type inference
 - ESModule ready for tree-shaking and bundle size optimization
 - No external dependencies
 - A collection of 7 type guard functions:
-  a. isString - Similar to lodash's type guard functions
+  a. isString - type guard functions
   b. assertString - Provides TypeScript's type assertion feature
   c. ensureString - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
   d. fallbackString - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
@@ -38,8 +37,6 @@ Functions such as `is` simply provide type guards that can be used in conditiona
 ```typescript
 import { isString } from 'type-assurer'
 
-declare const value: unknown
-
 if (isString(value)) {
   console.log(`This is a string: ${value}`)
 } else {
@@ -52,10 +49,17 @@ Functions such as `isNot` are useful in cases that require a type guard function
 ```typescript
 import { isNotNil } from 'type-assurer'
 
-declare const values: string | null
-
 const result = values.filter(isNotNil)
 //    ^? string[]
+```
+
+Also, type guard functions such as `isXxx` are implemented in the form of `not(isXxx)`.
+If you have implemented your own type guard, you can use the `not` function directly.
+
+```typescript
+import { not } from 'type-assurer'
+
+const result = values.filter(not(isFoo))
 ```
 
 ### assert, assertNot
@@ -105,6 +109,22 @@ declare function fetchData(): Promise<string | undefined>
 const value = fallbackString(await fetchData(), 'default')
 //    ^? string
 // Returns value if it's a string, otherwise returns the fallbackValue
+```
+
+### coerce
+
+Functions like `coerce` are type modification functions.
+
+If there is a type check for a parsable value, there is a corresponding function. (e.g. NumberParsable, JsonParsable, etc.)
+
+```typescript
+import { coerceNumber } from 'type-assurer'
+
+const value1 = coerceNumber('123')
+//    ^? number
+
+const value2 = coerceNumber('abc')
+//    thrown TypeAssertionError
 ```
 
 ## Contributing

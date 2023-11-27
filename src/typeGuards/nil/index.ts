@@ -4,6 +4,7 @@ import { InvertedTypeAssertOf, InvertedTypeEnsureOf, TypeAssertOf, TypeGuard } f
 
 /**
  * Checks if a value is null or undefined.
+ *
  * @param target The value to check.
  * @returns True if the value is null or undefined, false otherwise.
  * @example
@@ -22,6 +23,7 @@ type IsNil = typeof isNil
 
 /**
  * Asserts that a value is null or undefined.
+ *
  * @param target The value to check.`
  * @param message (optional) The error message to throw if the value is not null or undefined.
  * @throws A TypeError with the given message if the value is not null or undefined.
@@ -54,6 +56,7 @@ export declare const fallbackNil: never
  *
  * In an if statement, it is simpler to use ! operator is simpler,
  * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
+ *
  * @param target The value to check.
  * @returns True if the value is not null or undefined, false otherwise.
  * @example
@@ -67,6 +70,7 @@ export const isNotNil = not(isNil)
 
 /**
  * Asserts that a value is not null or undefined.
+ *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is null or undefined.
  * @throws A TypeError with the given message if the value is null or undefined.
@@ -84,6 +88,7 @@ export const assertNotNil: InvertedTypeAssertOf<IsNil> = createAssertion(
 
 /**
  * Ensures that a value is not null or undefined.
+ *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is null or undefined.
  * @returns The value if it is not null or undefined.
@@ -95,7 +100,10 @@ export const assertNotNil: InvertedTypeAssertOf<IsNil> = createAssertion(
  * // result is string
  * ```
  */
-export const ensureNotNil: InvertedTypeEnsureOf<IsNil> = createEnsure(not(isNil), errorMessage('null or undefined', { not: true }))
+export const ensureNotNil: InvertedTypeEnsureOf<IsNil> = createEnsure(
+  not(isNil),
+  errorMessage('null or undefined', { not: true })
+)
 
 /**
  * `fallbackNotNil` is not needed because it is not useful.

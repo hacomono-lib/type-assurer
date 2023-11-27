@@ -10,7 +10,7 @@ import type {
   Not
 } from '../..'
 import { ValueType } from './type'
-import { type TestOption, allTypes, getGenerator, testTypes } from './value'
+import { type TestOption, type PickTypesOption, allTypes, getGenerator, testTypes } from './value'
 
 type ExpectGuard = (v: unknown) => boolean
 
@@ -47,8 +47,12 @@ export function testEquivalentGuard(
  * @param expectedValueTypes set expected ValueType array
  * @param opt
  */
-export function testGuard(actualGuard: TypeGuard | Not<TypeGuard>, expectedValueTypes: ValueType[], opt: TestOption = {}): void {
-  test.each(testTypes(expectedValueTypes))('test value type: %s', (type) => {
+export function testGuard(
+  actualGuard: TypeGuard | Not<TypeGuard>,
+  expectedValueTypes: ValueType[],
+  opt: TestOption & PickTypesOption = {}
+): void {
+  test.each(testTypes(expectedValueTypes, opt))('test value type: %s', (type) => {
     const generate = getGenerator(type)
     const expected = expectedValueTypes.includes(type)
     if (opt.negative) {
@@ -97,9 +101,9 @@ export function testEquivalentAssert(
 export function testAssert(
   actualAssert: TypeAssert | InvertedTypeAssert,
   expectedValueTypes: ValueType[],
-  opt: TestOption = {}
+  opt: TestOption & PickTypesOption = {}
 ): void {
-  test.each(testTypes(expectedValueTypes))('test value type: %s', (type) => {
+  test.each(testTypes(expectedValueTypes, opt))('test value type: %s', (type) => {
     const generate = getGenerator(type)
     const expected = expectedValueTypes.includes(type)
 
@@ -151,9 +155,9 @@ export function testEquivalentEnsure(
 export function testEnsure(
   ensure: TypeEnsure | InvertedTypeEnsure,
   expectedValueTypes: ValueType[],
-  opt: TestOption = {}
+  opt: TestOption & PickTypesOption = {}
 ): void {
-  test.each(testTypes(expectedValueTypes))('test value type: %s', (type) => {
+  test.each(testTypes(expectedValueTypes, opt))('test value type: %s', (type) => {
     const generate = getGenerator(type)
     const expected = expectedValueTypes.includes(type)
 
@@ -213,18 +217,20 @@ export function testEquivalentFallback(
 export function testFallback(
   fallback: TypeFallback | InvertedTypeFallback,
   expectedValueTypes: ValueType[],
-  opt: TestOption & { fallbackValue: unknown }
+  opt: TestOption & PickTypesOption & { fallbackValue: unknown }
 ): void
 
 export function testFallback(
   fallback: AnyFunction,
   expectedValueTypes: ValueType[],
-  opt: TestOption & { fallbackValue: unknown }
+  opt: TestOption & PickTypesOption & { fallbackValue: unknown }
 ): void {
-  test.each(testTypes(expectedValueTypes))('test value type: %s', (type) => {
+  test.each(testTypes(expectedValueTypes, opt))('test value type: %s', (type) => {
     const generate = getGenerator(type)
     const value = generate()
-    const expected = xor(expectedValueTypes.includes(type), opt.negative) ? value : opt.fallbackValue
+    const expected = xor(expectedValueTypes.includes(type), opt.negative)
+      ? value
+      : opt.fallbackValue
     expect(fallback(value, opt.fallbackValue)).toEqual(expected)
   })
 }

@@ -10,12 +10,11 @@ import type {
 } from '../../lib/type'
 import { errorMessage } from '../../lib/error'
 
-import { isPromiseLike } from '../promise-like'
-
 /**
- * Checks if a value is an Promise. (including PromiseLike)
+ * Checks if a value is a Promise. (excluding PromiseLike)
+ *
  * @param target The value to check.
- * @returns True if the value is an Promise, false otherwise.
+ * @returns True if the value is a Promise, false otherwise.
  * @example
  * ```ts
  * const target = getTarget() // Promise | string
@@ -25,20 +24,21 @@ import { isPromiseLike } from '../promise-like'
  * ```
  */
 export const isPromise = ((target: unknown): target is Promise<unknown> => {
-  return target instanceof Promise || isPromiseLike(target)
+  return target instanceof Promise
 }) as TypeGuard<Promise<unknown>>
 
 type IsPromise = typeof isPromise
 
 /**
- * Asserts that a value is an Promise. (including PromiseLike)
+ * Asserts that a value is a Promise. (excluding PromiseLike)
+ *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not an Promise.
- * @throws A TypeError with the given message if the value is not an Promise.
+ * @param message (optional) The error message to throw if the value is not a Promise.
+ * @throws A TypeError with the given message if the value is not a Promise.
  * @example
  * ```ts
  * const target = getTarget() // Promise | string
- * assertPromise(target, 'target must be an Promise')
+ * assertPromise(target, 'target must be a Promise')
  * // target is Promise
  * ```
  */
@@ -49,22 +49,27 @@ export const assertPromise: TypeAssertOf<IsPromise> = createAssertion(
 )
 
 /**
- * Ensures that a value is an Promise. (including PromiseLike)
+ * Ensures that a value is a Promise. (excluding PromiseLike)
+ *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not an Promise.
- * @throws A TypeError with the given message if the value is not an Promise.
- * @returns The value if it is an Promise.
+ * @param message (optional) The error message to throw if the value is not a Promise.
+ * @throws A TypeError with the given message if the value is not a Promise.
+ * @returns The value if it is a Promise.
  * @example
  * ```ts
  * const target = getTarget() // Promise | string
- * const result = ensurePromise(target, 'target must be an Promise')
+ * const result = ensurePromise(target, 'target must be a Promise')
  * // result is Promise
  * ```
  */
-export const ensurePromise: TypeEnsureOf<IsPromise> = createEnsure(isPromise, errorMessage('promise'))
+export const ensurePromise: TypeEnsureOf<IsPromise> = createEnsure(
+  isPromise,
+  errorMessage('promise')
+)
 
 /**
- * Fallbacks to a default value if the value is not an Promise. (including PromiseLike)
+ * Fallbacks to a default value if the value is not a Promise. (excluding PromiseLike)
+ *
  * @param target The value to check.
  * @param defaultValue The default value to fallback to.
  * @example
@@ -77,12 +82,13 @@ export const ensurePromise: TypeEnsureOf<IsPromise> = createEnsure(isPromise, er
 export const fallbackPromise: TypeFallbackOf<IsPromise> = createFallback(isPromise)
 
 /**
- * Checks if a value is not an Promise. (including PromiseLike)
+ * Checks if a value is not a Promise. (excluding PromiseLike)
  *
  * In an if statement, it is simpler to use ! operator is simpler,
  * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
+ *
  * @param target The value to check.
- * @returns True if the value is not an Promise, false otherwise.
+ * @returns True if the value is not a Promise, false otherwise.
  * @example
  * ```ts
  * const targets = getTargets() // Array<string | promise>
@@ -93,14 +99,15 @@ export const fallbackPromise: TypeFallbackOf<IsPromise> = createFallback(isPromi
 export const isNotPromise = not(isPromise)
 
 /**
- * Asserts that a value is not an Promise. (including PromiseLike)
+ * Asserts that a value is not a Promise. (excluding PromiseLike)
+ *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is an Promise.
- * @throws A TypeError with the given message if the value is an Promise.
+ * @param message (optional) The error message to throw if the value is a Promise.
+ * @throws A TypeError with the given message if the value is a Promise.
  * @example
  * ```ts
  * const target = getTarget() // string | Promise
- * assertNotPromise(target, 'target must not be an Promise')
+ * assertNotPromise(target, 'target must not be a Promise')
  * // target is string
  * ```
  */
@@ -110,25 +117,30 @@ export const assertNotPromise: InvertedTypeAssertOf<IsPromise> = createAssertion
 )
 
 /**
- * Enxures that a value is not an Promise. (including PromiseLike)
+ * Enxures that a value is not a Promise. (excluding PromiseLike)
+ *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is an Promise.
- * @throws A TypeError with the given message if the value is an Promise.
- * @returns The value if it is not an Promise.
+ * @param message (optional) The error message to throw if the value is a Promise.
+ * @throws A TypeError with the given message if the value is a Promise.
+ * @returns The value if it is not a Promise.
  * @example
  * ```ts
  * const target = getTarget() // string | Promise
- * const result = ensureNotPromise(target, 'target must not be an Promise')
+ * const result = ensureNotPromise(target, 'target must not be a Promise')
  * // result is string
  * ```
  */
-export const ensureNotPromise: InvertedTypeEnsureOf<IsPromise> = createEnsure(not(isPromise), errorMessage('promise', { not: true }))
+export const ensureNotPromise: InvertedTypeEnsureOf<IsPromise> = createEnsure(
+  not(isPromise),
+  errorMessage('promise', { not: true })
+)
 
 /**
- * Fallbacks to a default value if the value is not an Promise. (including PromiseLike)
+ * Fallbacks to a default value if the value is not a Promise. (excluding PromiseLike)
+ *
  * @param target The value to check.
  * @param defaultValue The default value to fallback to.
- * @return The value if it is not an Promise, the default value otherwise.
+ * @return The value if it is not a Promise, the default value otherwise.
  * @example
  * ```ts
  * const target = getTarget() // string | Promise

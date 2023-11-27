@@ -1,5 +1,4 @@
 import { describe } from 'vitest'
-import expected from 'lodash/isString.js'
 import {
   assertNotString,
   assertString,
@@ -10,36 +9,39 @@ import {
   isString,
   isNotString
 } from '.'
-import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
+import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { ValueType } from '../../lib/test/type'
+
+const expected = [ValueType.String, ValueType.EmptyString]
 
 describe('isString', () => {
-  testEquivalentGuard(isString, expected)
+  testGuard(isString, expected)
 })
 
 describe('assertString', () => {
-  testEquivalentAssert(assertString, expected)
+  testAssert(assertString, expected)
 })
 
 describe('ensureString', () => {
-  testEquivalentEnsure(ensureString, expected)
+  testEnsure(ensureString, expected)
 })
 
 describe('fallbackString', () => {
-  testEquivalentFallback(fallbackString, expected, { fallbackValue: 'fallback' })
+  testFallback(fallbackString, expected, { fallbackValue: 'fallback' })
 })
 
 describe('isNotString', () => {
-  testEquivalentGuard(isNotString, expected, { negative: true })
+  testGuard(isNotString, expected, { negative: true })
 })
 
 describe('assertNotString', () => {
-  testEquivalentAssert(assertNotString, expected, { negative: true })
+  testAssert(assertNotString, expected, { negative: true })
 })
 
 describe('ensureNotString', () => {
-  testEquivalentEnsure(ensureNotString, expected, { negative: true })
+  testEnsure(ensureNotString, expected, { negative: true })
 })
 
 describe('fallbackNotString', () => {
-  testEquivalentFallback(fallbackNotString, expected, { negative: true, fallbackValue: 123 })
+  testFallback(fallbackNotString, expected, { negative: true, fallbackValue: 123 })
 })

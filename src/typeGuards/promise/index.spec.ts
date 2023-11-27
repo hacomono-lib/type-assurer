@@ -12,7 +12,7 @@ import {
   isPromise
 } from '.'
 
-const expectedValueTypes = [ValueType.Promise, ValueType.Promise]
+const expectedValueTypes = [ValueType.Promise, ValueType.Awaited]
 
 describe('isPromise', () => {
   testGuard(isPromise, expectedValueTypes)
