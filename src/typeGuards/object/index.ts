@@ -24,8 +24,10 @@ import { errorMessage } from '../../lib/error'
  * }
  * ```
  */
-export const isObject = (<T extends Record<string, unknown>>(target: unknown): target is T =>
-  target !== null && !Array.isArray(target) && typeof target === 'object') as TypeGuard<object>
+export const isObject = ((target: unknown): boolean =>
+  target !== null && !Array.isArray(target) && typeof target === 'object') as TypeGuard<
+  Record<string, unknown>
+>
 
 type IsObject = typeof isObject
 

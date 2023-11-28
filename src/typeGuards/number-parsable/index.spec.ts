@@ -10,11 +10,16 @@ import {
   isNotNumberParsable,
   coerceNumber
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
-import { ValueType } from '../../lib/test/type'
-import { getGenerator } from '../../lib/test/value'
-import { TypeAssertionError } from '../../lib/error/error'
-import { testTypes } from '../../lib/test/value'
+import {
+  testAssert,
+  testEnsure,
+  testFallback,
+  testGuard,
+  testTypes,
+  getGenerator,
+  ValueType
+} from '../../lib/test'
+import { TypeAssertionError } from '../../lib/error'
 
 const expected = [
   ValueType.PositiveNumber,

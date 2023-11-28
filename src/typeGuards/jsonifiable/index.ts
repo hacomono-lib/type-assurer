@@ -11,8 +11,8 @@ import type {
 import { errorMessage } from '../../lib/error'
 
 import { isString } from '../string'
-import { isObject } from '../object'
-import { isArray } from '../array'
+
+import { deepJsonEqual } from './internals'
 import { Jsonifiable, JsonifiableString } from './type'
 
 type JsonifiableValue = Jsonifiable | JsonifiableString
@@ -54,54 +54,13 @@ export const isJsonifiable = ((target: unknown): target is JsonifiableValue => {
     }
   }
 
-  if (isObject(target) || isArray(target)) {
-    // remove function, symbol, undefined, etc.
-    const cloned = JSON.parse(JSON.stringify(target))
-
-    const hasToJSON = (value: unknown): value is { toJSON: (key: string | number) => unknown } => {
-      return isObject(value) && typeof (value as { toJSON: unknown }).toJSON === 'function'
-    }
-
-    const deepEqual = (cloned: unknown, target: unknown): boolean => {
-      if (cloned === target) {
-        return true
-      }
-
-      if (typeof cloned !== typeof target) {
-        return false
-      }
-
-      if (isObject(cloned) && isObject(target)) {
-        const aKeys = Object.keys(cloned)
-        const bKeys = Object.keys(target)
-
-        if (aKeys.length !== bKeys.length) {
-          return false
-        }
-
-        return aKeys.every((key) =>
-          deepEqual(cloned[key], hasToJSON(target[key]) ? target[key].toJSON(key) : target[key])
-        )
-      }
-
-      if (isArray(cloned) && isArray(target)) {
-        if (cloned.length !== target.length) {
-          return false
-        }
-
-        return cloned.every((value, index) => {
-          const insideTarget = target[index]
-          return deepEqual(
-            value,
-            hasToJSON(insideTarget) ? insideTarget.toJSON(index) : insideTarget
-          )
-        })
-      }
-
+  if (typeof target === 'object' && target !== null) {
+    try {
+      JSON.parse(JSON.stringify(target))
+      return true
+    } catch {
       return false
     }
-
-    return deepEqual(cloned, target)
   }
 
   return false
@@ -231,6 +190,18 @@ export const fallbackNotJsonifiable: InvertedTypeFallbackOf<IsJsonifiable> = cre
   not(isJsonifiable)
 )
 
+/**
+ *
+ * @param target
+ */
+export function coerceJsonObject<T extends Jsonifiable>(target: unknown | T): T
+
+/**
+ *
+ * @param target
+ */
+export function coerceJsonObject(target: unknown): Record<string, unknown>
+
 export function coerceJsonObject(tagret: unknown): Record<string, unknown> {
   if (!isJsonifiable(tagret)) {
     return {}
@@ -238,6 +209,18 @@ export function coerceJsonObject(tagret: unknown): Record<string, unknown> {
 
   return isString(tagret) ? JSON.parse(tagret) : tagret
 }
+
+/**
+ *
+ * @param target
+ */
+export function coerceJsonString<T extends JsonifiableString>(target: unknown | T): T
+
+/**
+ *
+ * @param target
+ */
+export function coerceJsonString(target: unknown): string
 
 export function coerceJsonString(target: unknown): string {
   if (!isJsonifiable(target)) {

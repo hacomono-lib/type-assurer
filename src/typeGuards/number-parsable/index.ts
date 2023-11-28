@@ -9,7 +9,8 @@ import {
   TypeGuard
 } from '../../lib/type'
 import { TypeAssertionError, errorMessage } from '../../lib/error'
-import { isNumber, isString } from '..'
+import { isNumber } from '../number'
+import { isString } from '../string'
 
 export type NumberParsable = number | `${number}`
 
@@ -169,6 +170,23 @@ export const fallbackNotNumberParsable: InvertedTypeFallbackOf<IsNumberParsable>
  * // result is number
  * ```
  */
+export function coerceNumber<N extends number>(target: unknown | N): N
+
+/**
+ * Coerces a value to number.
+ *
+ * @param target The value to coerce.
+ * @throws A TypeError if the value is not number or number string.
+ * @returns The value as number.
+ * @example
+ * ```ts
+ * const target = getTarget() // string | number
+ * const result = coerceNumber(target)
+ * // result is number
+ * ```
+ */
+export function coerceNumber(target: unknown): number
+
 export function coerceNumber(target: unknown): number {
   if (!isNumberParsable(target)) {
     throw new TypeAssertionError(errorMessage('number parsable')(target), target)

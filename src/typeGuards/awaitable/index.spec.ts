@@ -1,6 +1,5 @@
 import { describe } from 'vitest'
-import { ValueType } from '../../lib/test/type'
-import { testGuard, testAssert, testEnsure, testFallback } from '../../lib/test'
+import { testGuard, testAssert, testEnsure, testFallback, ValueType } from '../../lib/test'
 import {
   assertNotAwaitable,
   assertAwaitable,
@@ -20,34 +19,34 @@ const expectedValueTypes = [
   ValueType.Awaited
 ]
 
-describe('isPromiseLike', () => {
+describe('isAwaitable', () => {
   testGuard(isAwaitable, expectedValueTypes)
 })
 
-describe('assertPromiseLike', () => {
+describe('assertAwaitable', () => {
   testAssert(assertAwaitable, expectedValueTypes)
 })
 
-describe('ensurePromiseLike', () => {
+describe('ensureAwaitable', () => {
   testEnsure(ensureAwaitable, expectedValueTypes)
 })
 
-describe('fallbackPromiseLike', () => {
+describe('fallbackAwaitable', () => {
   testFallback(fallbackAwaitable, expectedValueTypes, { fallbackValue: Promise.resolve() })
 })
 
-describe('isNotPromiseLike', () => {
+describe('isNotAwaitable', () => {
   testGuard(isNotAwaitable, expectedValueTypes, { negative: true })
 })
 
-describe('assertNotPromiseLike', () => {
+describe('assertNotAwaitable', () => {
   testAssert(assertNotAwaitable, expectedValueTypes, { negative: true })
 })
 
-describe('ensureNotPromiseLike', () => {
+describe('ensureNotAwaitable', () => {
   testEnsure(ensureNotAwaitable, expectedValueTypes, { negative: true })
 })
 
-describe('fallbackNotPromiseLike', () => {
+describe('fallbackNotAwaitable', () => {
   testFallback(fallbackNotAwaitable, expectedValueTypes, { negative: true, fallbackValue: 123 })
 })

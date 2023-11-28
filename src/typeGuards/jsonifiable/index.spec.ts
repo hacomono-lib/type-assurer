@@ -1,18 +1,20 @@
 import { describe } from 'vitest'
 import {
-  assertNotJsonParsable,
-  assertJson,
-  ensureNotJsonParsable,
-  ensureJsonParsable,
-  fallbackNotJsonParsable,
-  fallbackJsonParsable,
-  isJson,
-  isNotJsonParsable
+  assertNotJsonifiable,
+  assertJsonifiable,
+  ensureNotJsonifiable,
+  ensureJsonifiable,
+  fallbackNotJsonifiable,
+  fallbackJsonifiable,
+  isJsonifiable,
+  isNotJsonifiable
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
-import { ValueType } from '../../lib/test/type'
+import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 
 const expected = [
+  ValueType.BooleanObject,
+  ValueType.StringObject,
+  ValueType.NumberObject,
   ValueType.NumberParsablePositiveInt,
   ValueType.NumberParsableNegativeInt,
   ValueType.NumberParsablePositiveFloat,
@@ -26,42 +28,49 @@ const expected = [
   ValueType.JsonParsableComplexObject,
   ValueType.JsonParsableEmptyObject,
   ValueType.JsonParsableArray,
-  ValueType.JsonParsableEmptyArray
+  ValueType.JsonParsableEmptyArray,
+  ValueType.JsonifiableObject,
+  ValueType.JsonifiableObjectInArray,
+  ValueType.Array,
+  ValueType.EmptyArray,
+  ValueType.ArrayLike,
+  ValueType.Object,
+  ValueType.EmptyObject
 ]
 
-describe('isJsonParsable', () => {
-  testGuard(isJson, expected, { parsableString: true })
+describe('isJsonifiable', () => {
+  testGuard(isJsonifiable, expected, { parsableString: true })
 })
 
-describe('assertJsonParsable', () => {
-  testAssert(assertJson, expected, { parsableString: true })
+describe('assertJsonifiable', () => {
+  testAssert(assertJsonifiable, expected, { parsableString: true })
 })
 
-describe('ensureJsonParsable', () => {
-  testEnsure(ensureJsonParsable, expected, { parsableString: true })
+describe('ensureJsonifiable', () => {
+  testEnsure(ensureJsonifiable, expected, { parsableString: true })
 })
 
-describe('fallbackJsonParsable', () => {
-  testFallback(fallbackJsonParsable, expected, {
+describe('fallbackJsonifiable', () => {
+  testFallback(fallbackJsonifiable, expected, {
     parsableString: true,
     fallbackValue: [{ foo: 'bar' }]
   })
 })
 
-describe('isNotJsonParsable', () => {
-  testGuard(isNotJsonParsable, expected, { parsableString: true, negative: true })
+describe('isNotJsonifiable', () => {
+  testGuard(isNotJsonifiable, expected, { parsableString: true, negative: true })
 })
 
-describe('assertNotJsonParsable', () => {
-  testAssert(assertNotJsonParsable, expected, { parsableString: true, negative: true })
+describe('assertNotJsonifiable', () => {
+  testAssert(assertNotJsonifiable, expected, { parsableString: true, negative: true })
 })
 
-describe('ensureNotJsonParsable', () => {
-  testEnsure(ensureNotJsonParsable, expected, { parsableString: true, negative: true })
+describe('ensureNotJsonifiable', () => {
+  testEnsure(ensureNotJsonifiable, expected, { parsableString: true, negative: true })
 })
 
-describe('fallbackNotJsonParsable', () => {
-  testFallback(fallbackNotJsonParsable, expected, {
+describe('fallbackNotJsonifiable', () => {
+  testFallback(fallbackNotJsonifiable, expected, {
     parsableString: true,
     negative: true,
     fallbackValue: 'fallback'

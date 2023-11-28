@@ -9,8 +9,7 @@ import {
   isObject,
   isNotObject
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
-import { ValueType } from '../../lib/test/type'
+import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 
 const expected = [
   ValueType.BooleanObject,

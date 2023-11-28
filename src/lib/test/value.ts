@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { ValueType } from './type'
 
 type ValueFactory = () => unknown
@@ -97,8 +98,18 @@ const generators = {
   [ValueType.Awaited]: async () => await Promise.resolve(),
   [ValueType.Date]: () => new Date(),
   [ValueType.Error]: () => new Error(),
-  [ValueType.Class]: () => class Foo {},
-  [ValueType.ClassInstance]: () => new (class Foo {})(),
+  [ValueType.Class]: () =>
+    class Foo {
+      bar() {
+        return 'baz'
+      }
+    },
+  [ValueType.ClassInstance]: () =>
+    new (class Foo {
+      bar() {
+        return 'baz'
+      }
+    })(),
   [ValueType.Map]: () => new Map([['foo', 'bar']]),
   [ValueType.EmptyMap]: () => new Map(),
   [ValueType.WeakMap]: () => new WeakMap([[persistentObject1, 'bar']]),
@@ -143,7 +154,9 @@ export function testTypes(expectTargets: ValueType[], opt: PickTypesOption = {})
     let result = true
 
     if (!opt.parsableString) {
-      result &&= !t.includes('Parsable')
+      result &&=
+        !t.toLocaleLowerCase().includes('parsable') &&
+        !t.toLocaleLowerCase().includes('jsonifiable')
     }
 
     if (!opt.typedArray) {
