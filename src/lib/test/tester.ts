@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { expect, test } from 'vitest'
 import type {
   InvertedTypeAssert,

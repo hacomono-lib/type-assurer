@@ -42,7 +42,7 @@ export function deepJsonEqual(cloned: unknown, target: unknown): boolean {
     const keys = Array.from(new Set([...aKeys, ...bKeys]))
 
     return keys.every((key) =>
-      deepJsonEqual(getValueByObject(key, cloned), getValueByObject(key, target))
+      deepJsonEqual(getValueByObject(key, cloned[key]), getValueByObject(key, target[key]))
     )
   }
 
