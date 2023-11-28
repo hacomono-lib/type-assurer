@@ -56,8 +56,8 @@ export const isJsonifiable = ((target: unknown): target is JsonifiableValue => {
 
   if (typeof target === 'object' && target !== null) {
     try {
-      JSON.parse(JSON.stringify(target))
-      return true
+      const cloned = JSON.parse(JSON.stringify(target))
+      return deepJsonEqual(target, cloned)
     } catch {
       return false
     }
