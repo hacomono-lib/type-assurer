@@ -38,7 +38,7 @@ type IsNumberParsable = typeof isNumberParsable
  *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is not number or number string.
- * @throws A TypeError with the given message if the value is not number or number string.
+ * @throws A TypeAssertionError with the given message if the value is not number or number string.
  * @example
  * ```ts
  * const target = getTarget() // number | string
@@ -57,7 +57,7 @@ export const assertNumberParsable: TypeAssertOf<IsNumberParsable> = createAssert
  *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is not number or number string.
- * @throws A TypeError with the given message if the value is not number or number string.
+ * @throws A TypeAssertionError with the given message if the value is not number or number string.
  * @returns The value if it is number or number string.
  * @example
  * ```ts
@@ -108,7 +108,7 @@ export const isNotNumberParsable = not(isNumberParsable)
  *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is number or number string.
- * @throws A TypeError with the given message if the value is number or number string.
+ * @throws A TypeAssertionError with the given message if the value is number or number string.
  * @example
  * ```ts
  * const target = getTarget() // string | number
@@ -126,7 +126,7 @@ export const assertNotNumberParsable: InvertedTypeAssertOf<IsNumberParsable> = c
  *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is number or number string.
- * @throws A TypeError with the given message if the value is number or number string.
+ * @throws A TypeAssertionError with the given message if the value is number or number string.
  * @returns The value if it is not number or number string.
  * @example
  * ```ts
@@ -159,9 +159,10 @@ export const fallbackNotNumberParsable: InvertedTypeFallbackOf<IsNumberParsable>
 
 /**
  * Coerces a value to number.
+ * Throws a TypeAssertionError if the value is not number or number string.
  *
  * @param target The value to coerce.
- * @throws A TypeError if the value is not number or number string.
+ * @throws A TypeAssertionError if the value is not number or number string.
  * @returns The value as number.
  * @example
  * ```ts
@@ -176,13 +177,15 @@ export function coerceNumber<N extends number>(target: unknown | N): N
  * Coerces a value to number.
  *
  * @param target The value to coerce.
- * @throws A TypeError if the value is not number or number string.
+ * @throws A TypeAssertionError if the value is not number or number string.
  * @returns The value as number.
  * @example
  * ```ts
- * const target = getTarget() // string | number
- * const result = coerceNumber(target)
- * // result is number
+ * const result = coerceNumber('1')
+ * // result is 1
+ *
+ * const result = coerceNumber('a')
+ * // throws TypeAssertionError
  * ```
  */
 export function coerceNumber(target: unknown): number
@@ -192,9 +195,33 @@ export function coerceNumber(target: unknown): number {
     throw new TypeAssertionError(errorMessage('number parsable')(target), target)
   }
 
-  if (isNumber(target)) {
-    return target
+  return isNumber(target) ? target : Number(target)
+}
+
+/**
+ * Fixes a value to number.
+ *
+ * @param target The value to fix.
+ * @param fallbackValue The fallback value to return if the value is not number or number string. (default: NaN)
+ * @returns The value as number, the fallback value otherwise.
+ * @example
+ * ```ts
+ * const result = fixNumber('1')
+ * // result is 1
+ *
+ * const result = fixNumber('a')
+ * // result is NaN
+ *
+ * const result = fixNumber('a', 0)
+ * // result is 0
+ * ```
+ */
+export function fixNumber(target: unknown, fallbackValue?: number): number
+
+export function fixNumber(target: unknown, defaultValue = NaN): number {
+  if (isNumberParsable(target)) {
+    return defaultValue
   }
 
-  return Number(target)
+  return isNumber(target) ? target : Number(target)
 }

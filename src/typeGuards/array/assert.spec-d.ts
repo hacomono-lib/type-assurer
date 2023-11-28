@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, describe, assertType } from 'vitest'
 import { assertArray, assertNotArray } from '.'
 

@@ -30,7 +30,7 @@ The library provides 8 utility functions for each type guard, such as `isString`
 
 And, note that `fallbackNotNil` can be replaced with the `??` operator. Functions that can be simplified using standard JavaScript expressions, like this example, are not targeted for implementation.
 
-### is, isNot
+### is
 
 Functions such as `is` simply provide type guards that can be used in conditional branches.
 
@@ -62,7 +62,7 @@ import { not } from 'type-assurer'
 const result = values.filter(not(isFoo))
 ```
 
-### assert, assertNot
+### assert
 
 Functions with names like `assert` `assertNot` are type assertion functions.
 If the type check does not pass, it throws a TypeError.
@@ -78,7 +78,7 @@ assertString(value, 'Value must be a string')
 // No error if value is a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-### ensure, ensureNot
+### ensure
 
 Functions with names like `ensure` `ensureNot` are type assertion functions, but return the same value if the type check passes.
 It is convenient to write type assertions on a single line.
@@ -95,7 +95,7 @@ const value = ensureString(await fetchData(), 'Value must be a string')
 // No error if fetchData returns a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-### fallback, fallbackNot
+### fallback
 
 Functions like `fallback` `fallbackNot` are type modification functions.
 
@@ -115,16 +115,39 @@ const value = fallbackString(await fetchData(), 'default')
 
 Functions like `coerce` are type modification functions.
 
-If there is a type check for a parsable value, there is a corresponding function. (e.g. NumberParsable, JsonParsable, etc.)
+If there is a type check for a parsable or modifiable value, there is a corresponding function. (e.g. NumberParsable, Jsonifiable, etc.)
+
+This function returns the modifiable value if the type is parsable, otherwise it throws an exception.
 
 ```typescript
 import { coerceNumber } from 'type-assurer'
 
 const value1 = coerceNumber('123')
-//    ^? number
+//    ^? 123
 
 const value2 = coerceNumber('abc')
 //    thrown TypeAssertionError
+```
+
+### fix
+
+Functions like `fix` are type modification functions.
+
+If there is a type check for a parsable or modifiable value, there is a corresponding function. (e.g. NumberParsable, Jsonifiable, etc.)
+
+This function returns the modifiable value if the type is parsable, otherwise it returns the fallback value specified in the second argument.
+
+```typescript
+import { fixNumber } from 'type-assurer'
+
+const value1 = fixNumber('123')
+//    ^? 123
+
+const value2 = fixNumber('abc')
+//    ^? NaN
+
+const value3 = fixNumber('abc', 0)
+//    ^? 0
 ```
 
 ## Contributing
