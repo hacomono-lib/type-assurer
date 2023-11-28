@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-types */
 import { createAssertion, createEnsure, createFallback, not } from '../../lib/factory'
 import type {
   InvertedTypeAssertOf,
@@ -9,6 +11,17 @@ import type {
   TypeGuard
 } from '../../lib/type'
 import { errorMessage } from '../../lib/error'
+
+type DefinitelyObject<T> = Exclude<
+  Extract<T, object>,
+  any[] | Function | readonly any[]
+> extends never
+  ? Record<string, unknown>
+  : Exclude<Extract<T, object>, any[] | Function | readonly any[]>
+
+interface ObjectTypeGuard extends TypeGuard<object> {
+  <T extends object>(target: T | unknown): target is DefinitelyObject<T>
+}
 
 /**
  * Checks if a value is a object or a class instance.
@@ -25,9 +38,7 @@ import { errorMessage } from '../../lib/error'
  * ```
  */
 export const isObject = ((target: unknown): boolean =>
-  target !== null && !Array.isArray(target) && typeof target === 'object') as TypeGuard<
-  Record<string, unknown>
->
+  target !== null && !Array.isArray(target) && typeof target === 'object') as ObjectTypeGuard
 
 type IsObject = typeof isObject
 

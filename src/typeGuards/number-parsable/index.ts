@@ -14,6 +14,8 @@ import { isString } from '../string'
 
 export type NumberParsable = number | `${number}`
 
+type Parse<N extends NumberParsable> = N extends `${number}` ? number : N
+
 /**
  * Checks if a value is number or number string.
  *
@@ -171,7 +173,7 @@ export const fallbackNotNumberParsable: InvertedTypeFallbackOf<IsNumberParsable>
  * // result is number
  * ```
  */
-export function coerceNumber<N extends number>(target: unknown | N): N
+export function coerceNumber<N extends NumberParsable>(target: unknown | N): Parse<N>
 
 /**
  * Coerces a value to number.
@@ -197,6 +199,29 @@ export function coerceNumber(target: unknown): number {
 
   return isNumber(target) ? target : Number(target)
 }
+
+/**
+ * Fixes a value to number.
+ *
+ * @param target The value to fix.
+ * @param fallbackValue The fallback value to return if the value is not number or number string. (default: NaN)
+ * @returns The value as number, the fallback value otherwise.
+ * @example
+ * ```ts
+ * const result = fixNumber('1')
+ * // result is 1
+ *
+ * const result = fixNumber('a')
+ * // result is NaN
+ *
+ * const result = fixNumber('a', 0)
+ * // result is 0
+ * ```
+ */
+export function fixNumber<N extends NumberParsable, F extends number = typeof NaN>(
+  target: unknown | N,
+  fallbackValue?: F
+): Parse<F> | N
 
 /**
  * Fixes a value to number.

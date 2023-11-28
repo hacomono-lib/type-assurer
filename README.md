@@ -10,13 +10,17 @@
 - TypeScript-first implementation with accurate type inference
 - ESModule ready for tree-shaking and bundle size optimization
 - No external dependencies
-- A collection of 7 type guard functions:
-  a. isString - type guard functions
-  b. assertString - Provides TypeScript's type assertion feature
-  c. ensureString - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
-  d. fallbackString - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
+- 7 type guard functions:
+  a. `isFoo` (e.g. isString) - type guard functions
+  b. `assertFoo` (e.g. assertString) - Provides TypeScript's type assertion feature
+  c. `ensureFoo` (e.g. ensureString) - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
+  d. `fallbackFoo` (e.g. fallbackString) - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
   - The reversed versions
   - Generator provided for custom type guards for non-primitive types
+- 2 type modification functions:
+  a. `coerceFoo` (e.g. coerceNumber) - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
+  b. `fixFoo` (e.g. fixNumber) - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
+  - If there is a type check for a parsable or modifiable value, there is a corresponding function. (e.g. NumberParsable, Jsonifiable, etc.)
 
 ## Installation
 
