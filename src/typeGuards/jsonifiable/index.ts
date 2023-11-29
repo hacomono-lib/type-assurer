@@ -11,15 +11,21 @@ import type {
 import { errorMessage } from '../../lib/error'
 
 import { isString } from '../string'
+import { isNumber } from '../number'
+import { isBoolean } from '../boolean'
 
-import { deepJsonEqual } from './internals'
+import { deepJsonEqual, isJsonPrimitive } from './internals'
 import { Jsonifiable, JsonifiableString } from './type'
 
 type JsonifiableValue = Jsonifiable | JsonifiableString
 
 /**
- * Checks if a value is a string that can be parsed as JSON.
- * Checks if a value is a object that can be formatted as JSON.
+ * @description
+ * For string values, it is determined by whether JSON.parse is successful.
+ *
+ * For object values, it is determined by whether there are any functions or undefined in the enumerable parameters.
+ *
+ * For other values, it is determined by whether the same value is output by JSON.stringify.
  *
  * @param target The value to check.
  * @returns True if the value is an JsonParsable, false otherwise.
@@ -43,8 +49,25 @@ type JsonifiableValue = Jsonifiable | JsonifiableString
  * const targetObj3 = { toJSON: () => 'bar' }
  * isJsonifiable(target) // true
  * ```
+ *
+ * @example
+ * ```ts
+ * const targetNum = 1
+ * isJsonifiable(target) // true
+ *
+ * const targetNum2 = NaN
+ * isJsonifiable(target) // false
+ * ```
  */
 export const isJsonifiable = ((target: unknown): target is JsonifiableValue => {
+  if (isBoolean(target) || target === null) {
+    return true
+  }
+
+  if (isNumber(target)) {
+    return !Number.isNaN(target) && Number.isFinite(target)
+  }
+
   if (isString(target)) {
     try {
       JSON.parse(target)
@@ -54,16 +77,24 @@ export const isJsonifiable = ((target: unknown): target is JsonifiableValue => {
     }
   }
 
-  if (typeof target === 'object' && target !== null) {
+  if (!!target && typeof target === 'object') {
     try {
-      const cloned = JSON.parse(JSON.stringify(target))
-      return deepJsonEqual(target, cloned)
-    } catch {
+      const parsed = JSON.parse(JSON.stringify(target))
+      if (isJsonPrimitive(parsed)) {
+        return true
+      }
+
+      return deepJsonEqual(target, parsed)
+    } catch (e) {
       return false
     }
   }
 
-  return false
+  try {
+    return JSON.stringify(target) === String(target)
+  } catch {
+    return false
+  }
 }) as TypeGuard<JsonifiableValue>
 
 type IsJsonifiable = typeof isJsonifiable

@@ -20,7 +20,7 @@ type DefinitelyObject<T> = Exclude<
   : Exclude<Extract<T, object>, any[] | Function | readonly any[]>
 
 interface ObjectTypeGuard extends TypeGuard<object> {
-  <T extends object>(target: T | unknown): target is DefinitelyObject<T>
+  <T>(target: T | unknown): target is DefinitelyObject<T>
 }
 
 /**

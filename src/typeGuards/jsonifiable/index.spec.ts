@@ -12,8 +12,14 @@ import {
 import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 
 const expected = [
+  ValueType.True,
+  ValueType.False,
   ValueType.BooleanObject,
   ValueType.StringObject,
+  ValueType.PositiveNumber,
+  ValueType.NegativeNumber,
+  ValueType.Null,
+  ValueType.Zero,
   ValueType.NumberObject,
   ValueType.NumberParsablePositiveInt,
   ValueType.NumberParsableNegativeInt,
@@ -35,7 +41,8 @@ const expected = [
   ValueType.EmptyArray,
   ValueType.ArrayLike,
   ValueType.Object,
-  ValueType.EmptyObject
+  ValueType.EmptyObject,
+  ValueType.BlankObject
 ]
 
 describe('isJsonifiable', () => {

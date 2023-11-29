@@ -244,7 +244,7 @@ export function fixNumber<N extends NumberParsable, F extends number = typeof Na
 export function fixNumber(target: unknown, fallbackValue?: number): number
 
 export function fixNumber(target: unknown, defaultValue = NaN): number {
-  if (isNumberParsable(target)) {
+  if (!isNumberParsable(target)) {
     return defaultValue
   }
 

@@ -56,4 +56,10 @@ describe('deepJsonEqual', () => {
 
     expect(deepJsonEqual(['0 0'], [{ toJSON: (k: string) => `${k} ${k}` }])).toBe(true)
   })
+
+  describe('edge case', () => {
+    it('Verify that array audits are performed correctly when an empty array is passed.', () => {
+      expect(deepJsonEqual(Array(3), JSON.parse(JSON.stringify(Array(3))))).toBe(false)
+    })
+  })
 })

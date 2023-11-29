@@ -187,7 +187,7 @@ export enum ValueType {
   /**
    * @description `Array(3)`
    */
-  BlankArray = 'spacedArray',
+  BlankArray = 'blankArray',
 
   /**
    * @description `document.body.children`

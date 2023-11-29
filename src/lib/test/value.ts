@@ -101,14 +101,22 @@ const generators = {
   [ValueType.Class]: () =>
     class Foo {
       bar() {
+        return 'bar'
+      }
+      get baz() {
         return 'baz'
       }
+      qux = 'qux'
     },
   [ValueType.ClassInstance]: () =>
     new (class Foo {
       bar() {
+        return 'bar'
+      }
+      get baz() {
         return 'baz'
       }
+      qux = 'qux'
     })(),
   [ValueType.Map]: () => new Map([['foo', 'bar']]),
   [ValueType.EmptyMap]: () => new Map(),
