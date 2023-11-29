@@ -300,9 +300,19 @@ export enum ValueType {
   RecursiveObject = 'recursiveObject',
 
   /**
-   * @description `{ [Symbol.dispose]: () => void 0 }`
+   * @description `{ [Symbol.toStringTag]: () => 'Foo' }`
    */
-  ResourceObject = 'resourceObject',
+  WellKnownSymbolObject = 'wellKnownSymbolObject',
+
+  /**
+   * @description `{ *[Symbol.iterator]() { yield 1 } }`
+   */
+  IterableObject = 'iterableObject',
+
+  /**
+   * @description `{ async *[Symbol.asyncIterator]() { yield 1 } }`
+   */
+  AsyncIterableObject = 'asyncIterableObject',
 
   /**
    * @description `{ foo: 'bar', baz: { toJSON: (k) => `${k}` } }`

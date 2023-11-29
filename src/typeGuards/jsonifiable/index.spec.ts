@@ -42,7 +42,12 @@ const expected = [
   ValueType.ArrayLike,
   ValueType.Object,
   ValueType.EmptyObject,
-  ValueType.BlankObject
+  ValueType.BlankObject,
+  ValueType.WellKnownSymbolObject,
+  ValueType.IterableObject,
+  ValueType.AsyncIterableObject,
+  ValueType.Date,
+  ValueType.Proxy
 ]
 
 describe('isJsonifiable', () => {

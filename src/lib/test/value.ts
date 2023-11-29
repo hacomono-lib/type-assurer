@@ -76,7 +76,17 @@ const generators = {
     obj.foo = obj
     return obj as {}
   },
-  [ValueType.ResourceObject]: () => ({ [Symbol.dispose]: () => void 0 }),
+  [ValueType.WellKnownSymbolObject]: () => ({ [Symbol.toStringTag]: () => 'Foo' }),
+  [ValueType.IterableObject]: () => ({
+    *[Symbol.iterator]() {
+      yield 1
+    }
+  }),
+  [ValueType.AsyncIterableObject]: () => ({
+    async *[Symbol.asyncIterator]() {
+      yield 1
+    }
+  }),
   [ValueType.JsonifiableObject]: () => ({
     foo: 'bar',
     baz: { toJSON: (k: string | number) => `${k}` }

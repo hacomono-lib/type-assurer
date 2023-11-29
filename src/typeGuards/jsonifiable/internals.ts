@@ -4,11 +4,13 @@ import { isString } from '../string'
 import { isNumber } from '../number'
 import { isBoolean } from '../boolean'
 
-export function hasToJSON(value: unknown): value is { toJSON: (key: string | number) => unknown } {
+export function hasToJSON(
+  value: unknown
+): value is { toJSON: (key: string | number | symbol) => unknown } {
   return isObject(value) && typeof (value as { toJSON: unknown }).toJSON === 'function'
 }
 
-function getValueByObject(key: string | number, target: unknown): unknown {
+function getValueByObject(key: string | number | symbol, target: unknown): unknown {
   if (isJsonPrimitive(target) || target === undefined) {
     return target
   }
@@ -32,6 +34,7 @@ function getValueByObject(key: string | number, target: unknown): unknown {
 
 // eslint-disable-next-line max-statements
 export function deepJsonEqual(a: unknown, b: unknown): boolean {
+  console.dir({ a, b }, { depth: null })
   if (a === b) {
     return true
   }
@@ -51,18 +54,23 @@ export function deepJsonEqual(a: unknown, b: unknown): boolean {
   return false
 }
 
-function getKeys<T extends Record<string, unknown>>(a: T): Array<keyof T> {
+function getKeys(a: Record<string, unknown>): Array<string | number | symbol> {
   if (a.constructor && Object !== a.constructor) {
-    return Object.getOwnPropertyNames(a.constructor.prototype)
+    return Reflect.ownKeys(a.constructor.prototype)
   }
 
   return Object.keys(a)
 }
 
-function objectEquals(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
+function objectEquals(
+  a: Record<string | number | symbol, unknown>,
+  b: Record<string | number | symbol, unknown>
+): boolean {
   const aKeys = getKeys(a)
   const bKeys = getKeys(b)
   const keys = Array.from(new Set([...aKeys, ...bKeys]))
+
+  console.dir({ aKeys, bKeys, keys }, { depth: null })
 
   if (keys.length !== aKeys.length || keys.length !== bKeys.length) {
     return false
