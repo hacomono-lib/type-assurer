@@ -32,7 +32,6 @@ function getValueByObject(key: string | number, target: unknown): unknown {
 
 // eslint-disable-next-line max-statements
 export function deepJsonEqual(a: unknown, b: unknown): boolean {
-  console.dir({ a: a, b: b }, { depth: null })
   if (a === b) {
     return true
   }
