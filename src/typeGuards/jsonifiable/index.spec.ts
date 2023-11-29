@@ -1,4 +1,4 @@
-import { describe } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import {
   assertNotJsonifiable,
   assertJsonifiable,
@@ -7,11 +7,39 @@ import {
   fallbackNotJsonifiable,
   fallbackJsonifiable,
   isJsonifiable,
-  isNotJsonifiable
+  isNotJsonifiable,
+  coerceJsonObject,
+  coerceJsonString
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
+import {
+  allTypes,
+  getGenerator,
+  testAssert,
+  testEnsure,
+  testFallback,
+  testGuard,
+  ValueType
+} from '../../lib/test'
 
-const expected = [
+const jsonParsables = [
+  ValueType.JsonParsableArray,
+  ValueType.JsonParsableEmptyArray,
+  ValueType.JsonParsableComplexObject,
+  ValueType.JsonParsableEmptyObject,
+  ValueType.JsonParsableFalse,
+  ValueType.JsonParsableNull,
+  ValueType.JsonParsableNumber,
+  ValueType.JsonParsableString,
+  ValueType.JsonParsableTrue,
+  ValueType.NumberParsablePositiveInt,
+  ValueType.NumberParsableNegativeInt,
+  ValueType.NumberParsablePositiveFloat,
+  ValueType.NumberParsableNegativeFloat,
+  ValueType.BooleanParsableTrue,
+  ValueType.BooleanParsableFalse
+]
+
+const jsonFormatables = [
   ValueType.True,
   ValueType.False,
   ValueType.BooleanObject,
@@ -21,22 +49,6 @@ const expected = [
   ValueType.Null,
   ValueType.Zero,
   ValueType.NumberObject,
-  ValueType.NumberParsablePositiveInt,
-  ValueType.NumberParsableNegativeInt,
-  ValueType.NumberParsablePositiveFloat,
-  ValueType.NumberParsableNegativeFloat,
-  ValueType.JsonParsableNumber,
-  ValueType.JsonParsableTrue,
-  ValueType.JsonParsableFalse,
-  ValueType.JsonParsableNull,
-  ValueType.JsonParsableString,
-  ValueType.JsonParsableObject,
-  ValueType.JsonParsableComplexObject,
-  ValueType.JsonParsableEmptyObject,
-  ValueType.JsonParsableArray,
-  ValueType.JsonParsableEmptyArray,
-  ValueType.JsonifiableObject,
-  ValueType.JsonifiableObjectInArray,
   ValueType.Array,
   ValueType.EmptyArray,
   ValueType.ArrayLike,
@@ -49,6 +61,10 @@ const expected = [
   ValueType.Date,
   ValueType.Proxy
 ]
+
+const expected = [...jsonFormatables, ...jsonParsables]
+
+const expectedNot = allTypes().filter((type) => !expected.includes(type))
 
 describe('isJsonifiable', () => {
   testGuard(isJsonifiable, expected, { parsableString: true })
@@ -86,5 +102,39 @@ describe('fallbackNotJsonifiable', () => {
     parsableString: true,
     negative: true,
     fallbackValue: 'fallback'
+  })
+})
+
+describe('coerceJsonString', () => {
+  test.each(jsonParsables)('test value type: %s, returns same value', (valueType) => {
+    const value = getGenerator(valueType)()
+    expect(coerceJsonString(value)).toBe(value)
+  })
+
+  test.each(jsonFormatables)('test value type: %s, coerce to JSON string', (valueType) => {
+    const value = getGenerator(valueType)()
+    expect(coerceJsonString(value)).toBe(JSON.stringify(value))
+  })
+
+  test.each(expectedNot)('test value type: %s, throws TypeAssertionError', (valueType) => {
+    const value = getGenerator(valueType)()
+    expect(() => coerceJsonString(value)).toThrow()
+  })
+})
+
+describe('coerceJsonObject', () => {
+  test.each(jsonFormatables)('test value type: %s, returns same value', (valueType) => {
+    const value = getGenerator(valueType)()
+    expect(coerceJsonObject(value)).toBe(value)
+  })
+
+  test.each(jsonParsables)('test value type: %s, coerce to JSON object', (valueType) => {
+    const value = getGenerator(valueType)()
+    expect(coerceJsonObject(value)).toEqual(JSON.parse(JSON.stringify(value)))
+  })
+
+  test.each(expectedNot)('test value type: %s, throws TypeAssertionError', (valueType) => {
+    const value = getGenerator(valueType)()
+    expect(() => coerceJsonObject(value)).toThrow()
   })
 })

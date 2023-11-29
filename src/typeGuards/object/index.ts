@@ -5,6 +5,7 @@ import type {
   InvertedTypeAssertOf,
   InvertedTypeEnsureOf,
   InvertedTypeFallbackOf,
+  Not,
   TypeAssertOf,
   TypeEnsureOf,
   TypeFallbackOf,
@@ -20,7 +21,11 @@ type DefinitelyObject<T> = Exclude<
   : Exclude<Extract<T, object>, any[] | Function | readonly any[]>
 
 interface ObjectTypeGuard extends TypeGuard<object> {
-  <T>(target: T | unknown): target is DefinitelyObject<T>
+  <T>(target: T | object): target is DefinitelyObject<T>
+}
+
+interface InvertedObjectTypeGuard extends Not<TypeGuard<object>> {
+  <T>(target: T | object): target is Exclude<T, DefinitelyObject<T>>
 }
 
 /**
@@ -110,7 +115,7 @@ export const fallbackObject: TypeFallbackOf<IsObject> = createFallback(isObject)
  * // result is string[]
  * ```
  */
-export const isNotObject = not(isObject)
+export const isNotObject = not(isObject) as InvertedObjectTypeGuard
 
 /**
  * Asserts that a value is not a object or a class instance.
