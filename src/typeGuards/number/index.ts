@@ -11,19 +11,23 @@ import {
 import { errorMessage } from '../../lib/error'
 
 /**
- * Checks if a value is a number.
+ * Checks if a value is a number. NaN is not considered a number.
  * @param target The value to check.
  * @returns True if the value is a number, false otherwise.
  * @example
  * ```ts
- * const target = getTarget() // number | string
- * if (isNumber(target)) {
- * // target is number
- * }
+ * const result = isNumber(123)
+ * // true
+ *
+ * const result = isNumber('123')
+ * // false
+ *
+ * const result = isNumber(NaN)
+ * // false
  * ```
  */
-export const isNumber = ((target: unknown): target is number =>
-  typeof target === 'number') as TypeGuard<number>
+export const isNumber = ((target: unknown) =>
+  typeof target === 'number' && !Number.isNaN(target)) as TypeGuard<number>
 
 type IsNumber = typeof isNumber
 

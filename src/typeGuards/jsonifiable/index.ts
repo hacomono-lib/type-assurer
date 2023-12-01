@@ -3,6 +3,7 @@ import type {
   InvertedTypeAssertOf,
   InvertedTypeEnsureOf,
   InvertedTypeFallbackOf,
+  InvertedTypeGuard,
   TypeAssertOf,
   TypeEnsureOf,
   TypeFallbackOf,
@@ -14,7 +15,49 @@ import { isNumber } from '../number'
 import { isBoolean } from '../boolean'
 
 import { deepJsonEqual, isJsonPrimitive } from './internals'
-import { Jsonifiable } from './type'
+import { Jsonifiable, JsonifiableGuard } from './type'
+
+export interface JsonifiableTypeGuard extends TypeGuard<Jsonifiable> {
+  <T extends Jsonifiable>(target: unknown): target is JsonifiableGuard<T>
+}
+
+export interface InvertedJsonifiableTypeGuard extends InvertedTypeGuard<Jsonifiable> {
+  <T extends Jsonifiable>(target: unknown): target is Exclude<T, JsonifiableGuard<T>>
+}
+
+export interface JsonifiableTypeAssert extends TypeAssertOf<JsonifiableTypeGuard> {
+  <T extends Jsonifiable>(target: unknown, message?: string): asserts target is JsonifiableGuard<T>
+}
+
+export interface InvertedJsonifiableTypeAssert extends InvertedTypeAssertOf<JsonifiableTypeGuard> {
+  <T extends Jsonifiable>(target: unknown, message?: string): asserts target is Exclude<
+    T,
+    Jsonifiable
+  >
+}
+
+export interface JsonifiableTypeEnsure extends TypeEnsureOf<JsonifiableTypeGuard> {
+  <T extends Jsonifiable>(target: unknown, message?: string): asserts target is JsonifiableGuard<T>
+}
+
+export interface InvertedJsonifiableTypeEnsure extends InvertedTypeEnsureOf<JsonifiableTypeGuard> {
+  <T extends Jsonifiable>(target: unknown, message?: string): asserts target is Exclude<
+    T,
+    Jsonifiable
+  >
+}
+
+export interface JsonifiableTypeFallback extends TypeFallbackOf<JsonifiableTypeGuard> {
+  <T extends Jsonifiable>(target: unknown, defaultValue: T): JsonifiableGuard<T>
+}
+
+export interface InvertedJsonifiableTypeFallback
+  extends InvertedTypeFallbackOf<JsonifiableTypeGuard> {
+  <T extends Jsonifiable>(target: unknown, defaultValue: Exclude<T, Jsonifiable>): Exclude<
+    T,
+    Jsonifiable
+  >
+}
 
 /**
  * Checks if a value can be serialized to JSON.
@@ -65,7 +108,7 @@ export const isJsonifiable = ((target: unknown): target is Jsonifiable => {
   } catch {
     return false
   }
-}) as TypeGuard<Jsonifiable>
+}) as JsonifiableTypeGuard
 
 type IsJsonifiable = typeof isJsonifiable
 
@@ -91,7 +134,7 @@ type IsJsonifiable = typeof isJsonifiable
  * ```
  */
 
-export const assertJsonifiable: TypeAssertOf<IsJsonifiable> = createAssertion(
+export const assertJsonifiable: JsonifiableTypeAssert = createAssertion(
   isJsonifiable,
   errorMessage('Jsonifiable')
 )
@@ -118,7 +161,7 @@ export const assertJsonifiable: TypeAssertOf<IsJsonifiable> = createAssertion(
  * // result is Jsonifiable, because it has toJSON method
  * ```
  */
-export const ensureJsonifiable: TypeEnsureOf<IsJsonifiable> = createEnsure(
+export const ensureJsonifiable: JsonifiableTypeEnsure = createEnsure(
   isJsonifiable,
   errorMessage('Jsonifiable')
 )
@@ -144,7 +187,7 @@ export const ensureJsonifiable: TypeEnsureOf<IsJsonifiable> = createEnsure(
  * // result is Jsonifiable, because it has toJSON method
  * ```
  */
-export const fallbackJsonifiable: TypeFallbackOf<IsJsonifiable> = createFallback(isJsonifiable)
+export const fallbackJsonifiable: JsonifiableTypeFallback = createFallback(isJsonifiable)
 
 /**
  * Checks if a value is not a string that can be parsed as JSON.
@@ -166,7 +209,7 @@ export const fallbackJsonifiable: TypeFallbackOf<IsJsonifiable> = createFallback
  * // result is false, because it has toJSON method
  * ```
  */
-export const isNotJsonifiable = not(isJsonifiable)
+export const isNotJsonifiable: InvertedJsonifiableTypeGuard = not(isJsonifiable)
 
 /**
  * Asserts that a value is not a string that can be parsed as JSON.
@@ -189,7 +232,7 @@ export const isNotJsonifiable = not(isJsonifiable)
  * // throws TypeAssertionError, because it has toJSON method
  * ```
  */
-export const assertNotJsonifiable: InvertedTypeAssertOf<IsJsonifiable> = createAssertion(
+export const assertNotJsonifiable: InvertedJsonifiableTypeAssert = createAssertion(
   not(isJsonifiable),
   errorMessage('Jsonifiable', { not: true })
 )
@@ -216,7 +259,7 @@ export const assertNotJsonifiable: InvertedTypeAssertOf<IsJsonifiable> = createA
  * // throws TypeAssertionError, because it has toJSON method
  * ```
  */
-export const ensureNotJsonifiable: InvertedTypeEnsureOf<IsJsonifiable> = createEnsure(
+export const ensureNotJsonifiable: InvertedJsonifiableTypeEnsure = createEnsure(
   not(isJsonifiable),
   errorMessage('Jsonifiable', { not: true })
 )
@@ -242,6 +285,6 @@ export const ensureNotJsonifiable: InvertedTypeEnsureOf<IsJsonifiable> = createE
  * // result is 'fallback', because it has toJSON method
  * ```
  */
-export const fallbackNotJsonifiable: InvertedTypeFallbackOf<IsJsonifiable> = createFallback(
+export const fallbackNotJsonifiable: InvertedJsonifiableTypeFallback = createFallback(
   not(isJsonifiable)
 )

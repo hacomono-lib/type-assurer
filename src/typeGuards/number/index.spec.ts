@@ -16,8 +16,7 @@ const expected = [
   ValueType.NegativeNumber,
   ValueType.Zero,
   ValueType.PositiveInfinity,
-  ValueType.NegativeInfinity,
-  ValueType.NaN
+  ValueType.NegativeInfinity
 ]
 
 describe('isNumber', () => {
