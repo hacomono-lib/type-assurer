@@ -10,22 +10,53 @@ import type {
   TypeEnsureOf,
   TypeFallbackOf,
   TypeGuard
-} from '../../lib/type'
+} from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
 type DefinitelyObject<T> = Exclude<
   Extract<T, object>,
   any[] | Function | readonly any[]
-> extends never
-  ? Record<string, unknown>
-  : Exclude<Extract<T, object>, any[] | Function | readonly any[]>
+> extends infer R
+  ? R extends never
+    ? T extends object
+      ? Record<string, unknown>
+      : never
+    : R & {}
+  : never
 
-interface ObjectTypeGuard extends TypeGuard<object> {
+interface ObjectTypeGuard<T = unknown> extends TypeGuard<DefinitelyObject<T>> {
   <T>(target: T | object): target is DefinitelyObject<T>
 }
 
-interface InvertedObjectTypeGuard extends Not<TypeGuard<object>> {
+interface InvertedObjectTypeGuard<T = unknown> extends Not<TypeGuard<DefinitelyObject<T>>> {
   <T>(target: T | object): target is Exclude<T, DefinitelyObject<T>>
+}
+
+interface ObjectTypeAssert<T = unknown> extends TypeAssertOf<ObjectTypeGuard<T>> {
+  <T>(target: T | object, message?: string): asserts target is DefinitelyObject<T>
+}
+
+interface InvertedObjectTypeAssert<T = unknown> extends InvertedTypeAssertOf<ObjectTypeGuard<T>> {
+  <T>(target: T | object, message?: string): asserts target is Exclude<T, DefinitelyObject<T>>
+}
+
+interface ObjectTypeEnsure<T = unknown> extends TypeEnsureOf<ObjectTypeGuard<T>> {
+  <T>(target: T | object, message?: string): DefinitelyObject<T>
+}
+
+interface InvertedObjectTypeEnsure<T = unknown> extends InvertedTypeEnsureOf<ObjectTypeGuard<T>> {
+  <T>(target: T | object, message?: string): Exclude<T, DefinitelyObject<T>>
+}
+
+interface ObjectTypeFallback<T = unknown> extends TypeFallbackOf<ObjectTypeGuard<T>> {
+  <T, F>(target: T | object, defaultValue: F): DefinitelyObject<T> | DefinitelyObject<F>
+}
+
+interface InvertedObjectTypeFallback<T = unknown>
+  extends InvertedTypeFallbackOf<ObjectTypeGuard<T>> {
+  <T, F>(target: T | object, defaultValue: F | object):
+    | Exclude<T, DefinitelyObject<T>>
+    | Exclude<F, DefinitelyObject<F>>
 }
 
 /**
@@ -45,8 +76,6 @@ interface InvertedObjectTypeGuard extends Not<TypeGuard<object>> {
 export const isObject = ((target: unknown): boolean =>
   target !== null && !Array.isArray(target) && typeof target === 'object') as ObjectTypeGuard
 
-type IsObject = typeof isObject
-
 /**
  * Asserts that a value is a object or a class instance.
  * function, array, null, undefined, etc. are not considered Object.
@@ -62,10 +91,7 @@ type IsObject = typeof isObject
  * ```
  */
 
-export const assertObject: TypeAssertOf<IsObject> = createAssertion(
-  isObject,
-  errorMessage('object')
-)
+export const assertObject: ObjectTypeAssert = createAssertion(isObject, errorMessage('object'))
 
 /**
  * Ensures that a value is a object or a class instance.
@@ -82,7 +108,7 @@ export const assertObject: TypeAssertOf<IsObject> = createAssertion(
  * // result is Object
  * ```
  */
-export const ensureObject: TypeEnsureOf<IsObject> = createEnsure(isObject, errorMessage('object'))
+export const ensureObject: ObjectTypeEnsure = createEnsure(isObject, errorMessage('object'))
 
 /**
  * Fallbacks to a default value if the value is not a object or a class instance.
@@ -97,7 +123,7 @@ export const ensureObject: TypeEnsureOf<IsObject> = createEnsure(isObject, error
  * // result is Object | string
  * ```
  */
-export const fallbackObject: TypeFallbackOf<IsObject> = createFallback(isObject)
+export const fallbackObject: ObjectTypeFallback = createFallback(isObject)
 
 /**
  * Checks if a value is not a object or a class instance.
@@ -115,7 +141,7 @@ export const fallbackObject: TypeFallbackOf<IsObject> = createFallback(isObject)
  * // result is string[]
  * ```
  */
-export const isNotObject = not(isObject) as InvertedObjectTypeGuard
+export const isNotObject: InvertedObjectTypeGuard = not(isObject) as InvertedObjectTypeGuard
 
 /**
  * Asserts that a value is not a object or a class instance.
@@ -131,7 +157,7 @@ export const isNotObject = not(isObject) as InvertedObjectTypeGuard
  * // target is string
  * ```
  */
-export const assertNotObject: InvertedTypeAssertOf<IsObject> = createAssertion(
+export const assertNotObject: InvertedObjectTypeAssert = createAssertion(
   not(isObject),
   errorMessage('object', { not: true })
 )
@@ -151,7 +177,7 @@ export const assertNotObject: InvertedTypeAssertOf<IsObject> = createAssertion(
  * // result is string
  * ```
  */
-export const ensureNotObject: InvertedTypeEnsureOf<IsObject> = createEnsure(
+export const ensureNotObject: InvertedObjectTypeEnsure = createEnsure(
   not(isObject),
   errorMessage('object', { not: true })
 )
@@ -170,4 +196,4 @@ export const ensureNotObject: InvertedTypeEnsureOf<IsObject> = createEnsure(
  * // result is string
  * ```
  */
-export const fallbackNotObject: InvertedTypeFallbackOf<IsObject> = createFallback(not(isObject))
+export const fallbackNotObject: InvertedObjectTypeFallback = createFallback(not(isObject))

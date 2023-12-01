@@ -34,7 +34,6 @@ function getValueByObject(key: string | number | symbol, target: unknown): unkno
 
 // eslint-disable-next-line max-statements
 export function deepJsonEqual(a: unknown, b: unknown): boolean {
-  console.dir({ a, b }, { depth: null })
   if (a === b) {
     return true
   }
@@ -69,8 +68,6 @@ function objectEquals(
   const aKeys = getKeys(a)
   const bKeys = getKeys(b)
   const keys = Array.from(new Set([...aKeys, ...bKeys]))
-
-  console.dir({ aKeys, bKeys, keys }, { depth: null })
 
   if (keys.length !== aKeys.length || keys.length !== bKeys.length) {
     return false

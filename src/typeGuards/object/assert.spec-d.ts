@@ -17,7 +17,7 @@ describe('assertObject type tests', () => {
   test('guard definite types 3', () => {
     const targetConstObject = {} as { foo?: string } | Date | unknown[]
     assertObject(targetConstObject)
-    assertType<{ foo?: string } | Date | unknown[]>(targetConstObject)
+    assertType<{ foo?: string } | Date>(targetConstObject)
   })
 
   test('guard unknown types', () => {
@@ -43,7 +43,7 @@ describe('assertNotObject type tests', () => {
   test('guard definite types 3', () => {
     const targetConstObject = {} as { foo?: string } | Date | unknown[]
     assertNotObject(targetConstObject)
-    assertType<never>(targetConstObject)
+    assertType<unknown[]>(targetConstObject)
   })
 
   test('guard unknown types', () => {

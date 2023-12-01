@@ -7,7 +7,7 @@ import {
   TypeEnsureOf,
   TypeFallbackOf,
   TypeGuard
-} from '../../lib/type'
+} from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
 /**

@@ -10,24 +10,23 @@ describe('fallbackObject type tests', () => {
 
   test('guard definite types 2', () => {
     const targetConstObject = {} as { foo?: string } | '1'
-    assertType<{ foo?: string }>(fallbackObject(targetConstObject, { foo: 'bar' }))
+    assertType<{ foo?: string } | { bar: string }>(
+      fallbackObject(targetConstObject, { bar: 'bar' })
+    )
   })
 
   test('guard definite types 3', () => {
     const targetConstObject = {} as { foo?: string } | Date | unknown[]
-    assertType<{ foo?: string } | Date | unknown[]>(
-      fallbackObject(targetConstObject, { foo: 'bar' })
-    )
+    assertType<{ foo?: string } | Date>(fallbackObject(targetConstObject, { foo: 'bar' }))
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
-    assertType<object>(fallbackObject(targetUnknown, { foo: 'bar' }))
+    assertType<{ foo: string }>(fallbackObject(targetUnknown, { foo: 'bar' }))
   })
 
   test('uncorrect fallback value', () => {
-    // @ts-expect-error
-    assertType<object>(fallbackObject({}, 'bar'))
+    assertType<never>(fallbackObject('foo', 'bar'))
   })
 })
 
@@ -44,7 +43,7 @@ describe('fallbackNotObject type tests', () => {
 
   test('guard definite types 3', () => {
     const targetConstObject = {} as { foo?: string } | Date | unknown[]
-    assertType<'bar'>(fallbackNotObject(targetConstObject, 'bar'))
+    assertType<'bar' | unknown[]>(fallbackNotObject(targetConstObject, 'bar'))
   })
 
   test('guard unknown types', () => {
@@ -53,7 +52,6 @@ describe('fallbackNotObject type tests', () => {
   })
 
   test('uncorrect fallback value', () => {
-    // @ts-expect-error
-    assertType<object>(fallbackNotObject({}, { foo: 'bar' }))
+    assertType<never>(fallbackNotObject({}, { foo: 'bar' }))
   })
 })

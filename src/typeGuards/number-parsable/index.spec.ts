@@ -103,29 +103,29 @@ describe('coerceNumber', () => {
 
 describe('fixNumber', () => {
   it('should fix number', () => {
-    expect(fixNumber(123)).toBe(123)
-    expect(fixNumber(123.456)).toBe(123.456)
-    expect(fixNumber(Infinity)).toBe(Infinity)
-    expect(fixNumber(-123)).toBe(-123)
-    expect(fixNumber(-123.456)).toBe(-123.456)
-    expect(fixNumber(-Infinity)).toBe(-Infinity)
-    expect(fixNumber(0)).toBe(0)
+    expect(fixNumber(123, NaN)).toBe(123)
+    expect(fixNumber(123.456, NaN)).toBe(123.456)
+    expect(fixNumber(Infinity, NaN)).toBe(Infinity)
+    expect(fixNumber(-123, NaN)).toBe(-123)
+    expect(fixNumber(-123.456, NaN)).toBe(-123.456)
+    expect(fixNumber(-Infinity, NaN)).toBe(-Infinity)
+    expect(fixNumber(0, NaN)).toBe(0)
   })
 
   it('should fix number from number-like string', () => {
-    expect(fixNumber('123')).toBe(123)
-    expect(fixNumber('123.456')).toBe(123.456)
-    expect(fixNumber('Infinity')).toBe(Infinity)
-    expect(fixNumber('-123')).toBe(-123)
-    expect(fixNumber('-123.456')).toBe(-123.456)
-    expect(fixNumber('-Infinity')).toBe(-Infinity)
+    expect(fixNumber('123', NaN)).toBe(123)
+    expect(fixNumber('123.456', NaN)).toBe(123.456)
+    expect(fixNumber('Infinity', NaN)).toBe(Infinity)
+    expect(fixNumber('-123', NaN)).toBe(-123)
+    expect(fixNumber('-123.456', NaN)).toBe(-123.456)
+    expect(fixNumber('-Infinity', NaN)).toBe(-Infinity)
   })
 
   const targetValues = testTypes(expected).filter((type) => !expected.includes(type))
 
   it.each(targetValues)('should return fallback value when argument is %s', (type) => {
     const value = getGenerator(type)()
-    expect(fixNumber(value)).toBe(NaN)
+    expect(fixNumber(value, NaN)).toBe(NaN)
     expect(fixNumber(value, 123)).toBe(123)
   })
 })

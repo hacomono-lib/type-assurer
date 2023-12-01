@@ -1,6 +1,11 @@
 import { errorMessage } from '../../lib/error'
 import { createAssertion, createEnsure, not } from '../../lib/factory'
-import { InvertedTypeAssertOf, InvertedTypeEnsureOf, TypeAssertOf, TypeGuard } from '../../lib/type'
+import {
+  InvertedTypeAssertOf,
+  InvertedTypeEnsureOf,
+  TypeAssertOf,
+  TypeGuard
+} from '../../lib/types'
 
 /**
  * Checks if a value is null or undefined.

@@ -8,7 +8,7 @@ import {
   TypeEnsureOf,
   TypeFallbackOf,
   TypeGuard
-} from '../../lib/type'
+} from '../../lib/types'
 
 /**
  * Checks if a value is a string.

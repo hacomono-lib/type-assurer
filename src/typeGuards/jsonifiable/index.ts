@@ -7,74 +7,44 @@ import type {
   TypeEnsureOf,
   TypeFallbackOf,
   TypeGuard
-} from '../../lib/type'
+} from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
-import { isString } from '../string'
 import { isNumber } from '../number'
 import { isBoolean } from '../boolean'
 
 import { deepJsonEqual, isJsonPrimitive } from './internals'
-import { Jsonifiable, JsonifiableString } from './type'
-
-type JsonifiableValue = Jsonifiable | JsonifiableString
+import { Jsonifiable } from './type'
 
 /**
- * @description
- * For string values, it is determined by whether JSON.parse is successful.
+ * Checks if a value can be serialized to JSON.
  *
- * For object values, it is determined by whether there are any functions or undefined in the enumerable parameters.
- *
- * For other values, it is determined by whether the same value is output by JSON.stringify.
+ * If the argument value is an object, it is determined by whether it is the same as the result serialized to JSON. In other words, if it contains Function, it will be false.
  *
  * @param target The value to check.
- * @returns True if the value is an JsonParsable, false otherwise.
+ * @returns True if the value is an Jsonifiable, false otherwise.
  * @example
  * ```ts
- * const targetStr = '{"foo":"bar"}'
- * isJsonifiable(target) // true
+ * const result = isJsonifiable({"foo":"bar"})
+ * // result is true
  *
- * const targetStr2 = 'foo'
- * isJsonifiable(target) // false
- * ```
+ * const result = isJsonifiable({ foo: () => 'bar' })
+ * // result is false
  *
- * @example
- * ```ts
- * const targetObj = { foo: 'bar' }
- * isJsonifiable(target) // true
+ * const result = isJsonifiable('{"foo":"bar"}')
+ * // result is false
  *
- * const targetObj2 = { foo: () => 'bar' }
- * isJsonifiable(target) // false
- *
- * const targetObj3 = { toJSON: () => 'bar' }
- * isJsonifiable(target) // true
- * ```
- *
- * @example
- * ```ts
- * const targetNum = 1
- * isJsonifiable(target) // true
- *
- * const targetNum2 = NaN
- * isJsonifiable(target) // false
+ * const result = isJsonifiable(new Date())
+ * // result is true, because it has toJSON method
  * ```
  */
-export const isJsonifiable = ((target: unknown): target is JsonifiableValue => {
+export const isJsonifiable = ((target: unknown): target is Jsonifiable => {
   if (isBoolean(target) || target === null) {
     return true
   }
 
   if (isNumber(target)) {
     return !Number.isNaN(target) && Number.isFinite(target)
-  }
-
-  if (isString(target)) {
-    try {
-      JSON.parse(target)
-      return true
-    } catch {
-      return false
-    }
   }
 
   if (!!target && typeof target === 'object') {
@@ -95,58 +65,83 @@ export const isJsonifiable = ((target: unknown): target is JsonifiableValue => {
   } catch {
     return false
   }
-}) as TypeGuard<JsonifiableValue>
+}) as TypeGuard<Jsonifiable>
 
 type IsJsonifiable = typeof isJsonifiable
 
 /**
- * Asserts that a value is a string that can be parsed as JSON.
+ * Asserts that a value can be serialized to JSON.
  *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not a string that can be parsed as JSON.
- * @throws A TypeError with the given message if the value is not a string that can be parsed as JSON.
+ * @param message (optional) The error message to throw if the value is not an Jsonifiable.
+ * @throws A TypeError with the given message if the value is not an Jsonifiable.
  * @example
  * ```ts
- * const target = getTarget() // JsonParsable | string
- * assertJsonParsable(target, 'target must be an JsonParsable')
- * // target is JsonParsable
+ * assertJsonifiable({"foo":"bar"})
+ * // target is Jsonifiable
+ *
+ * assertJsonifiable({ foo: () => 'bar' })
+ * // throws TypeAssertionError
+ *
+ * assertJsonifiable('{"foo":"bar"}')
+ * // throws TypeAssertionError
+ *
+ * assertJsonifiable(new Date())
+ * // target is Jsonifiable, because it has toJSON method
  * ```
  */
 
 export const assertJsonifiable: TypeAssertOf<IsJsonifiable> = createAssertion(
   isJsonifiable,
-  errorMessage('JsonParsable')
+  errorMessage('Jsonifiable')
 )
 
 /**
- * Ensures that a value is a string that can be parsed as JSON.
+ * Enxures that a value can be serialized to JSON.
  *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not a string that can be parsed as JSON.
- * @throws A TypeError with the given message if the value is not a string that can be parsed as JSON.
- * @returns The value if it is a string that can be parsed as JSON.
+ * @param message (optional) The error message to throw if the value is not an Jsonifiable.
+ * @throws A TypeError with the given message if the value is not an Jsonifiable.
+ * @returns The value if it is an Jsonifiable.
  * @example
  * ```ts
- * const target = getTarget() // JsonParsable | string
- * const result = ensureJsonParsable(target, 'target must be an JsonParsable')
- * // result is JsonParsable
+ * const result = ensureJsonifiable({"foo":"bar"})
+ * // result is {"foo":"bar"}
+ *
+ * const result = ensureJsonifiable({ foo: () => 'bar' })
+ * // throws TypeAssertionError
+ *
+ * const result = ensureJsonifiable('{"foo":"bar"}')
+ * // throws TypeAssertionError
+ *
+ * const result = ensureJsonifiable(new Date())
+ * // result is Jsonifiable, because it has toJSON method
  * ```
  */
 export const ensureJsonifiable: TypeEnsureOf<IsJsonifiable> = createEnsure(
   isJsonifiable,
-  errorMessage('JsonParsable')
+  errorMessage('Jsonifiable')
 )
 
 /**
- * Fallbacks to a default value if the value is not a string that can be parsed as JSON.
+ * Fallbacks to a default value if the value is not an Jsonifiable.
  *
  * @param target The value to check.
  * @param defaultValue The default value to fallback to.
+ * @return The value if it is an Jsonifiable, the default value otherwise.
  * @example
  * ```ts
- * const target = getTarget() // JsonParsable | string
- * const result = fallbackJsonParsable(target, ['default'])
- * // result is JsonParsable | string
+ * const result = fallbackJsonifiable({"foo":"bar"}, {})
+ * // result is Jsonifiable
+ *
+ * const result = fallbackJsonifiable({ foo: () => 'bar' }, {})
+ * // result is {}
+ *
+ * const result = fallbackJsonifiable('{"foo":"bar"}', {})
+ * // result is {}
+ *
+ * const result = fallbackJsonifiable(new Date(), {})
+ * // result is Jsonifiable, because it has toJSON method
  * ```
  */
 export const fallbackJsonifiable: TypeFallbackOf<IsJsonifiable> = createFallback(isJsonifiable)
@@ -154,15 +149,21 @@ export const fallbackJsonifiable: TypeFallbackOf<IsJsonifiable> = createFallback
 /**
  * Checks if a value is not a string that can be parsed as JSON.
  *
- * In an if statement, it is simpler to use ! operator is simpler,
- * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
  * @param target The value to check.
- * @returns True if the value is not an JsonParsable, false otherwise.
+ * @returns True if the value is not a string that can be parsed as JSON, false otherwise.
  * @example
  * ```ts
- * const targets = getTargets() // Array<JsonParsable | string>
- * const result = targets.filter(isNotJsonParsable)
- * // result is string[]
+ * const result = isNotJsonifiable({"foo":"bar"})
+ * // result is false
+ *
+ * const result = isNotJsonifiable({ foo: () => 'bar' })
+ * // result is true
+ *
+ * const result = isNotJsonifiable('{"foo":"bar"}')
+ * // result is true
+ *
+ * const result = isNotJsonifiable(new Date())
+ * // result is false, because it has toJSON method
  * ```
  */
 export const isNotJsonifiable = not(isJsonifiable)
@@ -175,14 +176,22 @@ export const isNotJsonifiable = not(isJsonifiable)
  * @throws A TypeError with the given message if the value is a string that can be parsed as JSON.
  * @example
  * ```ts
- * const target = getTarget() // string | JsonParsable
- * assertNotJsonParsable(target, 'target must not be an JsonParsable')
- * // target is string
+ * assertNotJsonifiable({"foo":"bar"})
+ * // throws TypeAssertionError
+ *
+ * assertNotJsonifiable({ foo: () => 'bar' })
+ * // target is not Jsonifiable
+ *
+ * assertNotJsonifiable('{"foo":"bar"}')
+ * // target is not Jsonifiable
+ *
+ * assertNotJsonifiable(new Date())
+ * // throws TypeAssertionError, because it has toJSON method
  * ```
  */
 export const assertNotJsonifiable: InvertedTypeAssertOf<IsJsonifiable> = createAssertion(
   not(isJsonifiable),
-  errorMessage('JsonParsable', { not: true })
+  errorMessage('Jsonifiable', { not: true })
 )
 
 /**
@@ -194,69 +203,45 @@ export const assertNotJsonifiable: InvertedTypeAssertOf<IsJsonifiable> = createA
  * @returns The value if it is not a string that can be parsed as JSON.
  * @example
  * ```ts
- * const target = getTarget() // string | JsonParsable
- * const result = ensureNotJsonParsable(target, 'target must not be an JsonParsable')
- * // result is string
+ * const result = ensureNotJsonifiable({"foo":"bar"})
+ * // throws TypeAssertionError
+ *
+ * const result = ensureNotJsonifiable({ foo: () => 'bar' })
+ * // result is { foo: () => 'bar' }
+ *
+ * const result = ensureNotJsonifiable('{"foo":"bar"}')
+ * // result is '{"foo":"bar"}'
+ *
+ * const result = ensureNotJsonifiable(new Date())
+ * // throws TypeAssertionError, because it has toJSON method
  * ```
  */
 export const ensureNotJsonifiable: InvertedTypeEnsureOf<IsJsonifiable> = createEnsure(
   not(isJsonifiable),
-  errorMessage('JsonParsable', { not: true })
+  errorMessage('Jsonifiable', { not: true })
 )
 
 /**
- * Fallbacks to a default value if the value is not a string that can be parsed as JSON.
+ * Fallbacks to a default value if the value is a string that can be parsed as JSON.
  *
  * @param target The value to check.
  * @param defaultValue The default value to fallback to.
  * @return The value if it is not a string that can be parsed as JSON, the default value otherwise.
  * @example
  * ```ts
- * const target = getTarget() // string | JsonParsable
- * const result = fallbackNotJsonParsable(target, 'default')
- * // result is string
+ * const result = fallbackNotJsonifiable({"foo":"bar"}, 'fallback')
+ * // result is 'fallback'
+ *
+ * const result = fallbackNotJsonifiable({ foo: () => 'bar' }, 'fallback')
+ * // result is { foo: () => 'bar' }
+ *
+ * const result = fallbackNotJsonifiable('{"foo":"bar"}', 'fallback')
+ * // result is '{"foo":"bar"}'
+ *
+ * const result = fallbackNotJsonifiable(new Date(), 'fallback')
+ * // result is 'fallback', because it has toJSON method
  * ```
  */
 export const fallbackNotJsonifiable: InvertedTypeFallbackOf<IsJsonifiable> = createFallback(
   not(isJsonifiable)
 )
-
-/**
- *
- * @param target
- */
-export function coerceJsonObject<T extends Jsonifiable>(target: unknown | T): T
-
-/**
- *
- * @param target
- */
-export function coerceJsonObject(target: unknown): Record<string, unknown>
-
-export function coerceJsonObject(tagret: unknown): Record<string, unknown> {
-  if (!isJsonifiable(tagret)) {
-    return {}
-  }
-
-  return isString(tagret) ? JSON.parse(tagret) : tagret
-}
-
-/**
- *
- * @param target
- */
-export function coerceJsonString<T extends JsonifiableString>(target: unknown | T): T
-
-/**
- *
- * @param target
- */
-export function coerceJsonString(target: unknown): string
-
-export function coerceJsonString(target: unknown): string {
-  if (!isJsonifiable(target)) {
-    return '{}'
-  }
-
-  return isString(target) ? target : JSON.stringify(target)
-}

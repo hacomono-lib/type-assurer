@@ -5,10 +5,11 @@ import {
   InvertedTypeFallbackOf,
   TypeAssertOf,
   TypeEnsureOf,
+  TypeErrorMessage,
   TypeFallbackOf,
   TypeGuard
-} from '../../lib/type'
-import { TypeAssertionError, errorMessage } from '../../lib/error'
+} from '../../lib/types'
+import { errorMessage } from '../../lib/error'
 import { isNumber } from '../number'
 import { isString } from '../string'
 
@@ -164,6 +165,7 @@ export const fallbackNotNumberParsable: InvertedTypeFallbackOf<IsNumberParsable>
  * Throws a TypeAssertionError if the value is not number or number string.
  *
  * @param target The value to coerce.
+ * @param message (optional) The error message to throw if the value is not number or number string.
  * @throws A TypeAssertionError if the value is not number or number string.
  * @returns The value as number.
  * @example
@@ -173,12 +175,16 @@ export const fallbackNotNumberParsable: InvertedTypeFallbackOf<IsNumberParsable>
  * // result is number
  * ```
  */
-export function coerceNumber<N extends NumberParsable>(target: unknown | N): Parse<N>
+export function coerceNumber<N extends NumberParsable>(
+  target: unknown | N,
+  message?: TypeErrorMessage | string
+): Parse<N>
 
 /**
  * Coerces a value to number.
  *
  * @param target The value to coerce.
+ * @param message (optional) The error message to throw if the value is not number or number string.
  * @throws A TypeAssertionError if the value is not number or number string.
  * @returns The value as number.
  * @example
@@ -190,13 +196,10 @@ export function coerceNumber<N extends NumberParsable>(target: unknown | N): Par
  * // throws TypeAssertionError
  * ```
  */
-export function coerceNumber(target: unknown): number
+export function coerceNumber(target: unknown, message?: TypeErrorMessage | string): number
 
-export function coerceNumber(target: unknown): number {
-  if (!isNumberParsable(target)) {
-    throw new TypeAssertionError(errorMessage('number parsable')(target), target)
-  }
-
+export function coerceNumber(target: unknown, message?: TypeErrorMessage | string): number {
+  assertNumberParsable(target, message)
   return isNumber(target) ? target : Number(target)
 }
 
@@ -204,46 +207,40 @@ export function coerceNumber(target: unknown): number {
  * Fixes a value to number.
  *
  * @param target The value to fix.
- * @param fallbackValue The fallback value to return if the value is not number or number string. (default: NaN)
+ * @param defaultValue The fallback value to return if the value is not number or number string.
  * @returns The value as number, the fallback value otherwise.
  * @example
  * ```ts
- * const result = fixNumber('1')
+ * const result = fixNumber('1', 0)
  * // result is 1
- *
- * const result = fixNumber('a')
- * // result is NaN
  *
  * const result = fixNumber('a', 0)
  * // result is 0
  * ```
  */
-export function fixNumber<N extends NumberParsable, F extends number = typeof NaN>(
+export function fixNumber<N extends NumberParsable, F extends number>(
   target: unknown | N,
-  fallbackValue?: F
+  defaultValue: F
 ): Parse<F> | N
 
 /**
  * Fixes a value to number.
  *
  * @param target The value to fix.
- * @param fallbackValue The fallback value to return if the value is not number or number string. (default: NaN)
+ * @param defaultValue The fallback value to return if the value is not number or number string.
  * @returns The value as number, the fallback value otherwise.
  * @example
  * ```ts
- * const result = fixNumber('1')
+ * const result = fixNumber('1', 0)
  * // result is 1
- *
- * const result = fixNumber('a')
- * // result is NaN
  *
  * const result = fixNumber('a', 0)
  * // result is 0
  * ```
  */
-export function fixNumber(target: unknown, fallbackValue?: number): number
+export function fixNumber(target: unknown, defaultValue: number): number
 
-export function fixNumber(target: unknown, defaultValue = NaN): number {
+export function fixNumber(target: unknown, defaultValue: number): number {
   if (!isNumberParsable(target)) {
     return defaultValue
   }
