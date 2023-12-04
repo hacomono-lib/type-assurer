@@ -7,18 +7,20 @@ describe('isJsonifiable type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
     if (isJsonifiable(targetObject)) {
-      assertType<JsonifiableObject | JsonifiableArray | null | string>(targetObject)
+      assertType<Equals<JsonifiableObject | JsonifiableArray | null | string, typeof targetObject>>(
+        true
+      )
     } else {
-      assertType<object>(targetObject)
+      assertType<Equals<object, typeof targetObject>>(true)
     }
   })
 
   test('guard definite types 2', () => {
     const targetConstObject = {} as { foo?: string } | '1'
     if (isJsonifiable(targetConstObject)) {
-      assertType<{ foo?: string } | '1'>(targetConstObject)
+      assertType<Equals<{ foo?: string } | '1', typeof targetConstObject>>(true)
     } else {
-      assertType<never>(targetConstObject)
+      assertType<Equals<never, typeof targetConstObject>>(true)
     }
   })
 
@@ -31,9 +33,11 @@ describe('isJsonifiable type tests', () => {
       | (() => void)
       | undefined
     if (isJsonifiable(targetConstObject)) {
-      assertType<{ foo?: string } | Date | JsonifiableArray | null>(targetConstObject)
+      assertType<
+        Equals<{ foo?: string } | Date | JsonifiableArray | null, typeof targetConstObject>
+      >(true)
     } else {
-      assertType<undefined | (() => void) | unknown[]>(targetConstObject)
+      assertType<Equals<undefined | (() => void) | unknown[], typeof targetConstObject>>(true)
     }
   })
 
@@ -46,18 +50,18 @@ describe('isJsonifiable type tests', () => {
     }
     const target = new Foo()
     if (isJsonifiable(target)) {
-      assertType<never>(target)
+      assertType<Equals<never, typeof target>>(true)
     } else {
-      assertType<Foo>(target)
+      assertType<Equals<Foo, typeof target>>(true)
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isJsonifiable(targetUnknown)) {
-      assertType<Jsonifiable>(targetUnknown)
+      assertType<Equals<Jsonifiable, typeof targetUnknown>>(true)
     } else {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     }
   })
 })
@@ -66,18 +70,20 @@ describe('isNotJsonifiable type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
     if (isNotJsonifiable(targetObject)) {
-      assertType<object>(targetObject)
+      assertType<Equals<object, typeof targetObject>>(true)
     } else {
-      assertType<JsonifiableArray | JsonifiableObject | string | null>(targetObject)
+      assertType<Equals<JsonifiableArray | JsonifiableObject | string | null, typeof targetObject>>(
+        true
+      )
     }
   })
 
   test('guard definite types 2', () => {
     const targetConstObject = {} as { foo?: string } | '1'
     if (isNotJsonifiable(targetConstObject)) {
-      assertType<never>(targetConstObject)
+      assertType<Equals<never, typeof targetConstObject>>(true)
     } else {
-      assertType<{ foo?: string } | '1'>(targetConstObject)
+      assertType<Equals<{ foo?: string } | '1', typeof targetConstObject>>(true)
     }
   })
 
@@ -90,9 +96,11 @@ describe('isNotJsonifiable type tests', () => {
       | (() => void)
       | undefined
     if (isNotJsonifiable(targetConstObject)) {
-      assertType<undefined | (() => void) | unknown[]>(targetConstObject)
+      assertType<Equals<undefined | (() => void) | unknown[], typeof targetConstObject>>(true)
     } else {
-      assertType<{ foo?: string } | Date | JsonifiableArray | null>(targetConstObject)
+      assertType<
+        Equals<{ foo?: string } | Date | JsonifiableArray | null, typeof targetConstObject>
+      >(true)
     }
   })
 
@@ -105,18 +113,18 @@ describe('isNotJsonifiable type tests', () => {
     }
     const target = new Foo()
     if (isNotJsonifiable(target)) {
-      assertType<Foo>(target)
+      assertType<Equals<Foo, typeof target>>(true)
     } else {
-      assertType<never>(target)
+      assertType<Equals<never, typeof target>>(true)
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isNotJsonifiable(targetUnknown)) {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     } else {
-      assertType<Jsonifiable>(targetUnknown)
+      assertType<Equals<Jsonifiable, typeof targetUnknown>>(true)
     }
   })
 })

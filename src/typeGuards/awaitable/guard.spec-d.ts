@@ -5,27 +5,27 @@ describe('isAwaitable type tests', () => {
   test('guard definite types.', () => {
     const targetAwaitable = Promise.resolve() as Promise<void> | void
     if (isAwaitable(targetAwaitable)) {
-      assertType<Promise<void>>(targetAwaitable)
+      assertType<Equals<Promise<void>, typeof targetAwaitable>>(true)
     } else {
-      assertType<void>(targetAwaitable)
+      assertType<Equals<void, typeof targetAwaitable>>(true)
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isAwaitable(targetUnknown)) {
-      assertType<PromiseLike<unknown>>(targetUnknown)
+      assertType<Equals<PromiseLike<unknown>, typeof targetUnknown>>(true)
     } else {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     }
   })
 
   test('guard union types', () => {
     const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
     if (isAwaitable(targetUnion)) {
-      assertType<Promise<string | number>>(targetUnion)
+      assertType<Equals<Promise<string | number>, typeof targetUnion>>(true)
     } else {
-      assertType<string | number>(targetUnion)
+      assertType<Equals<string | number, typeof targetUnion>>(true)
     }
   })
 })
@@ -34,27 +34,27 @@ describe('isNotAwaitable type tests', () => {
   test('guard definite types.', () => {
     const targetAwaitable = Promise.resolve() as Promise<void> | void
     if (isNotAwaitable(targetAwaitable)) {
-      assertType<void>(targetAwaitable)
+      assertType<Equals<void, typeof targetAwaitable>>(true)
     } else {
-      assertType<Promise<void>>(targetAwaitable)
+      assertType<Equals<Promise<void>, typeof targetAwaitable>>(true)
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isNotAwaitable(targetUnknown)) {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     } else {
-      assertType<PromiseLike<unknown>>(targetUnknown)
+      assertType<Equals<PromiseLike<unknown>, typeof targetUnknown>>(true)
     }
   })
 
   test('guard union types', () => {
     const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
     if (isNotAwaitable(targetUnion)) {
-      assertType<string | number>(targetUnion)
+      assertType<Equals<string | number, typeof targetUnion>>(true)
     } else {
-      assertType<Promise<string | number>>(targetUnion)
+      assertType<Equals<Promise<string | number>, typeof targetUnion>>(true)
     }
   })
 })

@@ -1,46 +1,55 @@
 import { test, describe, assertType } from 'vitest'
 import { ensureObject, ensureNotObject } from '.'
+import { Equals } from '../../lib/test'
 
 describe('ensureObject type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
-    assertType<object>(ensureObject(targetObject))
+    const result = ensureObject(targetObject)
+    assertType<Equals<object, typeof result>>(true)
   })
 
   test('guard definite types 2', () => {
     const targetConstObject = {} as { foo?: string } | '1'
-    assertType<{ foo?: string }>(ensureObject(targetConstObject))
+    const result = ensureObject(targetConstObject)
+    assertType<Equals<{ foo?: string }, typeof result>>(true)
   })
 
   test('guard definite types 3', () => {
     const targetConstObject = {} as { foo?: string } | Date | unknown[]
-    assertType<{ foo?: string } | Date>(ensureObject(targetConstObject))
+    const result = ensureObject(targetConstObject)
+    assertType<Equals<{ foo?: string } | Date, typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
-    assertType<object>(ensureObject(targetUnknown))
+    const result = ensureObject(targetUnknown)
+    assertType<Equals<object, typeof result>>(true)
   })
 })
 
 describe('ensureNotObject type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
-    assertType<string>(ensureNotObject(targetObject))
+    const result = ensureNotObject(targetObject)
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('guard definite types 2', () => {
     const targetConstObject = {} as { foo?: string } | '1'
-    assertType<'1'>(ensureNotObject(targetConstObject))
+    const result = ensureNotObject(targetConstObject)
+    assertType<Equals<'1', typeof result>>(true)
   })
 
   test('guard definite types 3', () => {
     const targetConstObject = {} as { foo?: string } | Date | unknown[]
-    assertType<unknown[]>(ensureNotObject(targetConstObject))
+    const result = ensureNotObject(targetConstObject)
+    assertType<Equals<unknown[], typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
-    assertType<unknown>(ensureNotObject(targetUnknown))
+    const result = ensureNotObject(targetUnknown)
+    assertType<Equals<unknown, typeof result>>(true)
   })
 })

@@ -5,13 +5,13 @@ describe('assertBoolean type tests', () => {
   test('guard definite types.', () => {
     const targetBoolean = true as boolean | string
     assertBoolean(targetBoolean)
-    assertType<boolean>(targetBoolean)
+    assertType<Equals<boolean, typeof targetBoolean>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     assertBoolean(targetUnknown)
-    assertType<boolean>(targetUnknown)
+    assertType<Equals<boolean, typeof targetUnknown>>(true)
   })
 })
 
@@ -19,12 +19,12 @@ describe('assertNotBoolean type tests', () => {
   test('guard definite types.', () => {
     const targetBoolean = true as boolean | string
     assertNotBoolean(targetBoolean)
-    assertType<string>(targetBoolean)
+    assertType<Equals<string, typeof targetBoolean>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     assertNotBoolean(targetUnknown)
-    assertType<unknown>(targetUnknown)
+    assertType<Equals<unknown, typeof targetUnknown>>(true)
   })
 })

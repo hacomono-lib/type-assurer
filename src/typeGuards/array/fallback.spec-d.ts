@@ -5,42 +5,50 @@ import { fallbackArray, fallbackNotArray } from '.'
 describe('fallbackArray type tests', () => {
   test('fallback definite types.', () => {
     const targetArray = [] as string[] | string
-    assertType<string[]>(fallbackArray(targetArray, ['default']))
+    const result = fallbackArray(targetArray, ['default'])
+    assertType<Equals<string[], typeof result>>(true)
   })
 
   test('fallback definite types with fallback never array', () => {
     const targetNever = [] as string[]
-    assertType<string[]>(fallbackArray(targetNever, []))
+    const result = fallbackArray(targetNever, [])
+    assertType<Equals<string[], typeof result>>(true)
   })
 
   test('fallback definite type with unmatched fallback array', () => {
     const targetArray = [] as string[] | string
-    assertType<string[] | number[]>(fallbackArray(targetArray, [0]))
+    const result = fallbackArray(targetArray, [0])
+    assertType<Equals<string[] | number[], typeof result>>(true)
   })
 
   test('fallback unknown types', () => {
     const targetUnknown = 'string' as unknown
-    assertType<unknown[]>(fallbackArray(targetUnknown, ['default'] as unknown[]))
+    const result = fallbackArray(targetUnknown, ['default'] as unknown[])
+    assertType<Equals<unknown[], typeof result>>(true)
   })
 
   test('fallback unknown types with fallback never array', () => {
     const targetNever = 'string' as unknown
-    assertType<unknown[]>(fallbackArray(targetNever, []))
+    const result = fallbackArray(targetNever, [])
+    assertType<Equals<unknown[], typeof result>>(true)
   })
 
   test('fallback union types', () => {
     const targetUnion = [] as string[] | number[] | string
-    assertType<string[] | number[]>(fallbackArray(targetUnion, ['default']))
+    const result = fallbackArray(targetUnion, ['default'])
+    assertType<Equals<string[] | number[], typeof result>>(true)
   })
 
   test('fallback union types 2', () => {
     const targetUnion2 = [] as Array<string | number> | string | number
-    assertType<Array<string | number>>(fallbackArray(targetUnion2, ['default']))
+    const result = fallbackArray(targetUnion2, ['default'])
+    assertType<Equals<Array<string | number>, typeof result>>(true)
   })
 
   test('fallback tuple types', () => {
     const tuple = ['', 0] as [string, number] | string | number
-    assertType<[string] | [string, number]>(fallbackArray(tuple, ['default']))
+    const result = fallbackArray(tuple, ['default'])
+    assertType<Equals<[string] | [string, number], typeof result>>(true)
   })
 
   test('uncorrect fallback type', () => {
@@ -52,42 +60,50 @@ describe('fallbackArray type tests', () => {
 describe('fallbackNotArray type tests', () => {
   test('fallback definite types.', () => {
     const targetArray = [] as string[] | string
-    assertType<string>(fallbackNotArray(targetArray, 'default'))
+    const result = fallbackNotArray(targetArray, 'default')
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('fallback definite types with fallback never array', () => {
     const targetNever = [] as string[]
-    assertType<string>(fallbackNotArray(targetNever, 'default'))
+    const result = fallbackNotArray(targetNever, 'default')
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('fallback definite type with unmatched fallback array', () => {
     const targetArray = [] as string[] | string
-    assertType<string | number>(fallbackNotArray(targetArray, 0))
+    const result = fallbackNotArray(targetArray, 0)
+    assertType<Equals<string | number, typeof result>>(true)
   })
 
   test('fallback unknown types with unknown fallback value', () => {
     const targetUnknown = 'string' as unknown
-    assertType<unknown>(fallbackNotArray(targetUnknown, 'default' as unknown))
+    const result = fallbackNotArray(targetUnknown, 'default' as unknown)
+    assertType<Equals<unknown, typeof result>>(true)
   })
 
   test('fallback unknown types with definite fallback value', () => {
     const targetNever = 'string' as unknown
-    assertType<unknown>(fallbackNotArray(targetNever, 'default'))
+    const result = fallbackNotArray(targetNever, 'default')
+    assertType<Equals<unknown, typeof result>>(true)
   })
 
   test('fallback union types', () => {
     const targetUnion = [] as string[] | number[] | string
-    assertType<string | number>(fallbackNotArray(targetUnion, 'default'))
+    const result = fallbackNotArray(targetUnion, 'default')
+    assertType<Equals<string | number, typeof result>>(true)
   })
 
   test('fallback union types 2', () => {
     const targetUnion2 = [] as Array<string | number> | string | number
-    assertType<string | number>(fallbackNotArray(targetUnion2, 'default'))
+    const result = fallbackNotArray(targetUnion2, 'default')
+    assertType<Equals<string | number, typeof result>>(true)
   })
 
   test('fallback tuple types', () => {
     const tuple = ['', 0] as [string, number] | string | number
-    assertType<string | number>(fallbackNotArray(tuple, 'default'))
+    const result = fallbackNotArray(tuple, 'default')
+    assertType<Equals<string | number, typeof result>>(true)
   })
 
   test('uncorrect fallback type', () => {

@@ -5,17 +5,20 @@ import { fallbackNumber, fallbackNotNumber } from '.'
 describe('fallbackNumber type tests', () => {
   test('guard definite types', () => {
     const targetNumber = 1 as number | string
-    assertType<number>(fallbackNumber(targetNumber, 3))
+    const result = fallbackNumber(targetNumber, 3)
+    assertType<Equals<number, typeof result>>(true)
   })
 
   test('guard definite types 2', () => {
     const targetConstNumber = 1 as 1 | '1'
-    assertType<1 | 3>(fallbackNumber(targetConstNumber, 3))
+    const result = fallbackNumber(targetConstNumber, 3)
+    assertType<Equals<1 | 3, typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
-    assertType<number>(fallbackNumber(targetUnknown, 3))
+    const result = fallbackNumber(targetUnknown, 3)
+    assertType<Equals<number, typeof result>>(true)
   })
 
   test('uncorrect fallback types', () => {
@@ -27,17 +30,20 @@ describe('fallbackNumber type tests', () => {
 describe('fallbackNotNumber type tests', () => {
   test('guard definite types', () => {
     const targetNumber = 1 as number | string
-    assertType<string>(fallbackNotNumber(targetNumber, 'string'))
+    const result = fallbackNotNumber(targetNumber, 'string')
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('guard definite types 2', () => {
     const targetConstNumber = 1 as 1 | '1'
-    assertType<'1' | 'string'>(fallbackNotNumber(targetConstNumber, 'string'))
+    const result = fallbackNotNumber(targetConstNumber, 'string')
+    assertType<Equals<'1' | 'string', typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
-    assertType<unknown>(fallbackNotNumber(targetUnknown, 'string'))
+    const result = fallbackNotNumber(targetUnknown, 'string')
+    assertType<Equals<unknown, typeof result>>(true)
   })
 
   test('uncorrect fallback types', () => {

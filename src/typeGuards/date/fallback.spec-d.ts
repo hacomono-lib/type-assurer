@@ -5,12 +5,14 @@ import { fallbackDate, fallbackNotDate } from '.'
 describe('fallbackDate type tests', () => {
   test('guard definite types.', () => {
     const target = new Date() as Date | string
-    assertType<Date>(fallbackDate(target, new Date()))
+    const result = fallbackDate(target, new Date())
+    assertType<Equals<Date, typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const target = 'string' as unknown
-    assertType<Date>(fallbackDate(target, new Date()))
+    const result = fallbackDate(target, new Date())
+    assertType<Equals<Date, typeof result>>(true)
   })
 
   test('uncorrect fallback type', () => {
@@ -23,12 +25,14 @@ describe('fallbackDate type tests', () => {
 describe('fallbackNotDate type tests', () => {
   test('guard definite types.', () => {
     const target = new Date() as Date | string
-    assertType<string>(fallbackNotDate(target, 'string'))
+    const result = fallbackNotDate(target, 'string')
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const target = 'string' as unknown
-    assertType<unknown>(fallbackNotDate(target, 'string'))
+    const result = fallbackNotDate(target, 'string')
+    assertType<Equals<unknown, typeof result>>(true)
   })
 
   test('uncorrect fallback type', () => {

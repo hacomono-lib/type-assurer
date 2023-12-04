@@ -5,18 +5,18 @@ describe('isBoolean type tests', () => {
   test('guard definite types.', () => {
     const targetBoolean = true as boolean | string
     if (isBoolean(targetBoolean)) {
-      assertType<boolean>(targetBoolean)
+      assertType<Equals<boolean, typeof targetBoolean>>(true)
     } else {
-      assertType<string>(targetBoolean)
+      assertType<Equals<string, typeof targetBoolean>>(true)
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isBoolean(targetUnknown)) {
-      assertType<boolean>(targetUnknown)
+      assertType<Equals<boolean, typeof targetUnknown>>(true)
     } else {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     }
   })
 })
@@ -25,18 +25,18 @@ describe('isNotBoolean type tests', () => {
   test('guard definite types.', () => {
     const targetBoolean = true as boolean | string
     if (isNotBoolean(targetBoolean)) {
-      assertType<string>(targetBoolean)
+      assertType<Equals<string, typeof targetBoolean>>(true)
     } else {
-      assertType<boolean>(targetBoolean)
+      assertType<Equals<boolean, typeof targetBoolean>>(true)
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isNotBoolean(targetUnknown)) {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     } else {
-      assertType<boolean>(targetUnknown)
+      assertType<Equals<boolean, typeof targetUnknown>>(true)
     }
   })
 })

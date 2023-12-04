@@ -5,12 +5,14 @@ import { fallbackBoolean, fallbackNotBoolean } from '.'
 describe('fallbackBoolean type tests', () => {
   test('guard definite types.', () => {
     const target = true as boolean | string
-    assertType<boolean>(fallbackBoolean(target, true))
+    const result = fallbackBoolean(target, true)
+    assertType<Equals<boolean, typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const target = 'string' as unknown
-    assertType<boolean>(fallbackBoolean(target, true))
+    const result = fallbackBoolean(target, true)
+    assertType<Equals<boolean, typeof result>>(true)
   })
 
   test('uncorrectable types', () => {
@@ -23,12 +25,14 @@ describe('fallbackBoolean type tests', () => {
 describe('fallbackNotBoolean type tests', () => {
   test('guard definite types.', () => {
     const target = true as boolean | string
-    assertType<string>(fallbackNotBoolean(target, 'string'))
+    const result = fallbackNotBoolean(target, 'string')
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const target = 'string' as unknown
-    assertType<unknown>(fallbackNotBoolean(target, 'string'))
+    const result = fallbackNotBoolean(target, 'string')
+    assertType<Equals<unknown, typeof result>>(true)
   })
 
   test('uncorrectable types', () => {

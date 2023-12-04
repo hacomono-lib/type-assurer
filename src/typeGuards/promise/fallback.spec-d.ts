@@ -1,21 +1,25 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, describe, assertType } from 'vitest'
 import { fallbackPromise, fallbackNotPromise } from '.'
+import { Equals } from '../../lib/test'
 
 describe('fallbackPromise type tests', () => {
   test('fallback definite types.', () => {
     const targetPromise = Promise.resolve('return') as Promise<string> | string
-    assertType<Promise<string>>(fallbackPromise(targetPromise, Promise.resolve('fallback')))
+    const result = fallbackPromise(targetPromise, Promise.resolve('fallback'))
+    assertType<Equals<Promise<string>, typeof result>>(true)
   })
 
   test('fallback types as union', () => {
     const targetPromise = Promise.resolve('return') as Promise<string> | string
-    assertType<Promise<string | number>>(fallbackPromise(targetPromise, Promise.resolve(3)))
+    const result = fallbackPromise(targetPromise, Promise.resolve(3))
+    assertType<Equals<Promise<string | number>, typeof result>>(true)
   })
 
   test('fallback union types', () => {
     const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
-    assertType<Promise<string | number>>(fallbackPromise(targetUnion, Promise.resolve('fallback')))
+    const result = fallbackPromise(targetUnion, Promise.resolve('fallback'))
+    assertType<Equals<Promise<string | number>, typeof result>>(true)
   })
 
   test('uncorrectable types', () => {
@@ -27,17 +31,20 @@ describe('fallbackPromise type tests', () => {
 describe('fallbackNotPromise type tests', () => {
   test('fallback definite types.', () => {
     const targetPromise = Promise.resolve('return') as Promise<string> | string
-    assertType<string>(fallbackNotPromise(targetPromise, 'fallback'))
+    const result = fallbackNotPromise(targetPromise, 'fallback')
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('fallback types as union', () => {
     const targetPromise = Promise.resolve('return') as Promise<string> | string
-    assertType<string | number>(fallbackNotPromise(targetPromise, 3))
+    const result = fallbackNotPromise(targetPromise, 3)
+    assertType<Equals<string | number, typeof result>>(true)
   })
 
   test('fallback union types', () => {
     const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
-    assertType<string | number>(fallbackNotPromise(targetUnion, 'fallback'))
+    const result = fallbackNotPromise(targetUnion, 'fallback')
+    assertType<Equals<string | number, typeof result>>(true)
   })
 
   test('uncorrectable types', () => {

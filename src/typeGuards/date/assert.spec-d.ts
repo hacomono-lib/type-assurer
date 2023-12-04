@@ -5,13 +5,13 @@ describe('assertDate type tests', () => {
   test('guard definite types.', () => {
     const targetDate = new Date() as Date | string
     assertDate(targetDate)
-    assertType<Date>(targetDate)
+    assertType<Equals<Date, typeof targetDate>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     assertDate(targetUnknown)
-    assertType<Date>(targetUnknown)
+    assertType<Equals<Date, typeof targetUnknown>>(true)
   })
 })
 
@@ -19,12 +19,12 @@ describe('assertNotDate type tests', () => {
   test('guard definite types.', () => {
     const targetDate = new Date() as Date | string
     assertNotDate(targetDate)
-    assertType<string>(targetDate)
+    assertType<Equals<string, typeof targetDate>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     assertNotDate(targetUnknown)
-    assertType<unknown>(targetUnknown)
+    assertType<Equals<unknown, typeof targetUnknown>>(true)
   })
 })

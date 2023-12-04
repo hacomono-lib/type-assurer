@@ -4,23 +4,27 @@ import { ensureBoolean, ensureNotBoolean } from '.'
 describe('ensureBoolean type tests', () => {
   test('guard definite types.', () => {
     const target = true as boolean | string
-    assertType<boolean>(ensureBoolean(target))
+    const result = ensureBoolean(target)
+    assertType<Equals<boolean, typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const target = 'string' as unknown
-    assertType<boolean>(ensureBoolean(target))
+    const result = ensureBoolean(target)
+    assertType<Equals<boolean, typeof result>>(true)
   })
 })
 
 describe('ensureNotBoolean type tests', () => {
   test('guard definite types.', () => {
     const target = true as boolean | string
-    assertType<string>(ensureNotBoolean(target))
+    const result = ensureNotBoolean(target)
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('guard unknown types', () => {
     const target = 'string' as unknown
-    assertType<unknown>(ensureNotBoolean(target))
+    const result = ensureNotBoolean(target)
+    assertType<Equals<unknown, typeof result>>(true)
   })
 })

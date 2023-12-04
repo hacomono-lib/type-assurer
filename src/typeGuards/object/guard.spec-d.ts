@@ -1,23 +1,24 @@
 import { test, describe, assertType } from 'vitest'
 import { isObject, isNotObject } from '.'
+import { Equals } from '../../lib/test'
 
 describe('isObject type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
     if (isObject(targetObject)) {
-      assertType<object>(targetObject)
+      assertType<Equals<object, typeof targetObject>>(true)
     } else {
       // object type includes Array, null, but isObject checkes truthy object.
-      assertType<object | string>(targetObject)
+      assertType<Equals<object | string, typeof targetObject>>(true)
     }
   })
 
   test('guard definite types 2', () => {
     const targetConstObject = {} as { foo?: string } | '1'
     if (isObject(targetConstObject)) {
-      assertType<{ foo?: string }>(targetConstObject)
+      assertType<Equals<{ foo?: string }, typeof targetConstObject>>(true)
     } else {
-      assertType<'1'>(targetConstObject)
+      assertType<Equals<'1', typeof targetConstObject>>(true)
     }
   })
 
@@ -30,18 +31,20 @@ describe('isObject type tests', () => {
       | (() => void)
       | undefined
     if (isObject(targetConstObject)) {
-      assertType<{ foo?: string } | Date>(targetConstObject)
+      assertType<Equals<{ foo?: string } | Date, typeof targetConstObject>>(true)
     } else {
-      assertType<null | undefined | unknown[] | (() => void)>(targetConstObject)
+      assertType<Equals<null | undefined | unknown[] | (() => void), typeof targetConstObject>>(
+        true
+      )
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isObject(targetUnknown)) {
-      assertType<object>(targetUnknown)
+      assertType<Equals<object, typeof targetUnknown>>(true)
     } else {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     }
   })
 })
@@ -50,18 +53,18 @@ describe('isNotObject type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
     if (isNotObject(targetObject)) {
-      assertType<string | object>(targetObject)
+      assertType<Equals<string | object, typeof targetObject>>(true)
     } else {
-      assertType<object>(targetObject)
+      assertType<Equals<object, typeof targetObject>>(true)
     }
   })
 
   test('guard definite types 2', () => {
     const targetConstObject = {} as { foo?: string } | '1'
     if (isNotObject(targetConstObject)) {
-      assertType<'1'>(targetConstObject)
+      assertType<Equals<'1', typeof targetConstObject>>(true)
     } else {
-      assertType<{ foo?: string }>(targetConstObject)
+      assertType<Equals<{ foo?: string }, typeof targetConstObject>>(true)
     }
   })
 
@@ -74,18 +77,20 @@ describe('isNotObject type tests', () => {
       | (() => void)
       | undefined
     if (isNotObject(targetConstObject)) {
-      assertType<null | undefined | unknown[] | (() => void)>(targetConstObject)
+      assertType<Equals<null | undefined | unknown[] | (() => void), typeof targetConstObject>>(
+        true
+      )
     } else {
-      assertType<{ foo?: string } | Date>(targetConstObject)
+      assertType<Equals<{ foo?: string } | Date, typeof targetConstObject>>(true)
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isNotObject(targetUnknown)) {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     } else {
-      assertType<object>(targetUnknown)
+      assertType<Equals<object, typeof targetUnknown>>(true)
     }
   })
 })

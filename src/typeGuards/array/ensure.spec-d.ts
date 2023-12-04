@@ -4,53 +4,63 @@ import { ensureArray, ensureNotArray } from '.'
 describe('ensureArray type tests', () => {
   test('ensure definite types.', () => {
     const targetArray = [] as string[] | string
-    assertType<string[]>(ensureArray(targetArray))
+    const result = ensureArray(targetArray)
+    assertType<Equals<string[], typeof result>>(true)
   })
 
   test('ensure unknown types', () => {
     const targetUnknown = 'string' as unknown
-    assertType<unknown[]>(ensureArray(targetUnknown))
+    const result = ensureArray(targetUnknown)
+    assertType<Equals<unknown[], typeof result>>(true)
   })
 
   test('ensure union types', () => {
     const targetUnion = [] as string[] | number[] | string
-    assertType<string[] | number[]>(ensureArray(targetUnion))
+    const result = ensureArray(targetUnion)
+    assertType<Equals<string[] | number[], typeof result>>(true)
   })
 
   test('ensure union types 2', () => {
     const targetUnion2 = [] as Array<string | number> | string | number
-    assertType<Array<string | number>>(ensureArray(targetUnion2))
+    const result = ensureArray(targetUnion2)
+    assertType<Equals<Array<string | number>, typeof result>>(true)
   })
 
   test('ensure tuple types', () => {
     const tuple = ['', 0] as [string, number] | string | number
-    assertType<[string, number]>(ensureArray(tuple))
+    const result = ensureArray(tuple)
+    assertType<Equals<[string, number], typeof result>>(true)
   })
 })
 
 describe('ensureNotArray type tests', () => {
   test('ensure definite types.', () => {
     const targetArray = [] as string[] | string
-    assertType<string>(ensureNotArray(targetArray))
+    const result = ensureNotArray(targetArray)
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('ensure unknown types', () => {
     const targetUnknown = 'string' as unknown
-    assertType<unknown>(ensureNotArray(targetUnknown))
+    const result = ensureNotArray(targetUnknown)
+    assertType<Equals<unknown, typeof result>>(true)
   })
 
   test('ensure union types', () => {
     const targetUnion = [] as string[] | number[] | string
-    assertType<string>(ensureNotArray(targetUnion))
+    const result = ensureNotArray(targetUnion)
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('ensure union types 2', () => {
     const targetUnion2 = [] as Array<string | number> | string | number
-    assertType<string | number>(ensureNotArray(targetUnion2))
+    const result = ensureNotArray(targetUnion2)
+    assertType<Equals<string | number, typeof result>>(true)
   })
 
   test('ensure tuple types', () => {
     const tuple = ['', 0] as [string, number] | string | number
-    assertType<string | number>(ensureNotArray(tuple))
+    const result = ensureNotArray(tuple)
+    assertType<Equals<string | number, typeof result>>(true)
   })
 })

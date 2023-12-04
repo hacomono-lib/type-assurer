@@ -5,27 +5,27 @@ describe('isNumberParsable type tests', () => {
   test('guard definite types.', () => {
     const targetNumberParsable = '1' as string | number
     if (isNumberParsable(targetNumberParsable)) {
-      assertType<NumberParsable>(targetNumberParsable)
+      assertType<Equals<NumberParsable, typeof targetNumberParsable>>(true)
     } else {
-      assertType<string>(targetNumberParsable)
+      assertType<Equals<string, typeof targetNumberParsable>>(true)
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isNumberParsable(targetUnknown)) {
-      assertType<NumberParsable>(targetUnknown)
+      assertType<Equals<NumberParsable, typeof targetUnknown>>(true)
     } else {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     }
   })
 
   test('guard union types', () => {
     const targetUnion = '1' as '1' | 1 | 'a' | boolean
     if (isNumberParsable(targetUnion)) {
-      assertType<1 | '1'>(targetUnion)
+      assertType<Equals<1 | '1', typeof targetUnion>>(true)
     } else {
-      assertType<boolean | 'a'>(targetUnion)
+      assertType<Equals<boolean | 'a', typeof targetUnion>>(true)
     }
   })
 })
@@ -34,27 +34,27 @@ describe('isNotNumberParsable type tests', () => {
   test('guard definite types.', () => {
     const targetNumberParsable = '1' as string | number
     if (isNotNumberParsable(targetNumberParsable)) {
-      assertType<string>(targetNumberParsable)
+      assertType<Equals<string, typeof targetNumberParsable>>(true)
     } else {
-      assertType<NumberParsable>(targetNumberParsable)
+      assertType<Equals<NumberParsable, typeof targetNumberParsable>>(true)
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isNotNumberParsable(targetUnknown)) {
-      assertType<unknown>(targetUnknown)
+      assertType<Equals<unknown, typeof targetUnknown>>(true)
     } else {
-      assertType<NumberParsable>(targetUnknown)
+      assertType<Equals<NumberParsable, typeof targetUnknown>>(true)
     }
   })
 
   test('guard union types', () => {
     const targetUnion = '1' as '1' | 1 | 'a' | boolean
     if (isNotNumberParsable(targetUnion)) {
-      assertType<boolean | 'a'>(targetUnion)
+      assertType<Equals<boolean | 'a', typeof targetUnion>>(true)
     } else {
-      assertType<1 | '1'>(targetUnion)
+      assertType<Equals<1 | '1', typeof targetUnion>>(true)
     }
   })
 })

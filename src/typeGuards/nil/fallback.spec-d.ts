@@ -4,12 +4,12 @@ import { fallbackNil, fallbackNotNil } from '.'
 
 describe('fallbackNil type tests', () => {
   test('fallbackNil is not definition', () => {
-    assertType<never>(fallbackNil)
+    assertType<Equals<never, typeof fallbackNil>>(true)
   })
 })
 
 describe('fallbackNotNil type tests', () => {
   test('fallbackNotNil is not definition', () => {
-    assertType<never>(fallbackNotNil)
+    assertType<Equals<never, typeof fallbackNotNil>>(true)
   })
 })

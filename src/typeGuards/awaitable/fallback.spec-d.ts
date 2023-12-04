@@ -5,12 +5,14 @@ import { fallbackAwaitable, fallbackNotAwaitable } from '.'
 describe('fallbackAwaitable type tests', () => {
   test('fallback definite types.', () => {
     const targetAwaitable = Promise.resolve('return') as Promise<string> | string
-    assertType<Promise<string>>(fallbackAwaitable(targetAwaitable, Promise.resolve('fallback')))
+    const result = fallbackAwaitable(targetAwaitable, Promise.resolve('fallback'))
+    assertType<Equals<Promise<string>, typeof result>>(true)
   })
 
   test('fallback types as union', () => {
     const targetAwaitable = Promise.resolve('return') as Promise<string> | string
-    assertType<Promise<string | number>>(fallbackAwaitable(targetAwaitable, Promise.resolve(3)))
+    const result = fallbackAwaitable(targetAwaitable, Promise.resolve(3))
+    assertType<Equals<Promise<string | number>, typeof result>>(true)
   })
 
   test('fallback union types', () => {
@@ -29,17 +31,20 @@ describe('fallbackAwaitable type tests', () => {
 describe('fallbackNotAwaitable type tests', () => {
   test('fallback definite types.', () => {
     const targetAwaitable = Promise.resolve('return') as Promise<string> | string
-    assertType<string>(fallbackNotAwaitable(targetAwaitable, 'fallback'))
+    const result = fallbackNotAwaitable(targetAwaitable, 'fallback')
+    assertType<Equals<string, typeof result>>(true)
   })
 
   test('fallback types as union', () => {
     const targetAwaitable = Promise.resolve('return') as Promise<string> | string
-    assertType<string | number>(fallbackNotAwaitable(targetAwaitable, 3))
+    const result = fallbackNotAwaitable(targetAwaitable, 3)
+    assertType<Equals<string | number, typeof result>>(true)
   })
 
   test('fallback union types', () => {
     const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
-    assertType<string | number>(fallbackNotAwaitable(targetUnion, 'fallback'))
+    const result = fallbackNotAwaitable(targetUnion, 'fallback')
+    assertType<Equals<string | number, typeof result>>(true)
   })
 
   test('uncorrectable types', () => {

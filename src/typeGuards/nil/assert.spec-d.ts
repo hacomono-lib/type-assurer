@@ -5,25 +5,25 @@ describe('assertNil type tests', () => {
   test('guard definite types', () => {
     const targetNull = null as null | string
     assertNil(targetNull)
-    assertType<null>(targetNull)
+    assertType<Equals<null, typeof targetNull>>(true)
   })
 
   test('guard definite types 2', () => {
     const targetUndef = undefined as undefined | string
     assertNil(targetUndef)
-    assertType<undefined>(targetUndef)
+    assertType<Equals<undefined, typeof targetUndef>>(true)
   })
 
   test('guard definite types 3', () => {
     const targetConstString = 'string' as null | 'string'
     assertNil(targetConstString)
-    assertType<null>(targetConstString)
+    assertType<Equals<null, typeof targetConstString>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     assertNil(targetUnknown)
-    assertType<null | undefined>(targetUnknown)
+    assertType<Equals<null | undefined, typeof targetUnknown>>(true)
   })
 })
 
@@ -31,24 +31,24 @@ describe('assertNotNil type tests', () => {
   test('guard definite types', () => {
     const targetNull = null as null | string
     assertNotNil(targetNull)
-    assertType<string>(targetNull)
+    assertType<Equals<string, typeof targetNull>>(true)
   })
 
   test('guard definite types 2', () => {
     const targetUndef = undefined as undefined | string
     assertNotNil(targetUndef)
-    assertType<string>(targetUndef)
+    assertType<Equals<string, typeof targetUndef>>(true)
   })
 
   test('guard definite types 3', () => {
     const targetConstString = 'string' as 'string' | null
     assertNotNil(targetConstString)
-    assertType<'string'>(targetConstString)
+    assertType<Equals<'string', typeof targetConstString>>(true)
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     assertNotNil(targetUnknown)
-    assertType<unknown>(targetUnknown)
+    assertType<Equals<unknown, typeof targetUnknown>>(true)
   })
 })
