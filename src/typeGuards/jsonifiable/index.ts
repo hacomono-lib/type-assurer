@@ -110,8 +110,6 @@ export const isJsonifiable = ((target: unknown): target is Jsonifiable => {
   }
 }) as JsonifiableTypeGuard
 
-type IsJsonifiable = typeof isJsonifiable
-
 /**
  * Asserts that a value can be serialized to JSON.
  *
