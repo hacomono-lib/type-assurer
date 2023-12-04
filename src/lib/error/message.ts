@@ -7,7 +7,7 @@ function actualTypeOf(target: unknown): string {
   if (target === null) {
     return `null ${suffix}`
   }
-  return `object (constructor: ${target.constructor.name}) ${suffix}`
+  return `object (constructor: ${target.constructor?.name ?? 'object'}) ${suffix}`
 }
 
 export function errorMessage(

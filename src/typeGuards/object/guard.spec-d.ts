@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, describe, assertType } from 'vitest'
 import { isObject, isNotObject } from '.'
 
@@ -8,7 +7,8 @@ describe('isObject type tests', () => {
     if (isObject(targetObject)) {
       assertType<object>(targetObject)
     } else {
-      assertType<string>(targetObject)
+      // object type includes Array, null, but isObject checkes truthy object.
+      assertType<object | string>(targetObject)
     }
   })
 
@@ -30,9 +30,9 @@ describe('isObject type tests', () => {
       | (() => void)
       | undefined
     if (isObject(targetConstObject)) {
-      assertType<{ foo?: string } | Date | unknown[] | (() => void)>(targetConstObject)
+      assertType<{ foo?: string } | Date>(targetConstObject)
     } else {
-      assertType<null | undefined>(targetConstObject)
+      assertType<null | undefined | unknown[] | (() => void)>(targetConstObject)
     }
   })
 
@@ -50,7 +50,7 @@ describe('isNotObject type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
     if (isNotObject(targetObject)) {
-      assertType<string>(targetObject)
+      assertType<string | object>(targetObject)
     } else {
       assertType<object>(targetObject)
     }
@@ -74,9 +74,9 @@ describe('isNotObject type tests', () => {
       | (() => void)
       | undefined
     if (isNotObject(targetConstObject)) {
-      assertType<null | undefined>(targetConstObject)
+      assertType<null | undefined | unknown[] | (() => void)>(targetConstObject)
     } else {
-      assertType<{ foo?: string } | Date | unknown[] | (() => void)>(targetConstObject)
+      assertType<{ foo?: string } | Date>(targetConstObject)
     }
   })
 

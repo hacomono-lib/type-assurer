@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, describe, assertType } from 'vitest'
 import { ensureObject, ensureNotObject } from '.'
 
@@ -15,7 +14,7 @@ describe('ensureObject type tests', () => {
 
   test('guard definite types 3', () => {
     const targetConstObject = {} as { foo?: string } | Date | unknown[]
-    assertType<{ foo?: string } | Date | unknown[]>(ensureObject(targetConstObject))
+    assertType<{ foo?: string } | Date>(ensureObject(targetConstObject))
   })
 
   test('guard unknown types', () => {
@@ -37,7 +36,7 @@ describe('ensureNotObject type tests', () => {
 
   test('guard definite types 3', () => {
     const targetConstObject = {} as { foo?: string } | Date | unknown[]
-    assertType<never>(ensureNotObject(targetConstObject))
+    assertType<unknown[]>(ensureNotObject(targetConstObject))
   })
 
   test('guard unknown types', () => {

@@ -10,36 +10,36 @@ import {
   isDate,
   isNotDate
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
 
 describe('isDate', () => {
-  testGuard(isDate, expected)
+  testEquivalentGuard(isDate, expected)
 })
 
 describe('assertDate', () => {
-  testAssert(assertDate, expected)
+  testEquivalentAssert(assertDate, expected)
 })
 
 describe('ensureDate', () => {
-  testEnsure(ensureDate, expected)
+  testEquivalentEnsure(ensureDate, expected)
 })
 
 describe('fallbackDate', () => {
-  testFallback(fallbackDate, expected, { fallbackValue: [new Date()] })
+  testEquivalentFallback(fallbackDate, expected, { fallbackValue: [new Date()] })
 })
 
 describe('isNotDate', () => {
-  testGuard(isNotDate, expected, { negative: true })
+  testEquivalentGuard(isNotDate, expected, { negative: true })
 })
 
 describe('assertNotDate', () => {
-  testAssert(assertNotDate, expected, { negative: true })
+  testEquivalentAssert(assertNotDate, expected, { negative: true })
 })
 
 describe('ensureNotDate', () => {
-  testEnsure(ensureNotDate, expected, { negative: true })
+  testEquivalentEnsure(ensureNotDate, expected, { negative: true })
 })
 
 describe('fallbackNotDate', () => {
-  testFallback(fallbackNotDate, expected, { negative: true, fallbackValue: 'fallback' })
+  testEquivalentFallback(fallbackNotDate, expected, { negative: true, fallbackValue: 'fallback' })
 })

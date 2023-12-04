@@ -10,36 +10,36 @@ import {
   isArray,
   isNotArray
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
 
 describe('isArray', () => {
-  testGuard(isArray, expected)
+  testEquivalentGuard(isArray, expected)
 })
 
 describe('isNotArray', () => {
-  testGuard(isNotArray, expected, { negative: true })
+  testEquivalentGuard(isNotArray, expected, { negative: true })
 })
 
 describe('assertArray', () => {
-  testAssert(assertArray, expected)
+  testEquivalentAssert(assertArray, expected)
 })
 
 describe('assertNotArray', () => {
-  testAssert(assertNotArray, expected, { negative: true })
+  testEquivalentAssert(assertNotArray, expected, { negative: true })
 })
 
 describe('ensureArray', () => {
-  testEnsure(ensureArray, expected)
+  testEquivalentEnsure(ensureArray, expected)
 })
 
 describe('ensureNotArray', () => {
-  testEnsure(ensureNotArray, expected, { negative: true })
+  testEquivalentEnsure(ensureNotArray, expected, { negative: true })
 })
 
 describe('fallbackArray', () => {
-  testFallback(fallbackArray, expected, { fallbackValue: ['fallback'] })
+  testEquivalentFallback(fallbackArray, expected, { fallbackValue: ['fallback'] })
 })
 
 describe('fallbackNotArray', () => {
-  testFallback(fallbackNotArray, expected, { negative: true, fallbackValue: 'fallback' })
+  testEquivalentFallback(fallbackNotArray, expected, { negative: true, fallbackValue: 'fallback' })
 })

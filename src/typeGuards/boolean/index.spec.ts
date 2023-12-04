@@ -1,5 +1,4 @@
 import { describe } from 'vitest'
-import expected from 'lodash/isBoolean.js'
 import {
   assertNotBoolean,
   assertBoolean,
@@ -10,7 +9,9 @@ import {
   isBoolean,
   isNotBoolean
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
+
+const expected = [ValueType.True, ValueType.False]
 
 describe('isBoolean', () => {
   testGuard(isBoolean, expected)

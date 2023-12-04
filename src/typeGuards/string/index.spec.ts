@@ -1,5 +1,4 @@
 import { describe } from 'vitest'
-import expected from 'lodash/isString.js'
 import {
   assertNotString,
   assertString,
@@ -10,7 +9,9 @@ import {
   isString,
   isNotString
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
+
+const expected = [ValueType.String, ValueType.EmptyString]
 
 describe('isString', () => {
   testGuard(isString, expected)

@@ -7,11 +7,12 @@ import {
   TypeEnsureOf,
   TypeFallbackOf,
   TypeGuard
-} from '../../lib/type'
+} from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
 /**
  * Checks if a value is an array.
+ *
  * @param target The value to check.
  * @returns True if the value is an array, false otherwise.
  * @example
@@ -28,6 +29,7 @@ type IsArray = typeof isArray
 
 /**
  * Asserts that a value is an array.
+ *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is not an array.
  * @throws A TypeError with the given message if the value is not an array.
@@ -43,6 +45,7 @@ export const assertArray: TypeAssertOf<IsArray> = createAssertion(isArray, error
 
 /**
  * Ensures that a value is an array.
+ *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is not an array.
  * @throws A TypeError with the given message if the value is not an array.
@@ -58,6 +61,7 @@ export const ensureArray: TypeEnsureOf<IsArray> = createEnsure(isArray, errorMes
 
 /**
  * Fallbacks to a default value if the value is not an array.
+ *
  * @param target The value to check.
  * @param defaultValue The default value to fallback to.
  * @example
@@ -74,6 +78,7 @@ export const fallbackArray: TypeFallbackOf<IsArray> = createFallback(isArray)
  *
  * In an if statement, it is simpler to use ! operator is simpler,
  * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
+ *
  * @param target The value to check.
  * @returns True if the value is not an array, false otherwise.
  * @example
@@ -87,6 +92,7 @@ export const isNotArray = not(isArray)
 
 /**
  * Asserts that a value is not an array.
+ *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is an array.
  * @throws A TypeError with the given message if the value is an array.
@@ -104,6 +110,7 @@ export const assertNotArray: InvertedTypeAssertOf<IsArray> = createAssertion(
 
 /**
  * Enxures that a value is not an array.
+ *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is an array.
  * @throws A TypeError with the given message if the value is an array.
@@ -115,10 +122,14 @@ export const assertNotArray: InvertedTypeAssertOf<IsArray> = createAssertion(
  * // result is string
  * ```
  */
-export const ensureNotArray: InvertedTypeEnsureOf<IsArray> = createEnsure(not(isArray), errorMessage('array', { not: true }))
+export const ensureNotArray: InvertedTypeEnsureOf<IsArray> = createEnsure(
+  not(isArray),
+  errorMessage('array', { not: true })
+)
 
 /**
  * Fallbacks to a default value if the value is not an array.
+ *
  * @param target The value to check.
  * @param defaultValue The default value to fallback to.
  * @return The value if it is not an array, the default value otherwise.

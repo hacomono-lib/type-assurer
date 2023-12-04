@@ -3,21 +3,24 @@
 [![Release](https://github.com/hacomono-lib/type-assurer/actions/workflows/release.yml/badge.svg)](https://github.com/hacomono-lib/type-assurer/actions/workflows/release.yml)
 [![Test](https://github.com/hacomono-lib/type-assurer/actions/workflows/test.yml/badge.svg)](https://github.com/hacomono-lib/type-assurer/actions/workflows/test.yml)
 
-`type-assurer` is a TypeScript-first type checking library, providing compatibility with lodash's type guard functions while ensuring type safety. Designed with ESModules in mind, it allows for tree-shaking to minimize bundle sizes.
+`type-assurer` is a TypeScript-first type checking library. Designed with ESModules in mind, it allows for tree-shaking to minimize bundle sizes.
 
 ## Features
 
-- Compatible with lodash type guard functions
 - TypeScript-first implementation with accurate type inference
 - ESModule ready for tree-shaking and bundle size optimization
 - No external dependencies
-- A collection of 7 type guard functions:
-  a. isString - Similar to lodash's type guard functions
-  b. assertString - Provides TypeScript's type assertion feature
-  c. ensureString - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
-  d. fallbackString - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
+- 7 type guard functions:
+  a. `isFoo` (e.g. isString) - type guard functions
+  b. `assertFoo` (e.g. assertString) - Provides TypeScript's type assertion feature
+  c. `ensureFoo` (e.g. ensureString) - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
+  d. `fallbackFoo` (e.g. fallbackString) - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
   - The reversed versions
   - Generator provided for custom type guards for non-primitive types
+- 2 type modification functions:
+  a. `coerceFoo` (e.g. coerceNumber) - Evaluates the argument's type and returns the value if the type guard passes, otherwise throws an exception
+  b. `fixFoo` (e.g. fixNumber) - Evaluates the first argument's type and returns the value if the type guard passes, otherwise returns the second argument's value
+  - If there is a type check for a parsable or modifiable value, there is a corresponding function. (e.g. NumberParsable, Jsonifiable, etc.)
 
 ## Installation
 
@@ -31,14 +34,12 @@ The library provides 8 utility functions for each type guard, such as `isString`
 
 And, note that `fallbackNotNil` can be replaced with the `??` operator. Functions that can be simplified using standard JavaScript expressions, like this example, are not targeted for implementation.
 
-### is, isNot
+### is
 
 Functions such as `is` simply provide type guards that can be used in conditional branches.
 
 ```typescript
 import { isString } from 'type-assurer'
-
-declare const value: unknown
 
 if (isString(value)) {
   console.log(`This is a string: ${value}`)
@@ -52,13 +53,20 @@ Functions such as `isNot` are useful in cases that require a type guard function
 ```typescript
 import { isNotNil } from 'type-assurer'
 
-declare const values: string | null
-
 const result = values.filter(isNotNil)
 //    ^? string[]
 ```
 
-### assert, assertNot
+Also, type guard functions such as `isXxx` are implemented in the form of `not(isXxx)`.
+If you have implemented your own type guard, you can use the `not` function directly.
+
+```typescript
+import { not } from 'type-assurer'
+
+const result = values.filter(not(isFoo))
+```
+
+### assert
 
 Functions with names like `assert` `assertNot` are type assertion functions.
 If the type check does not pass, it throws a TypeError.
@@ -74,7 +82,7 @@ assertString(value, 'Value must be a string')
 // No error if value is a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-### ensure, ensureNot
+### ensure
 
 Functions with names like `ensure` `ensureNot` are type assertion functions, but return the same value if the type check passes.
 It is convenient to write type assertions on a single line.
@@ -91,7 +99,7 @@ const value = ensureString(await fetchData(), 'Value must be a string')
 // No error if fetchData returns a string, otherwise throws an error with the message "Value must be a string"
 ```
 
-### fallback, fallbackNot
+### fallback
 
 Functions like `fallback` `fallbackNot` are type modification functions.
 
@@ -105,6 +113,45 @@ declare function fetchData(): Promise<string | undefined>
 const value = fallbackString(await fetchData(), 'default')
 //    ^? string
 // Returns value if it's a string, otherwise returns the fallbackValue
+```
+
+### coerce
+
+Functions like `coerce` are type modification functions.
+
+If there is a type check for a parsable or modifiable value, there is a corresponding function. (e.g. NumberParsable, Jsonifiable, etc.)
+
+This function returns the modifiable value if the type is parsable, otherwise it throws an exception.
+
+```typescript
+import { coerceNumber } from 'type-assurer'
+
+const value1 = coerceNumber('123')
+//    ^? 123
+
+const value2 = coerceNumber('abc')
+//    thrown TypeAssertionError
+```
+
+### fix
+
+Functions like `fix` are type modification functions.
+
+If there is a type check for a parsable or modifiable value, there is a corresponding function. (e.g. NumberParsable, Jsonifiable, etc.)
+
+This function returns the modifiable value if the type is parsable, otherwise it returns the fallback value specified in the second argument.
+
+```typescript
+import { fixNumber } from 'type-assurer'
+
+const value1 = fixNumber('123')
+//    ^? 123
+
+const value2 = fixNumber('abc')
+//    ^? NaN
+
+const value3 = fixNumber('abc', 0)
+//    ^? 0
 ```
 
 ## Contributing

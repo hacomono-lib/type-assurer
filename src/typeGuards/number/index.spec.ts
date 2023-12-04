@@ -1,5 +1,4 @@
 import { describe } from 'vitest'
-import expected from 'lodash/isNumber.js'
 import {
   assertNotNumber,
   assertNumber,
@@ -10,7 +9,15 @@ import {
   isNumber,
   isNotNumber
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard } from '../../lib/test'
+import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
+
+const expected = [
+  ValueType.PositiveNumber,
+  ValueType.NegativeNumber,
+  ValueType.Zero,
+  ValueType.PositiveInfinity,
+  ValueType.NegativeInfinity
+]
 
 describe('isNumber', () => {
   testGuard(isNumber, expected)

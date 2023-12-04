@@ -1,5 +1,6 @@
+/* eslint-disable max-lines */
 import { expect, test } from 'vitest'
-import {
+import type {
   InvertedTypeAssert,
   InvertedTypeEnsure,
   InvertedTypeFallback,
@@ -8,34 +9,57 @@ import {
   TypeFallback,
   TypeGuard,
   Not
-} from '../..'
-import { type TestOption, allTypes, getGenerator } from './value'
+} from '../type'
+import { ValueType } from './type'
+import { type TestOption, type PickTypesOption, allTypes, getGenerator, testTypes } from './value'
 
 type ExpectGuard = (v: unknown) => boolean
 
 function xor(a: boolean | null | undefined, b: boolean | null | undefined): boolean {
-  return ((a as boolean) && (!b as boolean)) || ((!a as boolean) && (b as boolean))
+  return Boolean(a) !== Boolean(b)
 }
 
 /**
  * specifies TypeGuard function retuens should be same as lodash function
  *
  * @param actualGuard set TypeGuard function
- * @param expectGuard set lodash function
+ * @param expectGuard set Expected TypeGuard function (e.g. lodash)
  * @param opt
  */
-export function testGuard(
+export function testEquivalentGuard(
   actualGuard: TypeGuard | Not<TypeGuard>,
   expectGuard: ExpectGuard,
   opt: TestOption = {}
 ): void {
-  test.each(allTypes())('test value type: %s', (type) => {
+  const testcases = allTypes().map(
+    (t) => [t, xor(expectGuard(getGenerator(t)()), opt.negative)] as const
+  )
+
+  test.each(testcases)('test value type: %s, should return %s', (type, expected) => {
     const generate = getGenerator(type)
-    if (opt.negative) {
-      expect(actualGuard(generate())).not.toBe(expectGuard(generate()))
-    } else {
-      expect(actualGuard(generate())).toBe(expectGuard(generate()))
-    }
+    expect(actualGuard(generate())).toBe(expected)
+  })
+}
+
+/**
+ * specifies TypeGuard function returns should be true only specified ValueType.
+ *
+ * @param actualGuard set TypeGuard function
+ * @param expectedValueTypes set expected ValueType array
+ * @param opt
+ */
+export function testGuard(
+  actualGuard: TypeGuard | Not<TypeGuard>,
+  expectedValueTypes: ValueType[],
+  opt: TestOption & PickTypesOption = {}
+): void {
+  const testcases = testTypes(expectedValueTypes, opt).map(
+    (t) => [t, xor(expectedValueTypes.includes(t), opt.negative)] as const
+  )
+
+  test.each(testcases)('test value type: %s, should return %s', (type, expected) => {
+    const generate = getGenerator(type)
+    expect(actualGuard(generate())).toBe(expected)
   })
 }
 
@@ -43,26 +67,50 @@ export function testGuard(
  * specifies TypeAssert of InvertedTypeAssert function should throw or not that same as lodash function condition
  *
  * @param actualAssert set TypeAssert function (if opt.negative is true, set InvertedTypeAssert function)
- * @param expectGuard set lodash function
+ * @param expectGuard set Expected TypeGuard function (e.g. lodash)
  * @param opt
  */
-export function testAssert(
+export function testEquivalentAssert(
   actualAssert: TypeAssert | InvertedTypeAssert,
   expectGuard: ExpectGuard,
   opt: TestOption = {}
 ): void {
-  test.each(allTypes())('test value type: %s', (type) => {
+  const testcases = allTypes().map(
+    (t) => [t, xor(expectGuard(getGenerator(t)()), opt.negative)] as const
+  )
+
+  test.each(testcases)('test value type: %s, should results %s', (type, expected) => {
     const generate = getGenerator(type)
 
-    if (xor(expectGuard(generate()), opt.negative)) {
-      // (lodash.isString: true, negative: false) or (lodash.isString: false, negative: true)
-      // assertString should not throw
-
+    if (expected) {
       expect(() => actualAssert(generate())).not.toThrow()
     } else {
-      // (lodash.isString: true, negative: true) or (lodash.isString: false, negative: false)
-      // assertString should throw
+      expect(() => actualAssert(generate())).toThrow()
+    }
+  })
+}
 
+/**
+ *
+ * @param actualAssert
+ * @param expectedValueTypes
+ * @param opt
+ */
+export function testAssert(
+  actualAssert: TypeAssert | InvertedTypeAssert,
+  expectedValueTypes: ValueType[],
+  opt: TestOption & PickTypesOption = {}
+): void {
+  const testcases = testTypes(expectedValueTypes, opt).map(
+    (t) => [t, xor(expectedValueTypes.includes(t), opt.negative)] as const
+  )
+
+  test.each(testcases)('test value type: %s, should results %s', (type, expected) => {
+    const generate = getGenerator(type)
+
+    if (expected) {
+      expect(() => actualAssert(generate())).not.toThrow()
+    } else {
       expect(() => actualAssert(generate())).toThrow()
     }
   })
@@ -72,27 +120,53 @@ export function testAssert(
  * specifies TypeEnsure of InvertedTypeEnsure function should return or throw that same as lodash function condition
  *
  * @param ensure set TypeEnsure function (if opt.negative is true, set InvertedTypeEnsure function)
- * @param expectGuard set lodash function
+ * @param expectGuard set Expected TypeGuard function (e.g. lodash)
  * @param opt
  */
-export function testEnsure(
+export function testEquivalentEnsure(
   ensure: TypeEnsure | InvertedTypeEnsure,
   expectGuard: ExpectGuard,
   opt: TestOption = {}
 ): void {
-  test.each(allTypes())('test value type: %s', (type) => {
+  const testcases = allTypes().map(
+    (t) => [t, xor(expectGuard(getGenerator(t)()), opt.negative)] as const
+  )
+
+  test.each(testcases)('test value type: %s, should results %s', (type, expected) => {
     const generate = getGenerator(type)
 
-    if (xor(expectGuard(generate()), opt.negative)) {
-      // (lodash.isString: true, negative: false) or (lodash.isString: false, negative: true)
-      // ensureString should not throw and return value that same as argument
-
+    if (expected) {
       const value = generate()
       expect(ensure(value)).toEqual(value)
     } else {
-      // (lodash.isString: true, negative: true) or (lodash.isString: false, negative: false)
-      // ensureString should throw
+      expect(() => ensure(generate())).toThrow()
+    }
+  })
+}
 
+/**
+ * specifies TypeEnsure function should return or throw only specified ValueType.
+ *
+ * @param ensure set TypeEnsure function
+ * @param expectedValueTypes set expected ValueType array
+ * @param opt
+ */
+export function testEnsure(
+  ensure: TypeEnsure | InvertedTypeEnsure,
+  expectedValueTypes: ValueType[],
+  opt: TestOption & PickTypesOption = {}
+): void {
+  const testcases = testTypes(expectedValueTypes, opt).map(
+    (t) => [t, xor(expectedValueTypes.includes(t), opt.negative)] as const
+  )
+
+  test.each(testcases)('test value type: %s, should results %s', (type, expected) => {
+    const generate = getGenerator(type)
+
+    if (expected) {
+      const value = generate()
+      expect(ensure(value)).toEqual(value)
+    } else {
       expect(() => ensure(generate())).toThrow()
     }
   })
@@ -105,32 +179,58 @@ type AnyFunction = (...args: any[]) => any
  * specifies TypeFallback of InvertedTypeFallback function should return that same as lodash function condition
  *
  * @param fallback set TypeFallback function (if opt.negative is true, set InvertedTypeFallback function)
- * @param expectGuard set lodash function
+ * @param expectGuard set Expected TypeGuard function (e.g. lodash)
  * @param opt
  */
-export function testFallback(
+export function testEquivalentFallback(
   fallback: TypeFallback | InvertedTypeFallback,
   expectGuard: ExpectGuard,
   opt: TestOption & { fallbackValue: unknown }
 ): void
 
 // TypeFallback | InvertedTypeFallback is difficult to type safe, so use AnyFunction
-export function testFallback(
+export function testEquivalentFallback(
   fallback: AnyFunction,
   expectGuard: ExpectGuard,
   opt: TestOption & { fallbackValue: unknown }
 ): void {
-  test.each(allTypes())('test value type: %s', (type) => {
+  const testcases = allTypes().map(
+    (t) => [t, xor(expectGuard(getGenerator(t)()), opt.negative)] as const
+  )
+
+  test.each(testcases)('test value type: %s, should results %s', (type, expected) => {
     const generate = getGenerator(type)
     const value = generate()
 
-    // (lodash.isString: true, negative: false) or (lodash.isString: false, negative: true)
-    // fallbackString should return value that same as first argument
+    expect(fallback(value, opt.fallbackValue)).toEqual(expected ? value : opt.fallbackValue)
+  })
+}
 
-    // (lodash.isString: true, negative: true) or (lodash.isString: false, negative: false)
-    // fallbackString should return fallback value
+/**
+ * specifies TypeFallback function should return only specified ValueType.
+ *
+ * @param fallback set TypeFallback function
+ * @param expectedValueTypes set expected ValueType array
+ * @param opt
+ */
+export function testFallback(
+  fallback: TypeFallback | InvertedTypeFallback,
+  expectedValueTypes: ValueType[],
+  opt: TestOption & PickTypesOption & { fallbackValue: unknown }
+): void
 
-    const expected = xor(expectGuard(generate()), opt.negative) ? value : opt.fallbackValue
-    expect(fallback(value, opt.fallbackValue)).toEqual(expected)
+export function testFallback(
+  fallback: AnyFunction,
+  expectedValueTypes: ValueType[],
+  opt: TestOption & PickTypesOption & { fallbackValue: unknown }
+): void {
+  const testcases = testTypes(expectedValueTypes, opt).map(
+    (t) => [t, xor(expectedValueTypes.includes(t), opt.negative)] as const
+  )
+
+  test.each(testcases)('test value type: %s, should results %s', (type, expected) => {
+    const generate = getGenerator(type)
+    const value = generate()
+    expect(fallback(value, opt.fallbackValue)).toEqual(expected ? value : opt.fallbackValue)
   })
 }

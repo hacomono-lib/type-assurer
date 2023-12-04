@@ -7,13 +7,14 @@ import type {
   TypeEnsureOf,
   TypeFallbackOf,
   TypeGuard
-} from '../../lib/type'
+} from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
 /**
- * Checks if a value is an boolean.
+ * Checks if a value is a boolean.
+ *
  * @param target The value to check.
- * @returns True if the value is an boolean, false otherwise.
+ * @returns True if the value is a boolean, false otherwise.
  * @example
  * ```ts
  * const target = getTarget() // boolean | string
@@ -28,14 +29,15 @@ export const isBoolean = ((target: unknown): target is boolean =>
 type IsBoolean = typeof isBoolean
 
 /**
- * Asserts that a value is an boolean.
+ * Asserts that a value is a boolean.
+ *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not an boolean.
- * @throws A TypeError with the given message if the value is not an boolean.
+ * @param message (optional) The error message to throw if the value is not a boolean.
+ * @throws A TypeError with the given message if the value is not a boolean.
  * @example
  * ```ts
  * const target = getTarget() // boolean | string
- * assertBoolean(target, 'target must be an boolean')
+ * assertBoolean(target, 'target must be a boolean')
  * // target is boolean
  * ```
  */
@@ -46,15 +48,16 @@ export const assertBoolean: TypeAssertOf<IsBoolean> = createAssertion(
 )
 
 /**
- * Ensures that a value is an boolean.
+ * Ensures that a value is a boolean.
+ *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not an boolean.
- * @throws A TypeError with the given message if the value is not an boolean.
- * @returns The value if it is an boolean.
+ * @param message (optional) The error message to throw if the value is not a boolean.
+ * @throws A TypeError with the given message if the value is not a boolean.
+ * @returns The value if it is a boolean.
  * @example
  * ```ts
  * const target = getTarget() // boolean | string
- * const result = ensureBoolean(target, 'target must be an boolean')
+ * const result = ensureBoolean(target, 'target must be a boolean')
  * // result is boolean
  * ```
  */
@@ -64,7 +67,8 @@ export const ensureBoolean: TypeEnsureOf<IsBoolean> = createEnsure(
 )
 
 /**
- * Fallbacks to a default value if the value is not an boolean.
+ * Fallbacks to a default value if the value is not a boolean.
+ *
  * @param target The value to check.
  * @param defaultValue The default value to fallback to.
  * @example
@@ -77,12 +81,13 @@ export const ensureBoolean: TypeEnsureOf<IsBoolean> = createEnsure(
 export const fallbackBoolean: TypeFallbackOf<IsBoolean> = createFallback(isBoolean)
 
 /**
- * Checks if a value is not an boolean.
+ * Checks if a value is not a boolean.
  *
  * In an if statement, it is simpler to use ! operator is simpler,
  * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
+ *
  * @param target The value to check.
- * @returns True if the value is not an boolean, false otherwise.
+ * @returns True if the value is not a boolean, false otherwise.
  * @example
  * ```ts
  * const targets = getTargets() // Array<boolean | string>
@@ -93,14 +98,15 @@ export const fallbackBoolean: TypeFallbackOf<IsBoolean> = createFallback(isBoole
 export const isNotBoolean = not(isBoolean)
 
 /**
- * Asserts that a value is not an boolean.
+ * Asserts that a value is not a boolean.
+ *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is an boolean.
- * @throws A TypeError with the given message if the value is an boolean.
+ * @param message (optional) The error message to throw if the value is a boolean.
+ * @throws A TypeError with the given message if the value is a boolean.
  * @example
  * ```ts
  * const target = getTarget() // string | boolean
- * assertNotBoolean(target, 'target must not be an boolean')
+ * assertNotBoolean(target, 'target must not be a boolean')
  * // target is string
  * ```
  */
@@ -110,15 +116,16 @@ export const assertNotBoolean: InvertedTypeAssertOf<IsBoolean> = createAssertion
 )
 
 /**
- * Enxures that a value is not an boolean.
+ * Enxures that a value is not a boolean.
+ *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is an boolean.
- * @throws A TypeError with the given message if the value is an boolean.
- * @returns The value if it is not an boolean.
+ * @param message (optional) The error message to throw if the value is a boolean.
+ * @throws A TypeError with the given message if the value is a boolean.
+ * @returns The value if it is not a boolean.
  * @example
  * ```ts
  * const target = getTarget() // string | boolean
- * const result = ensureNotBoolean(target, 'target must not be an boolean')
+ * const result = ensureNotBoolean(target, 'target must not be a boolean')
  * // result is string
  * ```
  */
@@ -128,10 +135,11 @@ export const ensureNotBoolean: InvertedTypeEnsureOf<IsBoolean> = createEnsure(
 )
 
 /**
- * Fallbacks to a default value if the value is not an boolean.
+ * Fallbacks to a default value if the value is not a boolean.
+ *
  * @param target The value to check.
  * @param defaultValue The default value to fallback to.
- * @return The value if it is not an boolean, the default value otherwise.
+ * @return The value if it is not a boolean, the default value otherwise.
  * @example
  * ```ts
  * const target = getTarget() // string | boolean

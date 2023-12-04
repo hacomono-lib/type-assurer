@@ -8,10 +8,11 @@ import {
   TypeEnsureOf,
   TypeFallbackOf,
   TypeGuard
-} from '../../lib/type'
+} from '../../lib/types'
 
 /**
  * Checks if a value is a string.
+ *
  * @param target The value to check.
  * @returns True if the value is a string, false otherwise.
  * @example
@@ -29,6 +30,7 @@ type IsString = typeof isString
 
 /**
  * Asserts that a value is a string.
+ *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is not a string.
  * @throws A TypeError with the given message if the value is not a string.
@@ -46,6 +48,7 @@ export const assertString: TypeAssertOf<IsString> = createAssertion(
 
 /**
  * Ensures that a value is a string.
+ *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is not a string.
  * @throws A TypeError with the given message if the value is not a string.
@@ -61,6 +64,7 @@ export const ensureString: TypeEnsureOf<IsString> = createEnsure(isString, error
 
 /**
  * Returns a fallback value if a value is not a string.
+ *
  * @param target The value to check.
  * @param fallback The fallback value to return if the value is not a string.
  * @returns The value if it is a string, or the fallback value if it is not a string.
@@ -78,6 +82,7 @@ export const fallbackString: TypeFallbackOf<IsString> = createFallback(isString)
  *
  * In an if statement, it is simpler to use ! operator is simpler,
  * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
+ *
  * @param target The value to check.
  * @returns True if the value is not a string, false otherwise.
  * @example
@@ -108,6 +113,7 @@ export const assertNotString: InvertedTypeAssertOf<IsString> = createAssertion(
 
 /**
  * Ensures that a value is not a string.
+ *
  * @param target The value to check.
  * @param message (optional) The error message to throw if the value is a string.
  * @throws A TypeError with the given message if the value is a string.
@@ -119,10 +125,14 @@ export const assertNotString: InvertedTypeAssertOf<IsString> = createAssertion(
  * // result is number
  * ```
  */
-export const ensureNotString: InvertedTypeEnsureOf<IsString> = createEnsure(not(isString), errorMessage('string', { not: true }))
+export const ensureNotString: InvertedTypeEnsureOf<IsString> = createEnsure(
+  not(isString),
+  errorMessage('string', { not: true })
+)
 
 /**
  * Returns a fallback value if a value is a string.
+ *
  * @param target The value to check.
  * @param fallback The fallback value to return if the value is a string.
  * @returns The value if it is not a string, or the fallback value if it is a string.
