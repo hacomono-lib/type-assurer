@@ -4,7 +4,7 @@ description: A Type Guard Utility functions for checking if a value is a string.
 ---
 A Type Guard Utility functions for checking if a value is a string.
 
-## List of inputs and results for them
+## Example of return value
 
 | input | result |
 | ----- | ------ |
@@ -20,11 +20,22 @@ A Type Guard Utility functions for checking if a value is a string.
 
 A Type Guard function for checking if a value is a string.
 
+### Basic Usage (isString)
+
 ```typescript
 function isString(target: unknown): target is string
 ```
 
-### Basic Usage (isString)
+#### params
+
+- `target` .. The value to check.
+
+#### returns
+
+- `true` .. When the value is a string.
+- `false` .. When the value is not a string.
+
+### Examples (isString)
 
 ```typescript
 import { isString } from 'type-assurer'
@@ -50,11 +61,26 @@ if (isString(value2)) {
 
 A Type Assertion function for checking if a value is a string.
 
+### Basic Usage (assertString)
+
 ```typescript
 function assertString(target: unknown, errorMessage?: ErrorMessage): asserts target is string
 ```
 
-### Basic Usage (assertString)
+#### params
+
+- `target` .. The value to check.
+- `errorMessage` .. (optional) The error message to be displayed when the value is not a string.
+
+#### returns
+
+- `void` .. When the value is a string.
+
+#### throws
+
+- `TypeAssertionError` .. When the value is not a string.
+
+### Examples (assertString)
 
 ```typescript
 import { assertString } from 'type-assurer'
@@ -76,11 +102,26 @@ assertString(value2)
 
 Ensure that the value is a string. If it is not a string, throw an error.
 
+### Basic Usage
+
 ```typescript
 function ensureString(target: unknown, errorMessage?: ErrorMessage): string
 ```
 
-### Basic Usage (ensureString)
+#### params
+
+- `target` .. The value to check.
+- `errorMessage` .. (optional) The error message to be displayed when the value is not a string.
+
+#### returns
+
+- `string` .. When the value is a string.
+
+#### throws
+
+- `TypeAssertionError` .. When the value is not a string.
+
+### Examples
 
 ```typescript
 import { ensureString } from 'type-assurer'
@@ -102,11 +143,22 @@ const result2 = ensureString(getValue2())
 
 Fallback to the default value if the value is not a string.
 
+### Basic Usage
+
 ```typescript
 function fallbackString(target: unknown, defaultValue: string): string
 ```
 
-### Basic Usage (fallbackString)
+#### params
+
+- `target` .. The value to check.
+- `defaultValue` .. The default value to be returned when the value is not a string.
+
+#### returns
+
+- `string` .. When the value is a string. Or the default value when the value is not a string.
+
+### Examples
 
 ```typescript
 import { fallbackString } from 'type-assurer'

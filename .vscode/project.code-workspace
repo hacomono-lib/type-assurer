@@ -1,9 +1,25 @@
 {
-    "folders": [
-      { "path": ".." },
-      { "path": "docs", "name": "@docs" }
-    ],
-    "extensions": {
-      "recommendations": ["astro-build.astro-vscode"],
+  "folders": [
+    { "path": ".." },
+    { "path": "docs", "name": "@docs" }
+  ],
+  "extensions": {
+    "recommendations": ["astro-build.astro-vscode", "DavidAnson.vscode-markdownlint"],
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "command": "./node_modules/.bin/astro dev",
+        "name": "Development server",
+        "request": "launch",
+        "type": "node-terminal"
+      }
+    ]
+  },
+  "settings": {
+    "markdownlint.config": {
+      "no-duplicate-heading": false
     }
+  }
 }
