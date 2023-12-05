@@ -1,5 +1,6 @@
 import { test, describe, assertType } from 'vitest'
 import { isNumberParsable, isNotNumberParsable, type NumberParsable } from '.'
+import { Equals } from '../../lib/test'
 
 describe('isNumberParsable type tests', () => {
   test('guard definite types.', () => {

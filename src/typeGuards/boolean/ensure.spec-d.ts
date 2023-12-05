@@ -1,5 +1,6 @@
 import { test, describe, assertType } from 'vitest'
 import { ensureBoolean, ensureNotBoolean } from '.'
+import { Equals } from '../../lib/test'
 
 describe('ensureBoolean type tests', () => {
   test('guard definite types.', () => {

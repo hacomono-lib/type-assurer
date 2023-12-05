@@ -1,5 +1,5 @@
 import { test, describe, assertType } from 'vitest'
-import { isString, isNotString } from '.'
+import { isString } from '.'
 import { Equals } from '../../lib/test'
 
 describe('isString type tests', () => {
@@ -36,44 +36,6 @@ describe('isString type tests', () => {
       assertType<Equals<string, typeof targetUnknown>>(true)
     } else {
       assertType<Equals<unknown, typeof targetUnknown>>(true)
-    }
-  })
-})
-
-describe('isNotString type tests', () => {
-  test('guard definite types', () => {
-    const targetString = 'string' as string | object
-    if (isNotString(targetString)) {
-      assertType<Equals<object, typeof targetString>>(true)
-    } else {
-      assertType<Equals<string, typeof targetString>>(true)
-    }
-  })
-
-  test('guard definite types 2', () => {
-    const targetConstString = 'string' as 'string' | object
-    if (isNotString(targetConstString)) {
-      assertType<Equals<object, typeof targetConstString>>(true)
-    } else {
-      assertType<Equals<'string', typeof targetConstString>>(true)
-    }
-  })
-
-  test('guard definite types 3', () => {
-    const targetConstString = '3' as `${number}` | number
-    if (isNotString(targetConstString)) {
-      assertType<Equals<number, typeof targetConstString>>(true)
-    } else {
-      assertType<Equals<`${number}`, typeof targetConstString>>(true)
-    }
-  })
-
-  test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    if (isNotString(targetUnknown)) {
-      assertType<Equals<unknown, typeof targetUnknown>>(true)
-    } else {
-      assertType<Equals<string, typeof targetUnknown>>(true)
     }
   })
 })

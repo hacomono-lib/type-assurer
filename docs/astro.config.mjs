@@ -36,7 +36,19 @@ export default defineConfig({
         },
         {
           label: 'Reference',
-          autogenerate: { directory: 'reference', collapsed: false }
+          collapsed: false,
+          items: [
+            {
+              label: 'Common',
+              collapsed: false,
+              autogenerate: { directory: '/reference/common', collapsed: false }
+            },
+            {
+              label: 'Type Guards',
+              collapsed: false,
+              autogenerate: { directory: '/reference/typeGuards', collapsed: false }
+            }
+          ]
         }
       ]
     })

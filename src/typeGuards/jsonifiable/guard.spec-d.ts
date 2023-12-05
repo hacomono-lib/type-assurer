@@ -2,6 +2,7 @@
 import { test, describe, assertType } from 'vitest'
 import type { Jsonifiable, JsonifiableObject, JsonifiableArray } from './type'
 import { isJsonifiable, isNotJsonifiable } from '.'
+import { Equals } from '../../lib/test'
 
 describe('isJsonifiable type tests', () => {
   test('guard definite types', () => {

@@ -18,7 +18,7 @@ export interface TypeGuard<T = unknown> extends Branded<'type_guard'> {
  * @description inverted type guard
  */
 export interface InvertedTypeGuard<T = unknown> extends Branded<'inverted_type_guard'> {
-  <U>(target: T | U): target is Exclude<U, T>
+  <U>(target: T | U): target is unknown extends T | U ? unknown : Exclude<U, T>
 }
 
 /**

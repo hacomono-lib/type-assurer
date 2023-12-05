@@ -15,6 +15,16 @@ export enum ValueType {
   BooleanObject = 'booleanObject',
 
   /**
+   * @description `{ [Symbol.toPrimitive]: () => true }`
+   */
+  ObjectToPrimitiveBoolean = 'objectToPrimitiveBoolean',
+
+  /**
+   * @description `{ valueOf: () => true }`
+   */
+  ObjectValueOfBoolean = 'objectValueOfBoolean',
+
+  /**
    * @description `'true'`
    */
   BooleanParsableTrue = 'booleanParsableTrue',
@@ -30,9 +40,29 @@ export enum ValueType {
   Null = 'null',
 
   /**
+   * @description `{ [Symbol.toPrimitive]: () => null }`
+   */
+  ObjectToPrimitiveNull = 'objectToPrimitiveNull',
+
+  /**
+   * @description `{ valueOf: () => null }`
+   */
+  ObjectValueOfNull = 'objectValueOfNull',
+
+  /**
    * @description `undefined`
    */
   Undefined = 'undefined',
+
+  /**
+   * @description `{ [Symbol.toPrimitive]: () => undefined }`
+   */
+  ObjectToPrimitiveUndefined = 'objectToPrimitiveUndefined',
+
+  /**
+   * @description `{ valueOf: () => undefined }`
+   */
+  ObjectValueOfUndefined = 'objectValueOfUndefined',
 
   /**
    * @description `1`
@@ -65,14 +95,39 @@ export enum ValueType {
   NumberObject = 'numberObject',
 
   /**
-   * @description `BigInt(1)`
+   * @description `{ [Symbol.toPrimitive]: () => 1 }`
+   */
+  ObjectToPrimitiveNumber = 'objectToPrimitiveNumber',
+
+  /**
+   * @description `{ valueOf: () => 1 }`
+   */
+  ObjectValueOfNumber = 'objectValueOfNumber',
+
+  /**
+   * @description `1n`
    */
   PositiveBigInt = 'positiveBigint',
 
   /**
-   * @description `BigInt(-1)`
+   * @description `-1n`
    */
   NegativeBigInt = 'negativeBigint',
+
+  /**
+   * @description `BigInt(1)`
+   */
+  BigIntObject = 'bigintObject',
+
+  /**
+   * @description `{ [Symbol.toPrimitive]: () => 1n }`
+   */
+  ObjectToPrimitiveBigInt = 'objectToPrimitiveBigint',
+
+  /**
+   * @description `{ valueOf: () => 1n }`
+   */
+  ObjectValueOfBigInt = 'objectValueOfBigint',
 
   /**
    * @description `NaN`
@@ -123,6 +178,21 @@ export enum ValueType {
    * @description `String('foo')`
    */
   StringObject = 'stringObject',
+
+  /**
+   * @description `{ [Symbol.toPrimitive]: () => 'foo' }`
+   */
+  ObjectToPrimitiveString = 'objectToPrimitiveString',
+
+  /**
+   * @description `{ valueOf: () => 'foo' }`
+   */
+  ObjectValueOfString = 'objectValueOfString',
+
+  /**
+   * @description `{ toString: () => 'foo' }`
+   */
+  ObjectToString = 'objectToString',
 
   /**
    * @description `'123'`
@@ -353,6 +423,16 @@ export enum ValueType {
    * @description `Symbol('foo')`
    */
   Symbol = 'symbol',
+
+  /**
+   * @description `{ [Symbol.toPrimitive]: () => Symbol('foo') }`
+   */
+  ObjectToPrimitiveSymbol = 'objectToPrimitiveSymbol',
+
+  /**
+   * @description `{ valueOf: () => Symbol('foo') }`
+   */
+  ObjectValueOfSymbol = 'objectValueOfSymbol',
 
   /**
    * @description `new Proxy({}, {})`

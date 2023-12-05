@@ -14,18 +14,29 @@ const generators = {
   [ValueType.True]: () => true,
   [ValueType.False]: () => false,
   [ValueType.BooleanObject]: () => new Boolean(true),
+  [ValueType.ObjectToPrimitiveBoolean]: () => ({ [Symbol.toPrimitive]: () => true }),
+  [ValueType.ObjectValueOfBoolean]: () => ({ valueOf: () => true }),
   [ValueType.BooleanParsableTrue]: () => 'true',
   [ValueType.BooleanParsableFalse]: () => 'false',
   [ValueType.Null]: () => null,
+  [ValueType.ObjectToPrimitiveNull]: () => ({ [Symbol.toPrimitive]: () => null }),
+  [ValueType.ObjectValueOfNull]: () => ({ valueOf: () => null }),
   [ValueType.Undefined]: () => undefined,
+  [ValueType.ObjectToPrimitiveUndefined]: () => ({ [Symbol.toPrimitive]: () => undefined }),
+  [ValueType.ObjectValueOfUndefined]: () => ({ valueOf: () => undefined }),
   [ValueType.PositiveNumber]: () => 1,
   [ValueType.PositiveInfinity]: () => Infinity,
   [ValueType.Zero]: () => 0,
   [ValueType.NegativeNumber]: () => -1,
   [ValueType.NegativeInfinity]: () => -Infinity,
   [ValueType.NumberObject]: () => new Number(1),
-  [ValueType.PositiveBigInt]: () => BigInt(1),
-  [ValueType.NegativeBigInt]: () => BigInt(-1),
+  [ValueType.ObjectToPrimitiveNumber]: () => ({ [Symbol.toPrimitive]: () => 1 }),
+  [ValueType.ObjectValueOfNumber]: () => ({ valueOf: () => 1 }),
+  [ValueType.PositiveBigInt]: () => 1n,
+  [ValueType.NegativeBigInt]: () => -1n,
+  [ValueType.BigIntObject]: () => BigInt(1),
+  [ValueType.ObjectToPrimitiveBigInt]: () => ({ [Symbol.toPrimitive]: () => 1n }),
+  [ValueType.ObjectValueOfBigInt]: () => ({ valueOf: () => 1n }),
   [ValueType.NaN]: () => NaN,
   [ValueType.NumberParsablePositiveInt]: () => '123',
   [ValueType.NumberParsableNegativeInt]: () => '-123',
@@ -36,6 +47,9 @@ const generators = {
   [ValueType.String]: () => 'foo',
   [ValueType.EmptyString]: () => '',
   [ValueType.StringObject]: () => new String('foo'),
+  [ValueType.ObjectToPrimitiveString]: () => ({ [Symbol.toPrimitive]: () => 'foo' }),
+  [ValueType.ObjectValueOfString]: () => ({ valueOf: () => 'foo' }),
+  [ValueType.ObjectToString]: () => ({ toString: () => 'foo' }),
   [ValueType.JsonParsableNumber]: () => '123',
   [ValueType.JsonParsableTrue]: () => 'true',
   [ValueType.JsonParsableFalse]: () => 'false',
@@ -146,7 +160,9 @@ const generators = {
     async function* () {
       yield 1
     },
-  [ValueType.Symbol]: () => Symbol('foo')
+  [ValueType.Symbol]: () => Symbol('foo'),
+  [ValueType.ObjectToPrimitiveSymbol]: () => ({ [Symbol.toPrimitive]: () => Symbol('foo') }),
+  [ValueType.ObjectValueOfSymbol]: () => ({ valueOf: () => Symbol('foo') })
 } as const satisfies Record<ValueType, Readonly<ValueFactory>>
 
 Object.freeze(generators)

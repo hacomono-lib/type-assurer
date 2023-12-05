@@ -1,6 +1,5 @@
 import { test, describe, assertType } from 'vitest'
 import { coerceNumber } from '.'
-import { Equals } from '../../lib/test'
 
 describe('coerceNumber type tests', () => {
   test('coerce definite types.', () => {

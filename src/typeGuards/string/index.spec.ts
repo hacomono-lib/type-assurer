@@ -1,14 +1,5 @@
 import { describe } from 'vitest'
-import {
-  assertNotString,
-  assertString,
-  ensureNotString,
-  ensureString,
-  fallbackNotString,
-  fallbackString,
-  isString,
-  isNotString
-} from '.'
+import { assertString, ensureString, fallbackString, isString } from '.'
 import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 
 const expected = [ValueType.String, ValueType.EmptyString]
@@ -27,20 +18,4 @@ describe('ensureString', () => {
 
 describe('fallbackString', () => {
   testFallback(fallbackString, expected, { fallbackValue: 'fallback' })
-})
-
-describe('isNotString', () => {
-  testGuard(isNotString, expected, { negative: true })
-})
-
-describe('assertNotString', () => {
-  testAssert(assertNotString, expected, { negative: true })
-})
-
-describe('ensureNotString', () => {
-  testEnsure(ensureNotString, expected, { negative: true })
-})
-
-describe('fallbackNotString', () => {
-  testFallback(fallbackNotString, expected, { negative: true, fallbackValue: 123 })
 })

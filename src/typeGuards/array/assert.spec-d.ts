@@ -1,5 +1,6 @@
 import { test, describe, assertType } from 'vitest'
 import { assertArray, assertNotArray } from '.'
+import { Equals } from '../../lib/test'
 
 describe('isArray type tests', () => {
   test('assert definite types.', () => {

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, describe, assertType } from 'vitest'
 import { fallbackNumberParsable, fallbackNotNumberParsable } from '.'
+import { Equals } from '../../lib/test'
 
 describe('fallbackNumberParsable type tests', () => {
   test('guard definite types', () => {
