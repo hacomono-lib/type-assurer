@@ -9,29 +9,17 @@ export default defineConfig({
       social: {
         github: 'https://github.com/hacomono-lib/type-assurer',
       },
-      defaultLocale: 'root',
-      locales: {
-        root: {
-          label: 'English',
-          lang: 'en-US'
-        },
-        'jp': {
-          label: '日本語',
-          lang: 'ja-JP'
-        }
-      },
       sidebar: [
         {
           label: 'Home',
-          translations: { 'ja-JP': 'ホーム' },
           link: '/'
         },
         {
           label: 'Introduction',
           collapsed: false,
           items: [
-            { label: 'Getting Started', link: '/guides/start', translations: { 'ja-JP': '始める' }, },
-            { label: 'Concepts', link: '/guides/concepts', translations: { 'ja-JP': 'コンセプト' } },
+            { label: 'Getting Started', link: '/guides/start' },
+            { label: 'Concepts', link: '/guides/concepts' },
           ]
         },
         {
