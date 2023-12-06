@@ -40,7 +40,7 @@ function isString(target: unknown): target is string
 ```typescript
 import { isString } from 'type-assurer'
 
-const value: unknown = 'foo';
+const value: unknown = 'foo'
 
 if (isString(value)) {
   // value is string
@@ -85,16 +85,16 @@ function assertString(target: unknown, errorMessage?: ErrorMessage): asserts tar
 ```typescript
 import { assertString } from 'type-assurer'
 
-const value: unknown = 'foo';
+const value: unknown = 'foo'
 
 assertString(value)
-// When value is not string, throw TypeAssertionError
+// When the value is not string, throw TypeAssertionError
 // value is string
 
 const value2: string | number = 'foo'
 
 assertString(value2)
-// When value2 is number, throw TypeAssertionError
+// When the value is number, throw TypeAssertionError
 // value2 is string
 ```
 
