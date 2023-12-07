@@ -20,6 +20,9 @@ A Type Guard Utility functions for checking if a value is a string.
 
 A Type Guard function for checking if a value is a string.
 
+This function is determined by `typeof target === 'string'`.
+Therefore, String Object and objects with `toString` `Symbol.toPrimitive` are judged as false.
+
 ### Basic Usage (isString)
 
 ```typescript

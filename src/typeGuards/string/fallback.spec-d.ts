@@ -28,6 +28,11 @@ describe('fallbackString type tests', () => {
     assertType<Equals<string, typeof result>>(true)
   })
 
+  test('unknown fallback type', () => {
+    // @ts-expect-error
+    fallbackString('string', 'fallback' as unknown)
+  })
+
   test('uncorrect fallback type', () => {
     // @ts-expect-error
     fallbackString('string', 3)

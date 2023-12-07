@@ -26,4 +26,10 @@ describe('ensureString type tests', () => {
     const result = ensureString(targetUnknown)
     assertType<Equals<string, typeof result>>(true)
   })
+
+  test('guard unknown with type args', () => {
+    const targetUnknown = 'string' as unknown
+    const result = ensureString<'foo'>(targetUnknown)
+    assertType<Equals<'foo', typeof result>>(true)
+  })
 })

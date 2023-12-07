@@ -18,6 +18,10 @@ A Type Guard Utility functions for checking if a value is a Promise.
 
 A Type Guard function for checking if a value is a Promise.
 
+This determination is made by `instanceof Promise`.
+Therefore, PromiseLike objects with a then method will be judged as false.
+If you want to make this true, see isAwaitable.
+
 ### Basic Usage (isPromise)
 
 ```typescript
