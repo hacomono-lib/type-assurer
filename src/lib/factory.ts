@@ -197,7 +197,7 @@ export function createAssertion(
  * ```
  */
 export function createEnsure<T extends TypeGuard>(
-  guard: TypeGuard<T>,
+  guard: T,
   message: TypeErrorMessage
 ): TypeEnsureOf<T>
 

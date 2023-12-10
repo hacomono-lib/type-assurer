@@ -1,14 +1,5 @@
 import { describe } from 'vitest'
-import {
-  assertNotObject,
-  assertObject,
-  ensureNotObject,
-  ensureObject,
-  fallbackNotObject,
-  fallbackObject,
-  isObject,
-  isNotObject
-} from '.'
+import { assertObject, ensureObject, fallbackObject, isObject } from '.'
 import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 
 const expected = [
@@ -62,20 +53,4 @@ describe('ensureObject', () => {
 
 describe('fallbackObject', () => {
   testFallback(fallbackObject, expected, { fallbackValue: [{ foo: 'bar' }] })
-})
-
-describe('isNotObject', () => {
-  testGuard(isNotObject, expected, { negative: true })
-})
-
-describe('assertNotObject', () => {
-  testAssert(assertNotObject, expected, { negative: true })
-})
-
-describe('ensureNotObject', () => {
-  testEnsure(ensureNotObject, expected, { negative: true })
-})
-
-describe('fallbackNotObject', () => {
-  testFallback(fallbackNotObject, expected, { negative: true, fallbackValue: 'fallback' })
 })
