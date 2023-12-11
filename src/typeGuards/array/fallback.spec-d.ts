@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, describe, assertType } from 'vitest'
 import { fallbackArray, fallbackNotArray } from '.'
-import { Equals } from '../../lib/test'
+import type { Equals } from '../../lib/test'
 
 describe('fallbackArray type tests', () => {
   test('fallback definite types.', () => {

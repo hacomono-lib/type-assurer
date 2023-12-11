@@ -2,7 +2,7 @@ import { describe } from 'vitest'
 import { assertString, ensureString, fallbackString, isString } from '.'
 import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 
-const expected = [ValueType.String, ValueType.EmptyString]
+const expected = [ValueType.String, ValueType.EmptyString, ValueType.NumberStringLeadingZero]
 
 describe('isString', () => {
   testGuard(isString, expected)

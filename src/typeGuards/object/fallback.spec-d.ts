@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, describe, assertType } from 'vitest'
 import { fallbackObject } from '.'
-import { Equals } from '../../lib/test'
+import type { Equals } from '../../lib/test'
 
 describe('fallbackObject type tests', () => {
   test('guard definite types', () => {

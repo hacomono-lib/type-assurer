@@ -1,6 +1,6 @@
 import { test, describe, assertType } from 'vitest'
 import { assertObject } from '.'
-import { Equals } from '../../lib/test'
+import type { Equals } from '../../lib/test'
 
 describe('assertObject type tests', () => {
   test('guard definite types', () => {

@@ -1,6 +1,6 @@
 import { test, describe, assertType } from 'vitest'
-import { assertNumber, assertNotNumber } from '.'
-import { Equals } from '../../lib/test'
+import { assertNumber } from '.'
+import type { Equals } from '../../lib/test'
 
 describe('assertNumber type tests', () => {
   test('guard definite types', () => {
@@ -16,28 +16,8 @@ describe('assertNumber type tests', () => {
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
+    const targetUnknown = 123 as unknown
     assertNumber(targetUnknown)
     assertType<Equals<number, typeof targetUnknown>>(true)
-  })
-})
-
-describe('assertNotNumber type tests', () => {
-  test('guard definite types', () => {
-    const targetNumber = 1 as number | string
-    assertNotNumber(targetNumber)
-    assertType<Equals<string, typeof targetNumber>>(true)
-  })
-
-  test('guard definite types 2', () => {
-    const targetConstNumber = 1 as 1 | '1'
-    assertNotNumber(targetConstNumber)
-    assertType<Equals<'1', typeof targetConstNumber>>(true)
-  })
-
-  test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    assertNotNumber(targetUnknown)
-    assertType<Equals<unknown, typeof targetUnknown>>(true)
   })
 })

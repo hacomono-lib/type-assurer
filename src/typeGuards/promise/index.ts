@@ -1,13 +1,5 @@
-import { createAssertion, createEnsure, createFallback, not } from '../../lib/factory'
-import type {
-  InvertedTypeAssertOf,
-  InvertedTypeEnsureOf,
-  InvertedTypeFallbackOf,
-  TypeAssertOf,
-  TypeEnsureOf,
-  TypeFallbackOf,
-  TypeGuard
-} from '../../lib/types'
+import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
+import type { TypeAssertOf, TypeEnsureOf, TypeFallbackOf, TypeGuard } from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
 /**

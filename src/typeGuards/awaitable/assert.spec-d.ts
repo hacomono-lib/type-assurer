@@ -1,6 +1,6 @@
 import { test, describe, assertType } from 'vitest'
 import { assertAwaitable, assertNotAwaitable } from '.'
-import { Equals } from '../../lib/test'
+import type { Equals } from '../../lib/test'
 
 describe('isAwaitable type tests', () => {
   test('assert definite types.', () => {

@@ -1,6 +1,6 @@
 import { test, describe, assertType } from 'vitest'
 import { ensurePromise } from '.'
-import { Equals } from '../../lib/test'
+import type { Equals } from '../../lib/test'
 
 describe('ensurePromise type tests', () => {
   test('ensure definite types.', () => {

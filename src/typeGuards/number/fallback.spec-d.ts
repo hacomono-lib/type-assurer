@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { test, describe, assertType } from 'vitest'
-import { fallbackNumber, fallbackNotNumber } from '.'
-import { Equals } from '../../lib/test'
+import { fallbackNumber } from '.'
+import type { Equals } from '../../lib/test'
 
 describe('fallbackNumber type tests', () => {
   test('guard definite types', () => {
@@ -25,30 +25,5 @@ describe('fallbackNumber type tests', () => {
   test('uncorrect fallback types', () => {
     // @ts-expect-error
     fallbackNumber('string', '1')
-  })
-})
-
-describe('fallbackNotNumber type tests', () => {
-  test('guard definite types', () => {
-    const targetNumber = 1 as number | string
-    const result = fallbackNotNumber(targetNumber, 'string')
-    assertType<Equals<string, typeof result>>(true)
-  })
-
-  test('guard definite types 2', () => {
-    const targetConstNumber = 1 as 1 | '1'
-    const result = fallbackNotNumber(targetConstNumber, 'string')
-    assertType<Equals<'1' | 'string', typeof result>>(true)
-  })
-
-  test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    const result = fallbackNotNumber(targetUnknown, 'string')
-    assertType<Equals<unknown, typeof result>>(true)
-  })
-
-  test('uncorrect fallback types', () => {
-    // @ts-expect-error
-    fallbackNotNumber('string', 1)
   })
 })

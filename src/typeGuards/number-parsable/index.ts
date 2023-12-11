@@ -1,5 +1,5 @@
 import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import {
+import type {
   TypeAssertOf,
   TypeEnsureOf,
   TypeErrorMessage,

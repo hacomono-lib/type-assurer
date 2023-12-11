@@ -32,7 +32,7 @@ A Type Guard function for checking if a value is an Object.
 
 This determination is made by `target !== null && !Array.isArray(target) && typeof target === 'object'`.
 
-### Basic Usage (isObject)
+### Basic Usage
 
 ```typescript
 function isObject(target: unknown): target is object
@@ -49,7 +49,7 @@ function isObject(target: unknown): target is object
 
 'Object' here means a value that is not null, not an Array, and has a type of 'object'.
 
-### Example (isObject)
+### Example
 
 
 ```typescript
@@ -84,7 +84,7 @@ if (isObject(value3)) {
 
 A Type Assertion function for checking if a value is an Object.
 
-### Basic Usage (assertObject)
+### Basic Usage
 
 ```typescript
 function assertObject(target: unknown, errorMessage?: ErrorMessage): asserts target is object
@@ -107,7 +107,7 @@ Object here means a value that is not null, not an Array, and has a type of 'obj
 
 Object here means a value that is not null, not an Array, and has a type of 'object'.
 
-### Example (assertObject)
+### Example
 
 ```typescript
 import { assertObject } from 'type-assurer'
@@ -135,7 +135,7 @@ assertObject(value3)
 
 Ensure that the value is an Object. If it is not an Object, throw an error.
 
-### Basic Usage (ensureObject)
+### Basic Usage
 
 ```typescript
 function ensureObject(target: unknown, errorMessage?: ErrorMessage): object
@@ -158,7 +158,7 @@ Object here means a value that is not null, not an Array, and has a type of 'obj
 
 Object here means a value that is not null, not an Array, and has a type of 'object'.
 
-### Example (ensureObject)
+### Example
 
 ```typescript
 import { ensureObject } from 'type-assurer'
@@ -186,7 +186,7 @@ const result3 = ensureObject(getObject3())
 
 Fallback to the default value if the value is not an Object.
 
-### Basic Usage (fallbackObject)
+### Basic Usage
 
 ```typescript
 function fallbackObject(target: unknown, defaultValue: object): object
@@ -203,7 +203,7 @@ Object here means a value that is not null, not an Array, and has a type of 'obj
 
 - `object` .. When the value is an Object. Or the default value when the value is not an Object.
 
-### Example (fallbackObject)
+### Example
 
 ```typescript
 import { fallbackObject } from 'type-assurer'

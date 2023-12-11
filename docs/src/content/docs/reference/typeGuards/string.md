@@ -23,7 +23,7 @@ A Type Guard function for checking if a value is a string.
 This function is determined by `typeof target === 'string'`.
 Therefore, String Object and objects with `toString` `Symbol.toPrimitive` are judged as false.
 
-### Basic Usage (isString)
+### Basic Usage
 
 ```typescript
 function isString(target: unknown): target is string
@@ -38,7 +38,7 @@ function isString(target: unknown): target is string
 - `true` .. When the value is a string.
 - `false` .. When the value is not a string.
 
-### Examples (isString)
+### Examples
 
 ```typescript
 import { isString } from 'type-assurer'
@@ -64,7 +64,7 @@ if (isString(value2)) {
 
 A Type Assertion function for checking if a value is a string.
 
-### Basic Usage (assertString)
+### Basic Usage
 
 ```typescript
 function assertString(target: unknown, errorMessage?: ErrorMessage): asserts target is string
@@ -83,7 +83,7 @@ function assertString(target: unknown, errorMessage?: ErrorMessage): asserts tar
 
 - `TypeAssertionError` .. When the value is not a string.
 
-### Examples (assertString)
+### Examples
 
 ```typescript
 import { assertString } from 'type-assurer'

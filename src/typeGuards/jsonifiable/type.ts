@@ -4,16 +4,15 @@ export type Jsonifiable = JsonPrimitive | JsonifiableArray | JsonifiableObject
 
 export type JsonifiableArray = Jsonifiable[] | readonly Jsonifiable[]
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type NotJsonifiable = Exclude<any, Jsonifiable>
+
 export type JsonifiableObject =
   | ({ [Key in string]: Jsonifiable } & { [Key in string]?: Jsonifiable | undefined })
   | { toJSON: () => Jsonifiable }
 
-export type JsonifiableGuard<T> = T extends JsonPrimitive
+export type JsonifiableGuard<T> = T extends Jsonifiable
   ? T
-  : T extends JsonifiableArray
-  ? T
-  : T extends JsonifiableObject
-  ? T
-  : T extends object
-  ? null | JsonifiableObject | JsonifiableArray
+  : unknown extends T
+  ? Jsonifiable
   : never

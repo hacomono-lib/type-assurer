@@ -1,22 +1,16 @@
 import { test, describe, assertType } from 'vitest'
-import { ensureNil, ensureNotNil } from '.'
-import { Equals } from '../../lib/test'
-
-describe('ensureNil type tests', () => {
-  test('ensureNil is not definition', () => {
-    assertType<Equals<never, typeof ensureNil>>(true)
-  })
-})
+import { ensureNotNil } from '.'
+import type { Equals } from '../../lib/test'
 
 describe('ensureNotNil type tests', () => {
   test('guard definite types', () => {
-    const targetNull = null as null | string
+    const targetNull = 'string' as null | string
     const result = ensureNotNil(targetNull)
     assertType<Equals<string, typeof result>>(true)
   })
 
   test('guard definite types 2', () => {
-    const targetUndef = undefined as undefined | string
+    const targetUndef = 'string' as undefined | string
     const result = ensureNotNil(targetUndef)
     assertType<Equals<string, typeof result>>(true)
   })
@@ -30,6 +24,6 @@ describe('ensureNotNil type tests', () => {
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     const result = ensureNotNil(targetUnknown)
-    assertType<Equals<unknown, typeof result>>(true)
+    assertType<Equals<{}, typeof result>>(true)
   })
 })

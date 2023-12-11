@@ -22,7 +22,7 @@ This determination is made by `instanceof Promise`.
 Therefore, PromiseLike objects with a then method will be judged as false.
 If you want to make this true, see isAwaitable.
 
-### Basic Usage (isPromise)
+### Basic Usage
 
 ```typescript
 function isPromise(target: unknown): target is Promise<unknown>
@@ -37,7 +37,7 @@ function isPromise(target: unknown): target is Promise<unknown>
 - `true` .. When the value is a Promise.
 - `false` .. When the value is not a Promise.
 
-### Examples (isPromise)
+### Examples
 
 ```typescript
 import { isPromise } from 'type-assurer'
@@ -63,7 +63,7 @@ if (isPromise(value2)) {
 
 A Type Assertion function for checking if a value is a Promise.
 
-### Basic Usage (assertPromise)
+### Basic Usage
 
 ```typescript
 function assertPromise(target: unknown, errorMessage?: ErrorMessage): asserts target is Promise<unknown>
@@ -82,14 +82,14 @@ function assertPromise(target: unknown, errorMessage?: ErrorMessage): asserts ta
 
 - `TypeAssertionError` .. When the value is not a Promise.
 
-### Examples (assertPromise)
+### Examples
 
 ```typescript
 import { assertPromise } from 'type-assurer'
 
 const value: unknown = Promise.resolve('foo')
 
-assertPromise(value) 
+assertPromise(value)
 // When the value is not a Promise, TypeAssertionError is thrown.
 // value is Promise<unknown>
 
@@ -104,7 +104,7 @@ assertPromise(value2)
 
 Ensure that the value is a Promise. If it is not a Promise, throw an error.
 
-### Basic Usage (ensurePromise)
+### Basic Usage
 
 ```typescript
 function ensurePromise(target: unknown, errorMessage?: ErrorMessage): Promise<unknown>
@@ -123,7 +123,7 @@ function ensurePromise(target: unknown, errorMessage?: ErrorMessage): Promise<un
 
 - `TypeAssertionError` .. When the value is not a Promise.
 
-### Examples (ensurePromise)
+### Examples
 
 ```typescript
 import { ensurePromise } from 'type-assurer'
@@ -145,7 +145,7 @@ const result2 = await ensurePromise(fetchData2())
 
 Fallback to the fallback value if the value is not a Promise.
 
-### Basic Usage (fallbackPromise)
+### Basic Usage
 
 ```typescript
 function fallbackPromise(target: unknown, fallbackValue: Promise<unknown>): Promise<unknown>
@@ -160,7 +160,7 @@ function fallbackPromise(target: unknown, fallbackValue: Promise<unknown>): Prom
 
 - `Promise<unknown>` .. When the value is a Promise. Otherwise, the fallback value is returned.
 
-### Examples (fallbackPromise)
+### Examples
 
 ```typescript
 import { fallbackPromise } from 'type-assurer'

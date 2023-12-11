@@ -1,0 +1,70 @@
+---
+title: jsonifiable
+description: A Type Guard Utility functions for checking if a value is Jsonifiable.
+---
+A Type Guard Utility functions for checking if a value is Jsonifiable.
+
+"Jsonifiable" is a value that can be converted to a JSON string, using `JSON.stringify(value)`.
+
+:::note
+値がオブジェクトの場合は、JSON.parse(JSON.stringify(value)) した結果と元のオブジェクトが完全一致したかどうかを判定する.
+オブジェクトにメソッドがあれば、JSON.stringify した結果には含まれないため、完全一致しない.
+ただし、 WellKnown Symbols によって、JSON.stringify した結果に含まれず、参照されないため、この検査には含まれない.
+
+eng:
+If the value is an object, it checks whether the result of JSON.parse(JSON.stringify(value)) is exactly the same as the original object.
+If the object has a method, it will not be included in the result of JSON.stringify, so it will not match exactly.
+However, WellKnown Symbols are not included in the result of JSON.stringify and are not referenced, so they are not included in this check.
+
+e.g.
+```typescript
+const sample1 = {
+  foo: 'bar',
+}
+// this is true
+
+const sample2 = {
+  foo: 'bar',
+  toJSON: () => 'bar',
+}
+// this is true
+
+const sample3 = {
+  foo: 'bar',
+  [Symbol.toPrimitive]: () => 'bar',
+}
+// this is true
+```
+
+:::
+
+
+## Example of return value
+
+| input | example input | result |
+| ----- | -------------- | ------ |
+| boolean | `true` | true |
+| ^ | `false` | true |
+| number | `0` | true |
+| ^ | `1` | true |
+| ^ | `1.1` | true |
+| ^ | `Infinity` | false |
+| ^ | `-Infinity` | false |
+| ^ | `NaN` | false |
+| string | `'foo'` | false |
+| null | `null` | true |
+| undefined | `undefined` | false |
+| symbol | `Symbol('foo')` | false |
+| bigint | `0n` | false |
+| object | `{}` | true |
+| ^ | `{ foo: 'bar' }` | true |
+| ^ | `{ foo: undefined }` | false |
+| ^ | `{ foo: () => 'bar' }` | false |
+| object with `valueOf` | `{ valueOf: () => ({ foo: 'bar' }) }` | true |
+| object with `toJSON` | `{ toJSON: () => 'bar' }` | true |
+| object with `[Symbol.toPrimitive]` | `{ [Symbol.toPrimitive]: () => true }` | true |
+| array | `[]` | true |
+| ^ | `[1, 2, 3]` | true |
+| Date | `new Date()` | true |
+
+

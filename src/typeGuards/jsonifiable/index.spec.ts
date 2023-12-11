@@ -1,14 +1,5 @@
 import { describe } from 'vitest'
-import {
-  assertNotJsonifiable,
-  assertJsonifiable,
-  ensureNotJsonifiable,
-  ensureJsonifiable,
-  fallbackNotJsonifiable,
-  fallbackJsonifiable,
-  isJsonifiable,
-  isNotJsonifiable
-} from '.'
+import { assertJsonifiable, ensureJsonifiable, fallbackJsonifiable, isJsonifiable } from '.'
 import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 
 const expected = [
@@ -33,7 +24,14 @@ const expected = [
   ValueType.IterableObject,
   ValueType.AsyncIterableObject,
   ValueType.Date,
-  ValueType.Proxy
+  ValueType.Proxy,
+  ValueType.ObjectToPrimitiveBoolean,
+  ValueType.ObjectToPrimitiveNumber,
+  ValueType.ObjectToPrimitiveNull,
+  ValueType.ObjectToPrimitiveBigInt,
+  ValueType.ObjectToPrimitiveString,
+  ValueType.ObjectToPrimitiveSymbol,
+  ValueType.ObjectToPrimitiveUndefined
 ]
 
 describe('isJsonifiable', () => {
@@ -52,25 +50,5 @@ describe('fallbackJsonifiable', () => {
   testFallback(fallbackJsonifiable, expected, {
     parsableString: true,
     fallbackValue: [{ foo: 'bar' }]
-  })
-})
-
-describe('isNotJsonifiable', () => {
-  testGuard(isNotJsonifiable, expected, { parsableString: true, negative: true })
-})
-
-describe('assertNotJsonifiable', () => {
-  testAssert(assertNotJsonifiable, expected, { parsableString: true, negative: true })
-})
-
-describe('ensureNotJsonifiable', () => {
-  testEnsure(ensureNotJsonifiable, expected, { parsableString: true, negative: true })
-})
-
-describe('fallbackNotJsonifiable', () => {
-  testFallback(fallbackNotJsonifiable, expected, {
-    parsableString: true,
-    negative: true,
-    fallbackValue: 'fallback'
   })
 })

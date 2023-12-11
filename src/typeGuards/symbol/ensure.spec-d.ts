@@ -1,6 +1,6 @@
 import { test, describe, assertType } from 'vitest'
 import { ensureSymbol } from '.'
-import { Equals } from '../../lib/test'
+import type { Equals } from '../../lib/test'
 
 describe('ensureSymbol type tests', () => {
   test('guard definite types', () => {

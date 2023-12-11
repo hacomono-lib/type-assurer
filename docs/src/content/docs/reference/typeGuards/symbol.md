@@ -17,7 +17,7 @@ A Type Guard function for checking if a value is a symbol.
 
 This function is determined by `typeof target === 'symbol'`.
 
-### Basic Usage (isSymbol)
+### Basic Usage
 
 ```typescript
 function isSymbol(target: unknown): target is symbol
@@ -32,7 +32,7 @@ function isSymbol(target: unknown): target is symbol
 - `true` .. When the value is a symbol.
 - `false` .. When the value is not a symbol.
 
-### Examples (isSymbol)
+### Examples
 
 ```typescript
 import { isSymbol } from 'type-assurer'
@@ -56,11 +56,11 @@ if (isSymbol(value2)) {
 }
 ```
 
-### assertSymbol
+## assertSymbol
 
 A Type Guard function for checking if a value is a symbol.
 
-### Basic Usage (assertSymbol)
+### Basic Usage
 
 ```typescript
 function assertSymbol(target: unknown, message?: ErrorMessage): asserts target is symbol
@@ -79,7 +79,7 @@ function assertSymbol(target: unknown, message?: ErrorMessage): asserts target i
 
 - `TypeAssertionError` .. When the value is not a symbol.
 
-### Examples (assertSymbol)
+### Examples
 
 ```typescript
 import { assertSymbol } from 'type-assurer'
@@ -103,7 +103,7 @@ assertSymbol(value2)
 
 Ensure that the value is a symbol.
 
-### Basic Usage (ensureSymbol)
+### Basic Usage
 
 ```typescript
 function ensureSymbol(target: unknown, message?: ErrorMessage): symbol
@@ -122,7 +122,7 @@ function ensureSymbol(target: unknown, message?: ErrorMessage): symbol
 
 - `TypeAssertionError` .. When the value is not a symbol.
 
-### Examples (ensureSymbol)
+### Examples
 
 ```typescript
 import { ensureSymbol } from 'type-assurer'
@@ -146,7 +146,7 @@ const value2 = ensureSymbol(getValue2())
 
 A Type Guard function for checking if a value is a symbol.
 
-### Basic Usage (fallbackSymbol)
+### Basic Usage
 
 ```typescript
 function fallbackSymbol(target: unknown, fallbackValue: symbol): symbol
@@ -161,7 +161,7 @@ function fallbackSymbol(target: unknown, fallbackValue: symbol): symbol
 
 - `symbol` .. When the value is a symbol. If the value is not a symbol, return the fallback value.
 
-### Examples (fallbackSymbol)
+### Examples
 
 ```typescript
 import { fallbackSymbol } from 'type-assurer'

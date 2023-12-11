@@ -1,62 +1,33 @@
-import { createAssertion, createEnsure, createFallback, not } from '../../lib/factory'
+import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
 import type {
-  InvertedTypeAssertOf,
-  InvertedTypeEnsureOf,
-  InvertedTypeFallbackOf,
-  InvertedTypeGuard,
-  TypeAssertOf,
-  TypeEnsureOf,
-  TypeFallbackOf,
+  TypeAssert,
+  TypeEnsure,
+  TypeErrorMessage,
+  TypeFallback,
   TypeGuard
 } from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
+import { deepJsonEqual, isJsonPrimitive } from './internals'
+import type { Jsonifiable, JsonifiableGuard, NotJsonifiable } from './type'
+
 import { isNumber } from '../number'
 import { isBoolean } from '../boolean'
 
-import { deepJsonEqual, isJsonPrimitive } from './internals'
-import { Jsonifiable, JsonifiableGuard } from './type'
-
 export interface JsonifiableTypeGuard extends TypeGuard<Jsonifiable> {
-  <T extends Jsonifiable>(target: unknown): target is JsonifiableGuard<T>
+  <T>(target: T | NotJsonifiable): target is JsonifiableGuard<T>
 }
 
-export interface InvertedJsonifiableTypeGuard extends InvertedTypeGuard<Jsonifiable> {
-  <T extends Jsonifiable>(target: unknown): target is Exclude<T, JsonifiableGuard<T>>
+export interface JsonifiableTypeAssert extends TypeAssert<Jsonifiable> {
+  <T>(target: T | NotJsonifiable, message?: TypeErrorMessage): asserts target is JsonifiableGuard<T>
 }
 
-export interface JsonifiableTypeAssert extends TypeAssertOf<JsonifiableTypeGuard> {
-  <T extends Jsonifiable>(target: unknown, message?: string): asserts target is JsonifiableGuard<T>
+export interface JsonifiableTypeEnsure extends TypeEnsure<Jsonifiable> {
+  <T>(target: T, message?: TypeErrorMessage): JsonifiableGuard<T>
 }
 
-export interface InvertedJsonifiableTypeAssert extends InvertedTypeAssertOf<JsonifiableTypeGuard> {
-  <T extends Jsonifiable>(target: unknown, message?: string): asserts target is Exclude<
-    T,
-    Jsonifiable
-  >
-}
-
-export interface JsonifiableTypeEnsure extends TypeEnsureOf<JsonifiableTypeGuard> {
-  <T extends Jsonifiable>(target: unknown, message?: string): asserts target is JsonifiableGuard<T>
-}
-
-export interface InvertedJsonifiableTypeEnsure extends InvertedTypeEnsureOf<JsonifiableTypeGuard> {
-  <T extends Jsonifiable>(target: unknown, message?: string): asserts target is Exclude<
-    T,
-    Jsonifiable
-  >
-}
-
-export interface JsonifiableTypeFallback extends TypeFallbackOf<JsonifiableTypeGuard> {
-  <T extends Jsonifiable>(target: unknown, defaultValue: T): JsonifiableGuard<T>
-}
-
-export interface InvertedJsonifiableTypeFallback
-  extends InvertedTypeFallbackOf<JsonifiableTypeGuard> {
-  <T extends Jsonifiable>(target: unknown, defaultValue: Exclude<T, Jsonifiable>): Exclude<
-    T,
-    Jsonifiable
-  >
+export interface JsonifiableTypeFallback extends TypeFallback<Jsonifiable> {
+  <T, F>(target: T, defaultValue: F): JsonifiableGuard<T> | JsonifiableGuard<F>
 }
 
 /**
@@ -159,10 +130,10 @@ export const assertJsonifiable: JsonifiableTypeAssert = createAssertion(
  * // result is Jsonifiable, because it has toJSON method
  * ```
  */
-export const ensureJsonifiable: JsonifiableTypeEnsure = createEnsure(
+export const ensureJsonifiable = createEnsure(
   isJsonifiable,
   errorMessage('Jsonifiable')
-)
+) as JsonifiableTypeEnsure
 
 /**
  * Fallbacks to a default value if the value is not an Jsonifiable.
@@ -186,103 +157,3 @@ export const ensureJsonifiable: JsonifiableTypeEnsure = createEnsure(
  * ```
  */
 export const fallbackJsonifiable: JsonifiableTypeFallback = createFallback(isJsonifiable)
-
-/**
- * Checks if a value is not a string that can be parsed as JSON.
- *
- * @param target The value to check.
- * @returns True if the value is not a string that can be parsed as JSON, false otherwise.
- * @example
- * ```ts
- * const result = isNotJsonifiable({"foo":"bar"})
- * // result is false
- *
- * const result = isNotJsonifiable({ foo: () => 'bar' })
- * // result is true
- *
- * const result = isNotJsonifiable('{"foo":"bar"}')
- * // result is true
- *
- * const result = isNotJsonifiable(new Date())
- * // result is false, because it has toJSON method
- * ```
- */
-export const isNotJsonifiable: InvertedJsonifiableTypeGuard = not(isJsonifiable)
-
-/**
- * Asserts that a value is not a string that can be parsed as JSON.
- *
- * @param target The value to check.
- * @param message (optional) The error message to throw if the value is a string that can be parsed as JSON.
- * @throws A TypeError with the given message if the value is a string that can be parsed as JSON.
- * @example
- * ```ts
- * assertNotJsonifiable({"foo":"bar"})
- * // throws TypeAssertionError
- *
- * assertNotJsonifiable({ foo: () => 'bar' })
- * // target is not Jsonifiable
- *
- * assertNotJsonifiable('{"foo":"bar"}')
- * // target is not Jsonifiable
- *
- * assertNotJsonifiable(new Date())
- * // throws TypeAssertionError, because it has toJSON method
- * ```
- */
-export const assertNotJsonifiable: InvertedJsonifiableTypeAssert = createAssertion(
-  not(isJsonifiable),
-  errorMessage('Jsonifiable', { not: true })
-)
-
-/**
- * Enxures that a value is not a string that can be parsed as JSON.
- *
- * @param target The value to check.
- * @param message (optional) The error message to throw if the value is a string that can be parsed as JSON.
- * @throws A TypeError with the given message if the value is a string that can be parsed as JSON.
- * @returns The value if it is not a string that can be parsed as JSON.
- * @example
- * ```ts
- * const result = ensureNotJsonifiable({"foo":"bar"})
- * // throws TypeAssertionError
- *
- * const result = ensureNotJsonifiable({ foo: () => 'bar' })
- * // result is { foo: () => 'bar' }
- *
- * const result = ensureNotJsonifiable('{"foo":"bar"}')
- * // result is '{"foo":"bar"}'
- *
- * const result = ensureNotJsonifiable(new Date())
- * // throws TypeAssertionError, because it has toJSON method
- * ```
- */
-export const ensureNotJsonifiable: InvertedJsonifiableTypeEnsure = createEnsure(
-  not(isJsonifiable),
-  errorMessage('Jsonifiable', { not: true })
-)
-
-/**
- * Fallbacks to a default value if the value is a string that can be parsed as JSON.
- *
- * @param target The value to check.
- * @param defaultValue The default value to fallback to.
- * @return The value if it is not a string that can be parsed as JSON, the default value otherwise.
- * @example
- * ```ts
- * const result = fallbackNotJsonifiable({"foo":"bar"}, 'fallback')
- * // result is 'fallback'
- *
- * const result = fallbackNotJsonifiable({ foo: () => 'bar' }, 'fallback')
- * // result is { foo: () => 'bar' }
- *
- * const result = fallbackNotJsonifiable('{"foo":"bar"}', 'fallback')
- * // result is '{"foo":"bar"}'
- *
- * const result = fallbackNotJsonifiable(new Date(), 'fallback')
- * // result is 'fallback', because it has toJSON method
- * ```
- */
-export const fallbackNotJsonifiable: InvertedJsonifiableTypeFallback = createFallback(
-  not(isJsonifiable)
-)
