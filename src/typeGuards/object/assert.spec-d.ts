@@ -1,5 +1,5 @@
 import { test, describe, assertType } from 'vitest'
-import { assertObject, assertNotObject } from '.'
+import { assertObject } from '.'
 import { Equals } from '../../lib/test'
 
 describe('assertObject type tests', () => {
@@ -16,40 +16,22 @@ describe('assertObject type tests', () => {
   })
 
   test('guard definite types 3', () => {
-    const targetConstObject = {} as { foo?: string } | Date | unknown[]
+    const targetConstObject = { foo: 'bar' } as
+      | { foo?: string }
+      | Date
+      | unknown[]
+      | null
+      | string
+      | (() => void)
+      | undefined
+      | typeof String
     assertObject(targetConstObject)
     assertType<Equals<{ foo?: string } | Date, typeof targetConstObject>>(true)
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
+    const targetUnknown = { foo: 'bar' } as unknown
     assertObject(targetUnknown)
-    assertType<Equals<object, typeof targetUnknown>>(true)
-  })
-})
-
-describe('assertNotObject type tests', () => {
-  test('guard definite types', () => {
-    const targetObject = {} as object | string
-    assertNotObject(targetObject)
-    assertType<Equals<string, typeof targetObject>>(true)
-  })
-
-  test('guard definite types 2', () => {
-    const targetConstObject = {} as { foo?: string } | '1'
-    assertNotObject(targetConstObject)
-    assertType<Equals<'1', typeof targetConstObject>>(true)
-  })
-
-  test('guard definite types 3', () => {
-    const targetConstObject = {} as { foo?: string } | Date | unknown[]
-    assertNotObject(targetConstObject)
-    assertType<Equals<unknown[], typeof targetConstObject>>(true)
-  })
-
-  test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    assertNotObject(targetUnknown)
-    assertType<Equals<unknown, typeof targetUnknown>>(true)
+    assertType<Equals<Record<string, unknown>, typeof targetUnknown>>(true)
   })
 })

@@ -10,7 +10,7 @@ describe('isPromise type tests', () => {
   })
 
   test('assert unknown types', () => {
-    const targetUnknown = 'string' as unknown
+    const targetUnknown = Promise.resolve() as unknown
     assertPromise(targetUnknown)
     assertType<Equals<Promise<unknown>, typeof targetUnknown>>(true)
   })

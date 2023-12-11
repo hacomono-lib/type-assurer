@@ -10,7 +10,7 @@ describe('ensurePromise type tests', () => {
   })
 
   test('ensure unknown types', () => {
-    const targetUnknown = 'string' as unknown
+    const targetUnknown = Promise.resolve() as unknown
     const result = ensurePromise(targetUnknown)
     assertType<Equals<Promise<unknown>, typeof result>>(true)
   })

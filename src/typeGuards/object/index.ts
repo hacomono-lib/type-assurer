@@ -1,36 +1,58 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
 import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type { TypeAssertOf, TypeEnsureOf, TypeFallbackOf, TypeGuard } from '../../lib/types'
+import type {
+  TypeAssertOf,
+  TypeEnsureOf,
+  TypeErrorMessage,
+  TypeFallbackOf,
+  TypeGuard
+} from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
-type Object<T> = unknown extends T ? Record<string, unknown> : Extract<T, DefinitelyObject<T>>
+type AnyFunction = Function | ((...args: any[]) => any)
 
-type DefinitelyObject<T> = Exclude<
-  Extract<T, object>,
-  any[] | Function | readonly any[]
-> extends infer R
+type AnyArray = any[] | readonly any[]
+
+type DefinitelyObject<T> = unknown extends T
+  ? Record<string, unknown>
+  : Exclude<Extract<T, object>, AnyFunction | AnyArray> extends infer R
   ? R extends never
     ? T extends object
       ? Record<string, unknown>
       : never
-    : R & {}
+    : R
   : never
 
-interface ObjectTypeGuard<T = unknown> extends TypeGuard<DefinitelyObject<T>> {
-  <T>(target: Object<T> | unknown): target is Object<T>
+type NotObject =
+  | string
+  | number
+  | boolean
+  | symbol
+  | bigint
+  | null
+  | undefined
+  | AnyFunction
+  | AnyArray
+
+interface ObjectTypeGuard extends TypeGuard<DefinitelyObject<any>> {
+  <T>(target: T | NotObject): target is DefinitelyObject<T> & Exclude<T, NotObject>
 }
 
-interface ObjectTypeAssert<T = unknown> extends TypeAssertOf<ObjectTypeGuard<T>> {
-  <T>(target: T | object, message?: string): asserts target is DefinitelyObject<T>
+interface ObjectTypeAssert extends TypeAssertOf<ObjectTypeGuard> {
+  <T>(target: T | NotObject, message?: TypeErrorMessage): asserts target is DefinitelyObject<T> &
+    Exclude<T, NotObject>
 }
 
-interface ObjectTypeEnsure<T = unknown> extends TypeEnsureOf<ObjectTypeGuard<T>> {
-  <T>(target: T | object, message?: string): DefinitelyObject<T>
+interface ObjectTypeEnsure extends TypeEnsureOf<ObjectTypeGuard> {
+  <T>(target: T | NotObject, message?: TypeErrorMessage): DefinitelyObject<T> &
+    Exclude<T, NotObject>
 }
 
-interface ObjectTypeFallback<T = unknown> extends TypeFallbackOf<ObjectTypeGuard<T>> {
-  <T, F>(target: T | object, defaultValue: F): DefinitelyObject<T> | DefinitelyObject<F>
+interface ObjectTypeFallback extends TypeFallbackOf<ObjectTypeGuard> {
+  <T, F>(target: T | NotObject, defaultValue: F):
+    | (DefinitelyObject<T> & Exclude<T, NotObject>)
+    | Exclude<DefinitelyObject<F>, T>
 }
 
 /**
@@ -49,6 +71,12 @@ interface ObjectTypeFallback<T = unknown> extends TypeFallbackOf<ObjectTypeGuard
  */
 export const isObject = ((target: unknown): boolean =>
   target !== null && !Array.isArray(target) && typeof target === 'object') as ObjectTypeGuard
+
+const date = new Date() as Date | { foo: string } | null | undefined | (() => void) | unknown[]
+if (isObject(date)) {
+  date
+  // true
+}
 
 /**
  * Asserts that a value is a object or a class instance.

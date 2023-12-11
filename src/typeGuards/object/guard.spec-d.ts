@@ -6,10 +6,10 @@ describe('isObject type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
     if (isObject(targetObject)) {
-      assertType<Equals<Record<string, unknown>, typeof targetObject>>(true)
+      assertType<Equals<object, typeof targetObject>>(true)
     } else {
       // object type includes Array, null, but isObject checkes truthy object.
-      assertType<Equals<object | string, typeof targetObject>>(true)
+      assertType<Equals<string, typeof targetObject>>(true)
     }
   })
 
@@ -23,20 +23,24 @@ describe('isObject type tests', () => {
   })
 
   test('guard definite types 3', () => {
-    const targetConstObject = {} as
-      | { foo?: string }
+    const targetConstObject = { foo: 'bar' } as
+      | { foo: string }
       | Date
       | typeof String
       | unknown[]
       | null
+      | string
       | (() => void)
       | undefined
     if (isObject(targetConstObject)) {
-      assertType<Equals<{ foo?: string } | Date | typeof String, typeof targetConstObject>>(true)
+      assertType<Equals<{ foo: string } | Date, typeof targetConstObject>>(true)
     } else {
-      assertType<Equals<null | undefined | unknown[] | (() => void), typeof targetConstObject>>(
-        true
-      )
+      assertType<
+        Equals<
+          null | undefined | unknown[] | string | (() => void) | typeof String,
+          typeof targetConstObject
+        >
+      >(true)
     }
   })
 

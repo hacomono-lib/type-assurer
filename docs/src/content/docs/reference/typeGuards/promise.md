@@ -102,7 +102,7 @@ assertPromise(value2)
 
 ## ensurePromise
 
-A Type Assertion function for checking if a value is a Promise.
+Ensure that the value is a Promise. If it is not a Promise, throw an error.
 
 ### Basic Usage (ensurePromise)
 
@@ -143,7 +143,7 @@ const result2 = await ensurePromise(fetchData2())
 
 ## fallbackPromise
 
-A Type Assertion function for checking if a value is a Promise.
+Fallback to the fallback value if the value is not a Promise.
 
 ### Basic Usage (fallbackPromise)
 

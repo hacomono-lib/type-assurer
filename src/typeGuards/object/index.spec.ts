@@ -4,8 +4,21 @@ import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../.
 
 const expected = [
   ValueType.BooleanObject,
+  ValueType.ObjectToPrimitiveBoolean,
+  ValueType.ObjectValueOfBoolean,
+  ValueType.ObjectToPrimitiveBigInt,
+  ValueType.ObjectValueOfBigInt,
   ValueType.NumberObject,
+  ValueType.ObjectToPrimitiveNumber,
+  ValueType.ObjectValueOfNumber,
   ValueType.StringObject,
+  ValueType.ObjectToPrimitiveString,
+  ValueType.ObjectValueOfString,
+  ValueType.ObjectToString,
+  ValueType.ObjectValueOfNull,
+  ValueType.ObjectToPrimitiveNull,
+  ValueType.ObjectToPrimitiveUndefined,
+  ValueType.ObjectValueOfUndefined,
   ValueType.ArrayLike,
   ValueType.ArrayBuffer,
   ValueType.SharedArrayBuffer,
@@ -36,7 +49,9 @@ const expected = [
   ValueType.Set,
   ValueType.EmptySet,
   ValueType.WeakSet,
-  ValueType.EmptyWeakSet
+  ValueType.EmptyWeakSet,
+  ValueType.ObjectToPrimitiveSymbol,
+  ValueType.ObjectValueOfSymbol
 ]
 
 describe('isObject', () => {
