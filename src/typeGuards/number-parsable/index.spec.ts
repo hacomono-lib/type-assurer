@@ -1,13 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import {
-  assertNotNumberParsable,
   assertNumberParsable,
-  ensureNotNumberParsable,
   ensureNumberParsable,
-  fallbackNotNumberParsable,
   fallbackNumberParsable,
   isNumberParsable,
-  isNotNumberParsable,
   coerceNumber,
   fixNumber
 } from '.'
@@ -23,18 +19,38 @@ import {
 import { TypeAssertionError } from '../../lib/error'
 
 const expected = [
+  ValueType.True,
+  ValueType.False,
+  ValueType.BooleanObject,
+  ValueType.ObjectToPrimitiveBoolean,
+  ValueType.ObjectValueOfBoolean,
+  ValueType.NumberObject,
   ValueType.PositiveNumber,
   ValueType.NegativeNumber,
   ValueType.Zero,
   ValueType.PositiveInfinity,
   ValueType.NegativeInfinity,
-  ValueType.NaN,
   ValueType.NumberParsablePositiveInt,
+  ValueType.NumberStringLeadingZero,
   ValueType.NumberParsablePositiveFloat,
   ValueType.NumberParsablePositiveInfinity,
   ValueType.NumberParsableNegativeInt,
   ValueType.NumberParsableNegativeFloat,
-  ValueType.NumberParsableNegativeInfinity
+  ValueType.NumberParsableNegativeInfinity,
+  ValueType.ObjectToPrimitiveNumber,
+  ValueType.ObjectValueOfNumber,
+  ValueType.PositiveBigInt,
+  ValueType.NegativeBigInt,
+  ValueType.BigIntObject,
+  ValueType.ObjectToPrimitiveBigInt,
+  ValueType.ObjectValueOfBigInt,
+  ValueType.Null,
+  ValueType.ObjectToPrimitiveNull,
+  ValueType.ObjectValueOfNull,
+  ValueType.EmptyString,
+  ValueType.EmptyArray,
+  ValueType.EmptyBuffer,
+  ValueType.Date
 ]
 
 describe('isNumberParsable', () => {
@@ -50,27 +66,7 @@ describe('ensureNumberParsable', () => {
 })
 
 describe('fallbackNumberParsable', () => {
-  testFallback(fallbackNumberParsable, expected, { parsableString: true, fallbackValue: [123] })
-})
-
-describe('isNotNumberParsable', () => {
-  testGuard(isNotNumberParsable, expected, { parsableString: true, negative: true })
-})
-
-describe('assertNotNumberParsable', () => {
-  testAssert(assertNotNumberParsable, expected, { parsableString: true, negative: true })
-})
-
-describe('ensureNotNumberParsable', () => {
-  testEnsure(ensureNotNumberParsable, expected, { parsableString: true, negative: true })
-})
-
-describe('fallbackNotNumberParsable', () => {
-  testFallback(fallbackNotNumberParsable, expected, {
-    parsableString: true,
-    negative: true,
-    fallbackValue: 'fallback'
-  })
+  testFallback(fallbackNumberParsable, expected, { parsableString: true, fallbackValue: 12345 })
 })
 
 describe('coerceNumber', () => {

@@ -1,21 +1,35 @@
-import { createAssertion, createEnsure, createFallback, not } from '../../lib/factory'
+import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
 import {
-  InvertedTypeAssertOf,
-  InvertedTypeEnsureOf,
-  InvertedTypeFallbackOf,
   TypeAssertOf,
   TypeEnsureOf,
   TypeErrorMessage,
   TypeFallbackOf,
   TypeGuard
 } from '../../lib/types'
-import { errorMessage } from '../../lib/error'
+import { TypeAssertionError, errorMessage } from '../../lib/error'
 import { isNumber } from '../number'
-import { isString } from '../string'
 
 export type NumberParsable = number | `${number}`
 
 type Parse<N extends NumberParsable> = N extends `${number}` ? number : N
+
+type Result = { parsed: number; result: boolean }
+
+function commonTest(target: unknown): Result {
+  if (isNumber(target)) {
+    return { parsed: target, result: true }
+  }
+
+  const parsed = (() => {
+    try {
+      return Number(target)
+    } catch {
+      return NaN
+    }
+  })()
+
+  return { parsed, result: !isNaN(parsed) }
+}
 
 /**
  * Checks if a value is number or number string.
@@ -30,9 +44,8 @@ type Parse<N extends NumberParsable> = N extends `${number}` ? number : N
  * }
  * ```
  */
-export const isNumberParsable = ((target: unknown): target is number =>
-  isNumber(target) ||
-  (isString(target) && new Number(target).toString() === target)) as TypeGuard<NumberParsable>
+export const isNumberParsable = ((target: unknown) =>
+  commonTest(target).result) as TypeGuard<NumberParsable>
 
 type IsNumberParsable = typeof isNumberParsable
 
@@ -90,77 +103,6 @@ export const fallbackNumberParsable: TypeFallbackOf<IsNumberParsable> =
   createFallback(isNumberParsable)
 
 /**
- * Checks if a value is not number or number string.
- *
- * In an if statement, it is simpler to use ! operator is simpler,
- * but this method is useful in cases where the argument is a type guard function, such as Array.prototype.filter.
- *
- * @param target The value to check.
- * @returns True if the value is not number, false otherwise.
- * @example
- * ```ts
- * const targets = getTargets() // Array<string | number>
- * const result = targets.filter(isNotNumberParsable)
- * // result is string[] excluding number pasable string values
- * ```
- */
-export const isNotNumberParsable = not(isNumberParsable)
-
-/**
- * Asserts that a value is not number or number string.
- *
- * @param target The value to check.
- * @param message (optional) The error message to throw if the value is number or number string.
- * @throws A TypeAssertionError with the given message if the value is number or number string.
- * @example
- * ```ts
- * const target = getTarget() // string | number
- * assertNotNumberParsable(target, 'target must not be number or number string')
- * // target is string excluding number pasable string values
- * ```
- */
-export const assertNotNumberParsable: InvertedTypeAssertOf<IsNumberParsable> = createAssertion(
-  not(isNumberParsable),
-  errorMessage('number', { not: true })
-)
-
-/**
- * Enxures that a value is not number or number string.
- *
- * @param target The value to check.
- * @param message (optional) The error message to throw if the value is number or number string.
- * @throws A TypeAssertionError with the given message if the value is number or number string.
- * @returns The value if it is not number or number string.
- * @example
- * ```ts
- * const target = getTarget() // string | number
- * const result = ensureNotNumberParsable(target, 'target must not be number or number string')
- * // result is string excluding number pasable string values
- * ```
- */
-export const ensureNotNumberParsable: InvertedTypeEnsureOf<IsNumberParsable> = createEnsure(
-  not(isNumberParsable),
-  errorMessage('number parsable', { not: true })
-)
-
-/**
- * Fallbacks to a default value if the value is not number or number string.
- *
- * @param target The value to check.
- * @param defaultValue The default value to fallback to.
- * @return The value if it is not number, the default value otherwise.
- * @example
- * ```ts
- * const target = getTarget() // string | number
- * const result = fallbackNotNumber(target, 'default')
- * // result is string excluding number pasable string values
- * ```
- */
-export const fallbackNotNumberParsable: InvertedTypeFallbackOf<IsNumberParsable> = createFallback(
-  not(isNumberParsable)
-)
-
-/**
  * Coerces a value to number.
  * Throws a TypeAssertionError if the value is not number or number string.
  *
@@ -199,8 +141,13 @@ export function coerceNumber<N extends NumberParsable>(
 export function coerceNumber(target: unknown, message?: TypeErrorMessage | string): number
 
 export function coerceNumber(target: unknown, message?: TypeErrorMessage | string): number {
-  assertNumberParsable(target, message)
-  return isNumber(target) ? target : Number(target)
+  const { parsed, result } = commonTest(target)
+  if (result) {
+    return parsed
+  }
+  const m =
+    typeof message === 'string' ? message : message?.(target) ?? errorMessage('number')(target)
+  throw new TypeAssertionError(m, target)
 }
 
 /**
@@ -241,9 +188,6 @@ export function fixNumber<N extends NumberParsable, F extends number>(
 export function fixNumber(target: unknown, defaultValue: number): number
 
 export function fixNumber(target: unknown, defaultValue: number): number {
-  if (!isNumberParsable(target)) {
-    return defaultValue
-  }
-
-  return isNumber(target) ? target : Number(target)
+  const { parsed, result } = commonTest(target)
+  return result ? parsed : defaultValue
 }

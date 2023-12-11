@@ -140,6 +140,11 @@ export enum ValueType {
   NumberParsablePositiveInt = 'numberParsablePositiveInt',
 
   /**
+   * @description `'0123'`
+   */
+  NumberStringLeadingZero = 'numberStringLeadingZero',
+
+  /**
    * @description `'-123'`
    */
   NumberParsableNegativeInt = 'numberParsableNegativeInt',

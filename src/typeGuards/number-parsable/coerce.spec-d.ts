@@ -8,7 +8,7 @@ describe('coerceNumber type tests', () => {
   })
 
   test('coerce unknown types', () => {
-    const targetUnknown = 'string' as unknown
+    const targetUnknown = '3' as unknown
     assertType<number>(coerceNumber(targetUnknown))
   })
 

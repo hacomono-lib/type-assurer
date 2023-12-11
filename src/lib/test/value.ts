@@ -39,6 +39,7 @@ const generators = {
   [ValueType.ObjectValueOfBigInt]: () => ({ valueOf: () => 1n }),
   [ValueType.NaN]: () => NaN,
   [ValueType.NumberParsablePositiveInt]: () => '123',
+  [ValueType.NumberStringLeadingZero]: () => '0123',
   [ValueType.NumberParsableNegativeInt]: () => '-123',
   [ValueType.NumberParsablePositiveFloat]: () => '123.456',
   [ValueType.NumberParsableNegativeFloat]: () => '-123.456',
