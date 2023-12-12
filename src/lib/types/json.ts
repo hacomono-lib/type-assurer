@@ -1,7 +1,7 @@
-export type Json = JsonPrimitive | JsonArray | JsonObject
+export type JSON = JSONPrimitive | JSONArray | JSONObject
 
-export type JsonPrimitive = string | number | boolean | null
+export type JSONPrimitive = string | number | boolean | null
 
-export type JsonArray = Json[] | readonly Json[]
+export type JSONArray = JSON[] | readonly JSON[]
 
-export type JsonObject = { [Key in string]: Json } & { [Key in string]?: Json | undefined }
+export type JSONObject = { [Key in string]: JSON } & { [Key in string]?: JSON | undefined }

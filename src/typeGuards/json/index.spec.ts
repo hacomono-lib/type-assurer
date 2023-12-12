@@ -1,5 +1,5 @@
 import { describe } from 'vitest'
-import { assertJsonifiable, ensureJsonifiable, fallbackJsonifiable, isJsonifiable } from '.'
+import { assertJSON, ensureJSON, fallbackJSON, isJSON } from '.'
 import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 
 const expected = [
@@ -34,20 +34,20 @@ const expected = [
   ValueType.ObjectToPrimitiveUndefined
 ]
 
-describe('isJsonifiable', () => {
-  testGuard(isJsonifiable, expected, { parsableString: true })
+describe('isJSON', () => {
+  testGuard(isJSON, expected, { parsableString: true })
 })
 
-describe('assertJsonifiable', () => {
-  testAssert(assertJsonifiable, expected, { parsableString: true })
+describe('assertJSON', () => {
+  testAssert(assertJSON, expected, { parsableString: true })
 })
 
-describe('ensureJsonifiable', () => {
-  testEnsure(ensureJsonifiable, expected, { parsableString: true })
+describe('ensureJSON', () => {
+  testEnsure(ensureJSON, expected, { parsableString: true })
 })
 
-describe('fallbackJsonifiable', () => {
-  testFallback(fallbackJsonifiable, expected, {
+describe('fallbackJSON', () => {
+  testFallback(fallbackJSON, expected, {
     parsableString: true,
     fallbackValue: [{ foo: 'bar' }]
   })

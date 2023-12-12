@@ -1,11 +1,15 @@
-import { JsonPrimitive } from '../../lib/types'
+import type { JSON, JSONPrimitive } from '../../lib/types'
 
-export type JsonParsable = JsonStrPrimitive | JsonStrArray | JsonStrObject
+export type JSONParsable = JSONStrPrimitive | JSONStrArray | JSONStrObject
 
-type JsonStrPrimitive = `"${JsonPrimitive}"`
-
-// TODO: Can't express with current typescript
-type JsonStrArray = `[${string}]`
+type JSONStrPrimitive = `"${JSONPrimitive}"`
 
 // TODO: Can't express with current typescript
-type JsonStrObject = `{${string}}`
+type JSONStrArray = `[${string}]`
+
+// TODO: Can't express with current typescript
+type JSONStrObject = `{${string}}`
+
+// TODO: Can't express with current typescript
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export type ParseJSON<_T extends JSONParsable> = JSON

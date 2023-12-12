@@ -11,7 +11,7 @@ export function hasToJSON(
 }
 
 function getValueByObject(key: string | number | symbol, target: unknown): unknown {
-  if (isJsonPrimitive(target) || target === undefined) {
+  if (isJSONPrimitive(target) || target === undefined) {
     return target
   }
 
@@ -33,7 +33,7 @@ function getValueByObject(key: string | number | symbol, target: unknown): unkno
 }
 
 // eslint-disable-next-line max-statements
-export function deepJsonEqual(a: unknown, b: unknown): boolean {
+export function deepJSONEqual(a: unknown, b: unknown): boolean {
   if (a === b) {
     return true
   }
@@ -75,7 +75,7 @@ function objectEquals(
 
   let result = true
   for (const key of keys) {
-    result &&= deepJsonEqual(getValueByObject(key, a[key]), getValueByObject(key, b[key]))
+    result &&= deepJSONEqual(getValueByObject(key, a[key]), getValueByObject(key, b[key]))
   }
   return result
 }
@@ -87,11 +87,11 @@ function arrayEquals(a: unknown[], b: unknown[]): boolean {
 
   let result = true
   for (let index = 0; index < a.length; index++) {
-    result &&= deepJsonEqual(getValueByObject(index, a[index]), getValueByObject(index, b[index]))
+    result &&= deepJSONEqual(getValueByObject(index, a[index]), getValueByObject(index, b[index]))
   }
   return result
 }
 
-export function isJsonPrimitive(target: unknown): target is number | string | boolean | null {
+export function isJSONPrimitive(target: unknown): target is number | string | boolean | null {
   return isNumber(target) || isString(target) || isBoolean(target) || target === null
 }

@@ -1,13 +1,10 @@
 import { describe, expect, test } from 'vitest'
 import {
-  assertNotJsonParsable,
-  assertJsonParsable,
-  ensureNotJsonParsable,
-  ensureJsonParsable,
-  fallbackNotJsonParsable,
-  fallbackJsonParsable,
-  isJsonParsable,
-  isNotJsonParsable,
+  assertJSONParsable,
+  ensureJSONParsable,
+  fallbackJSONParsable,
+  isJSONParsable,
+  coerceJSON,
   fixJson
 } from '.'
 import {
@@ -38,42 +35,38 @@ const expected = [
   ValueType.BooleanParsableFalse
 ]
 
-describe('isJsonParsable', () => {
-  testGuard(isJsonParsable, expected, { parsableString: true })
+describe('isJSONParsable', () => {
+  testGuard(isJSONParsable, expected, { parsableString: true })
 })
 
-describe('assertJsonParsable', () => {
-  testAssert(assertJsonParsable, expected, { parsableString: true })
+describe('assertJSONParsable', () => {
+  testAssert(assertJSONParsable, expected, { parsableString: true })
 })
 
-describe('ensureJsonParsable', () => {
-  testEnsure(ensureJsonParsable, expected, { parsableString: true })
+describe('ensureJSONParsable', () => {
+  testEnsure(ensureJSONParsable, expected, { parsableString: true })
 })
 
-describe('fallbackJsonParsable', () => {
-  testFallback(fallbackJsonParsable, expected, {
+describe('fallbackJSONParsable', () => {
+  testFallback(fallbackJSONParsable, expected, {
     parsableString: true,
     fallbackValue: [{ foo: 'bar' }]
   })
 })
 
-describe('isNotJsonParsable', () => {
-  testGuard(isNotJsonParsable, expected, { parsableString: true, negative: true })
-})
+describe('coerceJson', () => {
+  test('coerces JSON', () => {
+    expect(coerceJSON('{"foo":"bar"}')).toStrictEqual({ foo: 'bar' })
+    expect(coerceJSON('123')).toBe(123)
+    expect(coerceJSON('true')).toBe(true)
+    expect(coerceJSON('false')).toBe(false)
+    expect(coerceJSON('null')).toBe(null)
+  })
 
-describe('assertNotJsonParsable', () => {
-  testAssert(assertNotJsonParsable, expected, { parsableString: true, negative: true })
-})
+  const notExpected = allTypes().filter((type) => !expected.includes(type))
 
-describe('ensureNotJsonParsable', () => {
-  testEnsure(ensureNotJsonParsable, expected, { parsableString: true, negative: true })
-})
-
-describe('fallbackNotJsonParsable', () => {
-  testFallback(fallbackNotJsonParsable, expected, {
-    parsableString: true,
-    negative: true,
-    fallbackValue: 'fallback'
+  test.each(notExpected)('throw value for %s', (type) => {
+    expect(() => coerceJSON(type)).toThrow()
   })
 })
 

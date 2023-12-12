@@ -1,20 +1,32 @@
-import { createAssertion, createEnsure, createFallback, not } from '../../lib/factory'
+import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
 import type {
-  InvertedTypeAssertOf,
-  InvertedTypeEnsureOf,
-  InvertedTypeFallbackOf,
   TypeAssertOf,
   TypeEnsureOf,
   TypeErrorMessage,
   TypeFallbackOf,
   TypeGuard
 } from '../../lib/types/type-guards'
-import { errorMessage } from '../../lib/error'
+import { TypeAssertionError, errorMessage } from '../../lib/error'
 
 import { isString } from '../string'
+import { isJSON, type JSONifiable, type JSONify } from '../json'
+import { JSON } from '../../lib/types'
 
-import type { JsonParsable } from './type'
-import { Json } from '../../lib/types'
+import type { JSONParsable, ParseJSON } from './type'
+
+type Result = { parsed: JSON; result: boolean; cause?: unknown }
+
+function commonTest(target: unknown): Result {
+  if (!isString(target)) {
+    return { parsed: {}, result: false }
+  }
+
+  try {
+    return { parsed: JSON.parse(target), result: true }
+  } catch (e) {
+    return { parsed: {}, result: false, cause: e }
+  }
+}
 
 /**
  * Checks if a value is string, that can be parsed as JSON.
@@ -23,39 +35,29 @@ import { Json } from '../../lib/types'
  * @return True if the value is string, that can be parsed as JSON, false otherwise.
  * @example
  * ```ts
- * const result = isJsonParsable('{ "foo": "bar" }')
+ * const result = isJSONParsable('{ "foo": "bar" }')
  * // result is true
  *
- * const result = isJsonParsable('foo')
+ * const result = isJSONParsable('foo')
  * // result is false
  *
- * const result = isJsonParsable('1')
+ * const result = isJSONParsable('1')
  * // result is true
  *
- * const result = isJsonParsable('true')
+ * const result = isJSONParsable('true')
  * // result is true
  *
- * const result = isJsonParsable('null')
+ * const result = isJSONParsable('null')
  * // result is true
  *
- * const result = isJsonParsable('undefined')
+ * const result = isJSONParsable('undefined')
  * // result is false
  * ```
  */
-export const isJsonParsable = ((target: unknown): target is JsonParsable => {
-  if (!isString(target)) {
-    return false
-  }
+export const isJSONParsable = ((target: unknown) =>
+  commonTest(target).result) as TypeGuard<JSONParsable>
 
-  try {
-    JSON.parse(target)
-    return true
-  } catch {
-    return false
-  }
-}) as TypeGuard<JsonParsable>
-
-type IsJsonParsable = typeof isJsonParsable
+type IsJSONParsable = typeof isJSONParsable
 
 /**
  * Asserts that a value is a string that can be parsed as JSON.
@@ -65,28 +67,28 @@ type IsJsonParsable = typeof isJsonParsable
  * @throws A TypeAssertionError with the given message if the value is not a string that can be parsed as JSON.
  * @example
  * ```ts
- * assertJsonParsable('{ "foo": "bar" }')
- * // target is JsonParsable
+ * assertJSONParsable('{ "foo": "bar" }')
+ * // target is JSONParsable
  *
- * assertJsonParsable('foo')
+ * assertJSONParsable('foo')
  * // throws TypeAssertionError
  *
- * assertJsonParsable('1')
- * // target is JsonParsable
+ * assertJSONParsable('1')
+ * // target is JSONParsable
  *
- * assertJsonParsable('true')
- * // target is JsonParsable
+ * assertJSONParsable('true')
+ * // target is JSONParsable
  *
- * assertJsonParsable('null')
- * // target is JsonParsable
+ * assertJSONParsable('null')
+ * // target is JSONParsable
  *
- * assertJsonParsable('undefined')
+ * assertJSONParsable('undefined')
  * // throws TypeAssertionError
  * ```
  */
-export const assertJsonParsable: TypeAssertOf<IsJsonParsable> = createAssertion(
-  isJsonParsable,
-  errorMessage('JsonParsable')
+export const assertJSONParsable: TypeAssertOf<IsJSONParsable> = createAssertion(
+  isJSONParsable,
+  errorMessage('JSONParsable')
 )
 
 /**
@@ -98,28 +100,28 @@ export const assertJsonParsable: TypeAssertOf<IsJsonParsable> = createAssertion(
  * @returns The value if it is a string that can be parsed as JSON.
  * @example
  * ```ts
- * const result = ensureJsonParsable('{ "foo": "bar" }')
+ * const result = ensureJSONParsable('{ "foo": "bar" }')
  * // result is '{ "foo": "bar" }'
  *
- * const result = ensureJsonParsable('foo')
+ * const result = ensureJSONParsable('foo')
  * // throws TypeAssertionError
  *
- * const result = ensureJsonParsable('1')
+ * const result = ensureJSONParsable('1')
  * // result is '1'
  *
- * const result = ensureJsonParsable('true')
+ * const result = ensureJSONParsable('true')
  * // result is 'true'
  *
- * const result = ensureJsonParsable('null')
+ * const result = ensureJSONParsable('null')
  * // result is 'null'
  *
- * const result = ensureJsonParsable('undefined')
+ * const result = ensureJSONParsable('undefined')
  * // throws TypeAssertionError
  * ```
  */
-export const ensureJsonParsable: TypeEnsureOf<IsJsonParsable> = createEnsure(
-  isJsonParsable,
-  errorMessage('JsonParsable')
+export const ensureJSONParsable: TypeEnsureOf<IsJSONParsable> = createEnsure(
+  isJSONParsable,
+  errorMessage('JSONParsable')
 )
 
 /**
@@ -130,278 +132,194 @@ export const ensureJsonParsable: TypeEnsureOf<IsJsonParsable> = createEnsure(
  * @return The value if it is a string that can be parsed as JSON, the default value otherwise.
  * @example
  * ```ts
- * const result = fallbackJsonParsable('{ "foo": "bar" }', '{ "baz": "qux" }')
+ * const result = fallbackJSONParsable('{ "foo": "bar" }', '{ "baz": "qux" }')
  * // result is '{ "foo": "bar" }'
  *
- * const result = fallbackJsonParsable('foo', '{ "baz": "qux" }')
+ * const result = fallbackJSONParsable('foo', '{ "baz": "qux" }')
  * // result is '{ "baz": "qux" }'
  *
- * const result = fallbackJsonParsable('1', '{ "baz": "qux" }')
+ * const result = fallbackJSONParsable('1', '{ "baz": "qux" }')
  * // result is '1'
  *
- * const result = fallbackJsonParsable('true', '{ "baz": "qux" }')
+ * const result = fallbackJSONParsable('true', '{ "baz": "qux" }')
  * // result is 'true'
  *
- * const result = fallbackJsonParsable('null', '{ "baz": "qux" }')
+ * const result = fallbackJSONParsable('null', '{ "baz": "qux" }')
  * // result is 'null'
  *
- * const result = fallbackJsonParsable('undefined', '{ "baz": "qux" }')
+ * const result = fallbackJSONParsable('undefined', '{ "baz": "qux" }')
  * // result is '{ "baz": "qux" }'
  * ```
  */
-export const fallbackJsonParsable: TypeFallbackOf<IsJsonParsable> = createFallback(isJsonParsable)
+export const fallbackJSONParsable: TypeFallbackOf<IsJSONParsable> = createFallback(isJSONParsable)
 
-/**
- * Checks if a value is not a string that can be parsed as JSON.
- *
- * In an if statement, it is simpler to use ! operator is simpler,
- * but this function is useful when you want to use it as a type guard.
- *
- * @param target The value to check.
- * @returns True if the value is not a string that can be parsed as JSON, false otherwise.
- * @example
- * ```ts
- * const result = isNotJsonParsable('{ "foo": "bar" }')
- * // result is false
- *
- * const result = isNotJsonParsable('foo')
- * // result is true
- *
- * const result = isNotJsonParsable('1')
- * // result is false
- *
- * const result = isNotJsonParsable('true')
- * // result is false
- *
- * const result = isNotJsonParsable('null')
- * // result is false
- *
- * const result = isNotJsonParsable('undefined')
- * // result is true
- * ```
- *
- * @example
- * ```ts
- * const targets = getTargets() // string[]
- * const result = targets.filter(isNotJsonParsable)
- * ```
- */
-export const isNotJsonParsable = not(isJsonParsable)
+interface CoerceJson {
+  /**
+   * If the value specified in the argument is a string, it parses it to JSON.
+   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * Throws a TypeAssertionError in any case.
+   * @param target The value to coerce to JSON.
+   * @param message (optional) The error message to throw if the value cannot be coerced to JSON.
+   * @throws A TypeAssertionError with the given message if the value cannot be coerced to JSON.
+   * @returns The value coerced to JSON.
+   * @example
+   * ```ts
+   * function fetchData() { return { foo: 'bar' }}
+   *
+   * const result = coerceJson(fetchData())
+   * // result is { foo: 'bar' }
+   *
+   * function fetchData2() { return '{ "foo": "bar" }' }
+   *
+   * const result2 = coerceJson(fetchData2())
+   * // result2 is { foo: 'bar' }
+   * ```
+   */
+  <T extends JSONParsable>(target: T, message?: TypeErrorMessage): ParseJSON<T>
 
-/**
- * Asserts that a value is not a string that can be parsed as JSON.
- * @param target The value to check.
- * @param message (optional) The error message to throw if the value is a string that can be parsed as JSON.
- * @throws A TypeError with the given message if the value is a string that can be parsed as JSON.
- * @example
- * ```ts
- * assertNotJsonParsable('{ "foo": "bar" }')
- * // throws TypeAssertionError
- *
- * assertNotJsonParsable('foo')
- * // target is not JsonParsable
- *
- * assertNotJsonParsable('1')
- * // throws TypeAssertionError
- *
- * assertNotJsonParsable('true')
- * // throws TypeAssertionError
- *
- * assertNotJsonParsable('null')
- * // throws TypeAssertionError
- *
- * assertNotJsonParsable('undefined')
- * // target is not JsonParsable
- * ```
- */
-export const assertNotJsonParsable: InvertedTypeAssertOf<IsJsonParsable> = createAssertion(
-  not(isJsonParsable),
-  errorMessage('JsonParsable', { not: true })
-)
+  /**
+   * If the value specified in the argument is a string, it parses it to JSON.
+   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * Throws a TypeAssertionError in any case.
+   * @param target The value to coerce to JSON.
+   * @param message (optional) The error message to throw if the value cannot be coerced to JSON.
+   * @throws A TypeAssertionError with the given message if the value cannot be coerced to JSON.
+   * @returns The value coerced to JSON.
+   * @example
+   * ```ts
+   * function fetchData() { return { foo: 'bar' }}
+   *
+   * const result = coerceJson(fetchData())
+   * // result is { foo: 'bar' }
+   *
+   * function fetchData2() { return '{ "foo": "bar" }' }
+   *
+   * const result2 = coerceJson(fetchData2())
+   * // result2 is { foo: 'bar' }
+   * ```
+   */
+  <T extends JSONifiable>(target: T, message?: TypeErrorMessage): JSONify<T>
 
-/**
- * Enxures that a value is not a string that can be parsed as JSON.
- * @param target The value to check.
- * @param message (optional) The error message to throw if the value is a string that can be parsed as JSON.
- * @throws A TypeAssertionError with the given message if the value is a string that can be parsed as JSON.
- * @returns The value if it is not a string that can be parsed as JSON.
- * @example
- * ```ts
- * const result = ensureNotJsonParsable('{ "foo": "bar" }')
- * // throws TypeAssertionError
- *
- * const result = ensureNotJsonParsable('foo')
- * // result is 'foo'
- *
- * const result = ensureNotJsonParsable('1')
- * // throws TypeAssertionError
- *
- * const result = ensureNotJsonParsable('true')
- * // throws TypeAssertionError
- *
- * const result = ensureNotJsonParsable('null')
- * // throws TypeAssertionError
- *
- * const result = ensureNotJsonParsable('undefined')
- * // result is 'undefined'
- * ```
- */
-export const ensureNotJsonParsable: InvertedTypeEnsureOf<IsJsonParsable> = createEnsure(
-  not(isJsonParsable),
-  errorMessage('JsonParsable', { not: true })
-)
-
-/**
- * Fallbacks to default value if a value is not a string that can be parsed as JSON.
- * @param target The value to check.
- * @param defaultValue The default value to return if the value is a string that can be parsed as JSON.
- * @return The value if it is not a string that can be parsed as JSON, the default value otherwise.
- * @example
- * ```ts
- * const result = fallbackNotJsonParsable('{ "foo": "bar" }', 'fallback')
- * // result is 'fallback'
- *
- * const result = fallbackNotJsonParsable('foo', 'fallback')
- * // result is 'foo'
- *
- * const result = fallbackNotJsonParsable('1', 'fallback')
- * // result is 'fallback'
- *
- * const result = fallbackNotJsonParsable('true', 'fallback')
- * // result is 'fallback'
- *
- * const result = fallbackNotJsonParsable('null', 'fallback')
- * // result is 'fallback'
- *
- * const result = fallbackNotJsonParsable('undefined', 'fallback')
- * // result is 'undefined'
- * ```
- */
-export const fallbackNotJsonParsable: InvertedTypeFallbackOf<IsJsonParsable> = createFallback(
-  not(isJsonParsable)
-)
-
-/**
- * Parses a string as JSON. If the string is not a valid JSON, it throws a TypeAssertionError.
- * @param target The value to parse.
- * @param message (optional) The error message to throw if the value is not a string that can be parsed as JSON.
- * @throws A TypeAssertionError with the given message if the value is not a string that can be parsed as JSON.
- * @returns The value if it is a string that can be parsed as JSON.
- * @example
- * ```ts
- * const result = parseJson('{ "foo": "bar" }')
- * // result is { foo: 'bar' }
- *
- * const result = parseJson('foo')
- * // throws TypeAssertionError
- *
- * const result = parseJson('1')
- * // result is 1
- *
- * const result = parseJson('true')
- * // result is true
- *
- * const result = parseJson('null')
- * // result is null
- *
- * const result = parseJson('undefined')
- * // throws TypeAssertionError
- * ```
- */
-export function coerceJson<T extends Json>(target: T | unknown, message: TypeErrorMessage): T
-
-/**
- * Parses a string as JSON. If the string is not a valid JSON, it throws a TypeAssertionError.
- * @param target The value to parse.
- * @param message (optional) The error message to throw if the value is not a string that can be parsed as JSON.
- * @throws A TypeAssertionError with the given message if the value is not a string that can be parsed as JSON.
- * @returns The value if it is a string that can be parsed as JSON.
- * @example
- * ```ts
- * const result = parseJson('{ "foo": "bar" }')
- * // result is { foo: 'bar' }
- *
- * const result = parseJson('foo')
- * // throws TypeAssertionError
- *
- * const result = parseJson('1')
- * // result is 1
- *
- * const result = parseJson('true')
- * // result is true
- *
- * const result = parseJson('null')
- * // result is null
- *
- * const result = parseJson('undefined')
- * // throws TypeAssertionError
- * ```
- */
-export function coerceJson(target: unknown, message: TypeErrorMessage): Json
-
-export function coerceJson(target: unknown, message: TypeErrorMessage): Json {
-  // FIXME: JSON.parse を 2 回呼んでいるので、パフォーマンスが悪い
-  assertJsonParsable(target, message)
-  return JSON.parse(target)
+  /**
+   * If the value specified in the argument is a string, it parses it to JSON.
+   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * Throws a TypeAssertionError in any case.
+   * @param target The value to coerce to JSON.
+   * @param message (optional) The error message to throw if the value cannot be coerced to JSON.
+   * @throws A TypeAssertionError with the given message if the value cannot be coerced to JSON.
+   * @returns The value coerced to JSON.
+   * @example
+   * ```ts
+   * function fetchData() { return { foo: 'bar' }}
+   *
+   * const result = coerceJson(fetchData())
+   * // result is { foo: 'bar' }
+   *
+   * function fetchData2() { return '{ "foo": "bar" }' }
+   *
+   * const result2 = coerceJson(fetchData2())
+   * // result2 is { foo: 'bar' }
+   * ```
+   */
+  (target: unknown, message?: TypeErrorMessage): JSON
 }
 
-/**
- * Parses a string as JSON. If the string is not a valid JSON, it returns the default value.
- * @param target The value to parse.
- * @param defaultValue The default value to return if the value is not a string that can be parsed as JSON.
- * @return The value if it is a string that can be parsed as JSON, the default value otherwise.
- * @example
- * ```ts
- * const result = parseJson('{ "foo": "bar" }', {})
- * // result is { foo: 'bar' }
- *
- * const result = parseJson('foo', {})
- * // result is {}
- *
- * const result = parseJson('1', {})
- * // result is 1
- *
- * const result = parseJson('true', {})
- * // result is true
- *
- * const result = parseJson('null', {})
- * // result is null
- *
- * const result = parseJson('undefined', {})
- * // result is {}
- * ```
- */
-export function fixJson<T extends Json, F extends Json>(target: T | unknown, defaultValue: F): T | F
+export const coerceJSON: CoerceJson = (target: unknown, message?: TypeErrorMessage): JSON => {
+  const { parsed, result, cause } = commonTest(target)
 
-/**
- * Parses a string as JSON. If the string is not a valid JSON, it returns the default value.
- * @param target The value to parse.
- * @param defaultValue The default value to return if the value is not a string that can be parsed as JSON.
- * @returns The value if it is a string that can be parsed as JSON, the default value otherwise.
- * @example
- * ```ts
- * const result = parseJson('{ "foo": "bar" }', {})
- * // result is { foo: 'bar' }
- *
- * const result = parseJson('foo', {})
- * // result is {}
- *
- * const result = parseJson('1', {})
- * // result is 1
- *
- * const result = parseJson('true', {})
- * // result is true
- *
- * const result = parseJson('null', {})
- * // result is null
- *
- * const result = parseJson('undefined', {})
- * // result is {}
- * ```
- */
-export function fixJson(target: unknown, defaultValue: Json): Json
+  if (result) {
+    return parsed
+  }
 
-export function fixJson(target: unknown, defaultValue: Json): Json {
-  // FIXME: JSON.parse を 2 回呼んでいるので、パフォーマンスが悪い
-  return isJsonParsable(target) ? JSON.parse(target) : defaultValue
+  if (isJSON(target)) {
+    return JSON.parse(JSON.stringify(target))
+  }
+
+  const m =
+    typeof message === 'string'
+      ? message
+      : message?.(target) ?? errorMessage('JSONParsable')(target)
+  throw new TypeAssertionError(m, target, { cause })
+}
+
+interface FixJSON {
+  /**
+   * If the value specified in the argument is a string, it parses it to JSON.
+   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * Otherwise, it returns the default value.
+   * @param target The value to coerce to JSON.
+   * @param defaultValue The default value to return if the value cannot be coerced to JSON.
+   * @returns The value coerced to JSON or the default value.
+   * @example
+   * ```ts
+   * function fetchData() { return { foo: 'bar' }}
+   *
+   * const result = fixJson(fetchData(), { baz: 'qux' })
+   * // result is { foo: 'bar' } | { baz: 'qux' }
+   *
+   * function fetchData2() { return '{ "foo": "bar" }' }
+   *
+   * const result2 = fixJson(fetchData2(), { baz: 'qux' })
+   * // result2 is { foo: 'bar' } | { baz: 'qux' }
+   * ```
+   */
+  <T extends JSONParsable, V extends JSON>(target: T, defaultValue: V): ParseJSON<T> | V
+
+  /**
+   * If the value specified in the argument is a string, it parses it to JSON.
+   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * Otherwise, it returns the default value.
+   * @param target The value to coerce to JSON.
+   * @param defaultValue The default value to return if the value cannot be coerced to JSON.
+   * @returns The value coerced to JSON or the default value.
+   * @example
+   * ```ts
+   * function fetchData() { return { foo: 'bar' }}
+   *
+   * const result = fixJson(fetchData(), { baz: 'qux' })
+   * // result is { foo: 'bar' } | { baz: 'qux' }
+   *
+   * function fetchData2() { return '{ "foo": "bar" }' }
+   *
+   * const result2 = fixJson(fetchData2(), { baz: 'qux' })
+   * // result2 is { foo: 'bar' } | { baz: 'qux' }
+   * ```
+   */
+  <T extends JSONifiable, V extends JSON>(target: T, defaultValue: V): JSONify<T> | V
+
+  /**
+   * If the value specified in the argument is a string, it parses it to JSON.
+   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * Otherwise, it returns the default value.
+   * @param target The value to coerce to JSON.
+   * @param defaultValue The default value to return if the value cannot be coerced to JSON.
+   * @returns The value coerced to JSON or the default value.
+   * @example
+   * ```ts
+   * function fetchData() { return { foo: 'bar' }}
+   *
+   * const result = fixJson(fetchData(), { baz: 'qux' })
+   * // result is { foo: 'bar' } | { baz: 'qux' }
+   *
+   * function fetchData2() { return '{ "foo": "bar" }' }
+   *
+   * const result2 = fixJson(fetchData2(), { baz: 'qux' })
+   * // result2 is { foo: 'bar' } | { baz: 'qux' }
+   * ```
+   */
+  (target: unknown, defaultValue: JSON): JSON
+}
+
+export const fixJSON: FixJSON = (target: unknown, defaultValue: JSON): JSON => {
+  const { parsed, result } = commonTest(target)
+
+  if (result) {
+    return parsed
+  }
+
+  if (isJSON(target)) {
+    return JSON.parse(JSON.stringify(target))
+  }
+
+  return defaultValue
 }

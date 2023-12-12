@@ -1,19 +1,19 @@
 ---
-title: jsonifiable
-description: A Type Guard Utility functions for checking if a value is Jsonifiable.
+title: JSON
+description: A Type Guard Utility functions for checking if a value is JSON like
 ---
-A Type Guard Utility functions for checking if a value is Jsonifiable.
+A Type Guard Utility functions for checking if a value is JSON like.
 
-"Jsonifiable" is a value that can be converted to a JSON string, using `JSON.stringify(value)` without causing member omissions.
+"JSON like" means a value that can be converted to a JSON object string using `JSON.stringify` without missing object members, or a value that can be converted to a JSON primitive value.
 
 :::note
 If the value is an object, it checks whether the result of `JSON.parse(JSON.stringify(value))` is exactly the same as the original object.
 
 If the object has a method, it will not be included in the result of `JSON.stringify`, so it will not match exactly.
 
-However, WellKnown Symbols are not included in the result of JSON.stringify and are not referenced, so they are not included in this check.
+However, [WellKnown Symbols](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Symbol#well-known_symbol) are not included in the result of JSON.stringify and are not referenced, so they are not included in this check.
 
-Also, if there is a toJSON method at the root, it checks the result of that method.
+Also, if there is a [toJSON](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#tojson_%E3%81%AE%E6%8C%99%E5%8B%95) method at the root, it checks the result of that method.
 
 e.g.
 
@@ -78,14 +78,14 @@ const sample4 = {
 | ^ | `[1, 2, 3]` | true |
 | Date | `new Date()` | true |
 
-## isJsonifiable
+## isJSON
 
-A Type Guard function for checking if a value is a Jsonifiable.
+A Type Guard function for checking if a value is a JSON like.
 
 ### Basic Usage
 
 ```typescript
-function isJsonifiable(target: unknown): target is Jsonifiable
+function isJSON(target: unknown): target is JSON
 ```
 
 #### params
@@ -94,17 +94,17 @@ function isJsonifiable(target: unknown): target is Jsonifiable
 
 #### returns
 
-- `true` .. When the value is a Jsonifiable.
-- `false` .. When the value is not a Jsonifiable.
+- `true` .. When the value is a JSON.
+- `false` .. When the value is not a JSON.
 
 ### Examples
 
 ```typescript
-import { isJsonifiable } from 'type-assurer'
+import { isJSON } from 'type-assurer'
 
 const value = { foo: 'bar' }
 
-if (isJsonifiable(value)) {
+if (isJSON(value)) {
   // value is { foo: string }
 } else {
   // value is never
@@ -112,7 +112,7 @@ if (isJsonifiable(value)) {
 
 const value2 = { foo: () => 'bar' }
 
-if (isJsonifiable(value2)) {
+if (isJSON(value2)) {
   // value2 is never
 } else {
   // value2 is { foo: () => string }
@@ -120,21 +120,21 @@ if (isJsonifiable(value2)) {
 
 const value3 = { foo: 'bar' } as unknown
 
-if (isJsonifiable(value3)) {
-  // value3 is Jsonifiable
+if (isJSON(value3)) {
+  // value3 is JSON
 } else {
   // value3 is unknown
 }
 ```
 
-## assertJsonifiable
+## assertJSON
 
-A Type Assertion function for checking if a value is a Jsonifiable.
+A Type Assertion function for checking if a value is a JSON.
 
 ### Basic Usage
 
 ```typescript
-function assertJsonifiable(target: unknown, message?: TypeErrorMessage): asserts target is Jsonifiable
+function assertJSON(target: unknown, message?: TypeErrorMessage): asserts target is JSON
 ```
 
 #### params
@@ -144,44 +144,44 @@ function assertJsonifiable(target: unknown, message?: TypeErrorMessage): asserts
 
 #### returns
 
-- `void` .. When the value is a Jsonifiable.
+- `void` .. When the value is a JSON.
 
 #### throws
 
-- `TypeAssertionError` .. When the value is not a Jsonifiable.
+- `TypeAssertionError` .. When the value is not a JSON.
 
 ### Examples
 
 ```typescript
-import { assertJsonifiable } from 'type-assurer'
+import { assertJSON } from 'type-assurer'
 
 const value = { foo: 'bar' }
 
-assertJsonifiable(value)
-// When the value is not a Jsonifiable, TypeAssertionError is thrown.
+assertJSON(value)
+// When the value is not a JSON, TypeAssertionError is thrown.
 // value is { foo: string }
 
 const value2 = { foo: () => 'bar' }
 
-assertJsonifiable(value2)
-// When the value is not a Jsonifiable, TypeAssertionError is thrown.
+assertJSON(value2)
+// When the value is not a JSON, TypeAssertionError is thrown.
 // value2 is never
 
 const value3 = { foo: 'bar' } as unknown
 
-assertJsonifiable(value3)
-// When the value is not a Jsonifiable, TypeAssertionError is thrown.
-// value3 is Jsonifiable
+assertJSON(value3)
+// When the value is not a JSON, TypeAssertionError is thrown.
+// value3 is JSON
 ```
 
-### ensureJsonifiable
+### ensureJSON
 
-Ensures that the value is a Jsonifiable. If it is not a Jsonifiable, an error is thrown.
+Ensures that the value is a JSON. If it is not a JSON, an error is thrown.
 
 ### Basic Usage
 
 ```typescript
-function ensureJsonifiable(target: unknown, message?: TypeErrorMessage): Jsonifiable
+function ensureJSON(target: unknown, message?: TypeErrorMessage): JSON
 ```
 
 #### params
@@ -191,75 +191,75 @@ function ensureJsonifiable(target: unknown, message?: TypeErrorMessage): Jsonifi
 
 #### returns
 
-- `Jsonifiable` .. When the value is a Jsonifiable.
+- `JSON` .. When the value is a JSON.
 
 #### throws
 
-- `TypeAssertionError` .. When the value is not a Jsonifiable.
+- `TypeAssertionError` .. When the value is not a JSON.
 
 ### Examples
 
 ```typescript
-import { ensureJsonifiable } from 'type-assurer'
+import { ensureJSON } from 'type-assurer'
 
 function getValue() { return { foo: 'bar' } }
 
-const value = ensureJsonifiable(getValue())
-// When the value is not a Jsonifiable, TypeAssertionError is thrown.
+const value = ensureJSON(getValue())
+// When the value is not a JSON, TypeAssertionError is thrown.
 // value is { foo: string }
 
 function getValue2() { return { foo: () => 'bar' } }
 
-const value2 = ensureJsonifiable(getValue2())
-// When the value is not a Jsonifiable, TypeAssertionError is thrown.
+const value2 = ensureJSON(getValue2())
+// When the value is not a JSON, TypeAssertionError is thrown.
 // value2 is never
 
 function getValue3() { return { foo: 'bar' } as unknown }
 
-const value3 = ensureJsonifiable(getValue3())
-// When the value is not a Jsonifiable, TypeAssertionError is thrown.
-// value3 is Jsonifiable
+const value3 = ensureJSON(getValue3())
+// When the value is not a JSON, TypeAssertionError is thrown.
+// value3 is JSON
 ```
 
-## fallbackJsonifiable
+## fallbackJSON
 
-Fallback to the default value if the value is not a Jsonifiable.
+Fallback to the default value if the value is not a JSON.
 
 ### Basic Usage
 
 ```typescript
-function fallbackJsonifiable(target: unknown, fallback: Jsonifiable): Jsonifiable
+function fallbackJSON(target: unknown, fallback: JSON): Jsonifiable
 ```
 
 #### params
 
 - `target` .. The value to check.
-- `fallback` .. The default value to return if the value is not a Jsonifiable.
+- `fallback` .. The default value to return if the value is not a JSON.
 
 #### returns
 
-- `Jsonifiable` .. When the value is a Jsonifiable. Otherwise, the fallback value.
+- `JSON` .. When the value is a JSON. Otherwise, the fallback value.
 
 ### Examples
 
 ```typescript
-import { fallbackJsonifiable } from 'type-assurer'
+import { fallbackJSON } from 'type-assurer'
 
 function getValue() { return { foo: 'bar' } }
 
-const value = fallbackJsonifiable(getValue(), { baz: 'qux' })
-// When the value is not a Jsonifiable, the process continues.
+const value = fallbackJSON(getValue(), { baz: 'qux' })
+// When the value is not a JSON, the process continues.
 // value is { foo: string } | { baz: string }
 
 function getValue2() { return { foo: () => 'bar' } }
 
-const value2 = fallbackJsonifiable(getValue2(), { baz: 'qux' })
-// When the value is not a Jsonifiable, the process continues.
+const value2 = fallbackJSON(getValue2(), { baz: 'qux' })
+// When the value is not a JSON, the process continues.
 // value2 is { baz: string }
 
 function getValue3() { return { foo: 'bar' } as unknown }
 
-const value3 = fallbackJsonifiable(getValue3(), { baz: 'qux' })
-// When the value is not a Jsonifiable, the process continues.
-// vlaue3 is Jsonifiable | { baz: string }
+const value3 = fallbackJSON(getValue3(), { baz: 'qux' })
+// When the value is not a JSON, the process continues.
+// vlaue3 is JSON | { baz: string }
 ```
