@@ -70,7 +70,11 @@ export type InvertedTypeAssertOf<T extends TypeGuard> = InvertedTypeAssert<Guard
  * @description type ensure.
  */
 export interface TypeEnsure<T = unknown> extends Branded<'type_ensurer'> {
-  <U>(target: U, message?: TypeErrorMessage): unknown extends U ? T : Extract<U, T>
+  <U>(target: U, message?: TypeErrorMessage): unknown extends U
+    ? T
+    : Extract<U, T> extends never
+    ? T
+    : Extract<U, T>
 }
 
 /**
@@ -94,7 +98,9 @@ export type InvertedTypeEnsureOf<T extends TypeGuard> = InvertedTypeEnsure<Guard
  * @description type fallback.
  */
 export interface TypeFallback<T = unknown> extends Branded<'type_fallback'> {
-  <U, V extends T>(target: U, fallback: V): (unknown extends U ? T : Extract<U, T>) | V
+  <U, V extends T>(target: U, fallback: V):
+    | (unknown extends U ? T : Extract<U, T> extends never ? T : Extract<U, T>)
+    | V
 }
 
 /**
