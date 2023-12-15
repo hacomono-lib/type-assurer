@@ -1,24 +1,23 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { fallbackJSON } from '.'
-import type { JSON } from './type'
-import type { Equals } from '../../lib/test/type-assert'
+import type { JSONifiable } from './type'
 
 describe('fallbackJSON type tests', () => {
   test('fallback definite types.', () => {
     const targetJSON = { foo: 'bar' }
     const result = fallbackJSON(targetJSON, { baz: 'qux' })
-    assertType<Equals<{ foo: string } | { baz: string }, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<{ foo: string } | { baz: string }>()
   })
 
   test('fallback unknown types', () => {
     const targetUnknown = { foo: 'bar' } as unknown
     const result = fallbackJSON(targetUnknown, { baz: 'qux' })
-    assertType<Equals<JSON | { baz: string }, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<JSONifiable | { baz: string }>()
   })
 
   test('fallback union types', () => {
-    const targetUnion = { foo: 'bar' } as JSON | string | number
+    const targetUnion = { foo: 'bar' } as JSONifiable | string | number
     const result = fallbackJSON(targetUnion, { baz: 'qux' })
-    assertType<Equals<JSON | { baz: string }, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<JSONifiable | { baz: string }>()
   })
 })

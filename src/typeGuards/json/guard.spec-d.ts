@@ -1,25 +1,24 @@
 /* eslint-disable max-lines-per-function */
-import { test, describe, assertType } from 'vitest'
-import type { JSON, JSONObject, JSONArray } from './type'
+import { test, describe, expectTypeOf } from 'vitest'
+import type { JSONifiable, JSONifiableObject, JSONifiableArray } from './type'
 import { isJSON } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('isJSON type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
     if (isJSON(targetObject)) {
-      assertType<Equals<JSONObject | JSONArray | string, typeof targetObject>>(true)
+      expectTypeOf(targetObject).toEqualTypeOf<JSONifiableObject | JSONifiableArray | string>()
     } else {
-      assertType<Equals<object, typeof targetObject>>(true)
+      expectTypeOf(targetObject).toEqualTypeOf<object>()
     }
   })
 
   test('guard definite types 2', () => {
     const targetConstObject = {} as { foo?: string } | '1'
     if (isJSON(targetConstObject)) {
-      assertType<Equals<{ foo?: string } | '1', typeof targetConstObject>>(true)
+      expectTypeOf(targetConstObject).toEqualTypeOf<{ foo?: string } | '1'>()
     } else {
-      assertType<Equals<never, typeof targetConstObject>>(true)
+      expectTypeOf(targetConstObject).toEqualTypeOf<never>()
     }
   })
 
@@ -32,9 +31,11 @@ describe('isJSON type tests', () => {
       | (() => void)
       | undefined
     if (isJSON(targetConstObject)) {
-      assertType<Equals<{ foo?: string } | Date | JSON[] | null, typeof targetConstObject>>(true)
+      expectTypeOf(targetConstObject).toEqualTypeOf<
+        { foo?: string } | Date | JSONifiable[] | null
+      >()
     } else {
-      assertType<Equals<undefined | (() => void) | unknown[], typeof targetConstObject>>(true)
+      expectTypeOf(targetConstObject).toEqualTypeOf<undefined | (() => void) | unknown[]>()
     }
   })
 
@@ -49,18 +50,18 @@ describe('isJSON type tests', () => {
     if (isJSON(target)) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore FIXME: This is a bug
-      assertType<Equals<never, typeof target>>(true)
+      expectTypeOf(target).toEqualTypeOf<never>()
     } else {
-      assertType<Equals<Foo, typeof target>>(true)
+      expectTypeOf(target).toEqualTypeOf<Foo>()
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isJSON(targetUnknown)) {
-      assertType<Equals<JSON, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<JSONifiable>()
     } else {
-      assertType<Equals<unknown, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
     }
   })
 })

@@ -1,24 +1,23 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { ensureAwaitable, ensureNotAwaitable } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('ensureAwaitable type tests', () => {
   test('ensure definite types.', () => {
     const targetAwaitable = Promise.resolve() as Promise<void> | void
     const result = ensureAwaitable(targetAwaitable)
-    assertType<Equals<Promise<void>, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<Promise<void>>()
   })
 
   test('ensure unknown types', () => {
     const targetUnknown = 'string' as unknown
     const result = ensureAwaitable(targetUnknown)
-    assertType<Equals<PromiseLike<unknown>, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<PromiseLike<unknown>>()
   })
 
   test('ensure union types', () => {
     const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
     const result = ensureAwaitable(targetUnion)
-    assertType<Equals<Promise<string | number>, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<Promise<string | number>>()
   })
 })
 
@@ -26,18 +25,18 @@ describe('ensureNotAwaitable type tests', () => {
   test('ensure definite types.', () => {
     const targetAwaitable = Promise.resolve() as Promise<void> | void
     const result = ensureNotAwaitable(targetAwaitable)
-    assertType<Equals<void, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<void>()
   })
 
   test('ensure unknown types', () => {
     const targetUnknown = 'string' as unknown
     const result = ensureNotAwaitable(targetUnknown)
-    assertType<Equals<unknown, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<unknown>()
   })
 
   test('ensure union types', () => {
     const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
     const result = ensureNotAwaitable(targetUnion)
-    assertType<Equals<string | number, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<string | number>()
   })
 })

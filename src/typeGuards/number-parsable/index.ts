@@ -11,7 +11,7 @@ import { isNumber } from '../number'
 
 export type NumberParsable = number | `${number}`
 
-type Parse<N extends NumberParsable> = N extends `${number}` ? number : N
+type Parse<N extends NumberParsable> = N extends `${infer R extends number}` ? R : N
 
 type Result = { parsed: number; result: boolean }
 
@@ -102,45 +102,48 @@ export const ensureNumberParsable: TypeEnsureOf<IsNumberParsable> = createEnsure
 export const fallbackNumberParsable: TypeFallbackOf<IsNumberParsable> =
   createFallback(isNumberParsable)
 
-/**
- * Coerces a value to number.
- * Throws a TypeAssertionError if the value is not number or number string.
- *
- * @param target The value to coerce.
- * @param message (optional) The error message to throw if the value is not number or number string.
- * @throws A TypeAssertionError if the value is not number or number string.
- * @returns The value as number.
- * @example
- * ```ts
- * const target = getTarget() // string | number
- * const result = coerceNumber(target)
- * // result is number
- * ```
- */
-export function coerceNumber<N extends NumberParsable>(
-  target: unknown | N,
+interface CoerceNumber {
+  /**
+   * Coerces a value to number.
+   * Throws a TypeAssertionError if the value is not number or number string.
+   *
+   * @param target The value to coerce.
+   * @param message (optional) The error message to throw if the value is not number or number string.
+   * @throws A TypeAssertionError if the value is not number or number string.
+   * @returns The value as number.
+   * @example
+   * ```ts
+   * const target = getTarget() // string | number
+   * const result = coerceNumber(target)
+   * // result is number
+   * ```
+   */
+  <N>(target: N, message?: TypeErrorMessage | string): unknown extends N
+    ? number
+    : Parse<Extract<N, NumberParsable>>
+
+  /**
+   * Coerces a value to number.
+   * Throws a TypeAssertionError if the value is not number or number string.
+   *
+   * @param target The value to coerce.
+   * @param message (optional) The error message to throw if the value is not number or number string.
+   * @throws A TypeAssertionError if the value is not number or number string.
+   * @returns The value as number.
+   * @example
+   * ```ts
+   * const target = getTarget() // string | number
+   * const result = coerceNumber(target)
+   * // result is number
+   * ```
+   */
+  (target: unknown, message?: TypeErrorMessage | string): number
+}
+
+export const coerceNumber: CoerceNumber = (
+  target: unknown,
   message?: TypeErrorMessage | string
-): Parse<N>
-
-/**
- * Coerces a value to number.
- *
- * @param target The value to coerce.
- * @param message (optional) The error message to throw if the value is not number or number string.
- * @throws A TypeAssertionError if the value is not number or number string.
- * @returns The value as number.
- * @example
- * ```ts
- * const result = coerceNumber('1')
- * // result is 1
- *
- * const result = coerceNumber('a')
- * // throws TypeAssertionError
- * ```
- */
-export function coerceNumber(target: unknown, message?: TypeErrorMessage | string): number
-
-export function coerceNumber(target: unknown, message?: TypeErrorMessage | string): number {
+): number => {
   const { parsed, result } = commonTest(target)
   if (result) {
     return parsed
@@ -150,44 +153,45 @@ export function coerceNumber(target: unknown, message?: TypeErrorMessage | strin
   throw new TypeAssertionError(m, target)
 }
 
-/**
- * Fixes a value to number.
- *
- * @param target The value to fix.
- * @param defaultValue The fallback value to return if the value is not number or number string.
- * @returns The value as number, the fallback value otherwise.
- * @example
- * ```ts
- * const result = fixNumber('1', 0)
- * // result is 1
- *
- * const result = fixNumber('a', 0)
- * // result is 0
- * ```
- */
-export function fixNumber<N extends NumberParsable, F extends number>(
-  target: unknown | N,
-  defaultValue: F
-): Parse<F> | N
+interface FixNumber {
+  /**
+   * Fixes a value to number.
+   *
+   * @param target The value to fix.
+   * @param defaultValue The fallback value to return if the value is not number or number string.
+   * @returns The value as number, the fallback value otherwise.
+   * @example
+   * ```ts
+   * const result = fixNumber('1', 0)
+   * // result is 1
+   *
+   * const result = fixNumber('a', 0)
+   * // result is 0
+   * ```
+   */
+  <N, F extends number>(target: N, defaultValue: F):
+    | (unknown extends N ? number : Parse<Extract<N, NumberParsable>>)
+    | F
 
-/**
- * Fixes a value to number.
- *
- * @param target The value to fix.
- * @param defaultValue The fallback value to return if the value is not number or number string.
- * @returns The value as number, the fallback value otherwise.
- * @example
- * ```ts
- * const result = fixNumber('1', 0)
- * // result is 1
- *
- * const result = fixNumber('a', 0)
- * // result is 0
- * ```
- */
-export function fixNumber(target: unknown, defaultValue: number): number
+  /**
+   * Fixes a value to number.
+   *
+   * @param target The value to fix.
+   * @param defaultValue The fallback value to return if the value is not number or number string.
+   * @returns The value as number, the fallback value otherwise.
+   * @example
+   * ```ts
+   * const result = fixNumber('1', 0)
+   * // result is 1
+   *
+   * const result = fixNumber('a', 0)
+   * // result is 0
+   * ```
+   */
+  (target: unknown, defaultValue: number): number
+}
 
-export function fixNumber(target: unknown, defaultValue: number): number {
+export const fixNumber: FixNumber = (target: unknown, defaultValue: number): number => {
   const { parsed, result } = commonTest(target)
   return result ? parsed : defaultValue
 }

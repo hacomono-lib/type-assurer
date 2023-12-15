@@ -1,41 +1,40 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { isString } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('isString type tests', () => {
   test('guard definite types', () => {
     const targetString = 'string' as string | object
     if (isString(targetString)) {
-      assertType<Equals<string, typeof targetString>>(true)
+      expectTypeOf(targetString).toEqualTypeOf<string>()
     } else {
-      assertType<Equals<object, typeof targetString>>(true)
+      expectTypeOf(targetString).toEqualTypeOf<object>()
     }
   })
 
   test('guard definite types 2', () => {
     const targetConstString = 'string' as 'string' | object
     if (isString(targetConstString)) {
-      assertType<Equals<'string', typeof targetConstString>>(true)
+      expectTypeOf(targetConstString).toEqualTypeOf<'string'>()
     } else {
-      assertType<Equals<object, typeof targetConstString>>(true)
+      expectTypeOf(targetConstString).toEqualTypeOf<object>()
     }
   })
 
   test('guard definite types 3', () => {
     const targetConstString = '3' as `${number}` | number
     if (isString(targetConstString)) {
-      assertType<Equals<`${number}`, typeof targetConstString>>(true)
+      expectTypeOf(targetConstString).toEqualTypeOf<`${number}`>()
     } else {
-      assertType<Equals<number, typeof targetConstString>>(true)
+      expectTypeOf(targetConstString).toEqualTypeOf<number>()
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isString(targetUnknown)) {
-      assertType<Equals<string, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<string>()
     } else {
-      assertType<Equals<unknown, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
     }
   })
 })

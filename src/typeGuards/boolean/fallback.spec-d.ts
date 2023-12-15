@@ -1,19 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { fallbackBoolean, fallbackNotBoolean } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('fallbackBoolean type tests', () => {
   test('guard definite types.', () => {
     const target = true as boolean | string
     const result = fallbackBoolean(target, true)
-    assertType<Equals<boolean, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<boolean>()
   })
 
   test('guard unknown types', () => {
     const target = 'string' as unknown
     const result = fallbackBoolean(target, true)
-    assertType<Equals<boolean, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<boolean>()
   })
 
   test('uncorrectable types', () => {
@@ -27,13 +26,13 @@ describe('fallbackNotBoolean type tests', () => {
   test('guard definite types.', () => {
     const target = true as boolean | string
     const result = fallbackNotBoolean(target, 'string')
-    assertType<Equals<string, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<string>()
   })
 
   test('guard unknown types', () => {
     const target = 'string' as unknown
     const result = fallbackNotBoolean(target, 'string')
-    assertType<Equals<unknown, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<unknown>()
   })
 
   test('uncorrectable types', () => {

@@ -1,8 +1,8 @@
-import type { JSON, JSONPrimitive } from '../../lib/types'
+import type { JSON } from '../../lib/types'
 
 export type JSONParsable = JSONStrPrimitive | JSONStrArray | JSONStrObject
 
-type JSONStrPrimitive = `"${JSONPrimitive}"`
+type JSONStrPrimitive = `${number}` | `${boolean}` | `${null}`
 
 // TODO: Can't express with current typescript
 type JSONStrArray = `[${string}]`

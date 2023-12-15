@@ -1,24 +1,23 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { isObject } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('isObject type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
     if (isObject(targetObject)) {
-      assertType<Equals<object, typeof targetObject>>(true)
+      expectTypeOf(targetObject).toEqualTypeOf<object>()
     } else {
       // object type includes Array, null, but isObject checkes truthy object.
-      assertType<Equals<string, typeof targetObject>>(true)
+      expectTypeOf(targetObject).toEqualTypeOf<string>()
     }
   })
 
   test('guard definite types 2', () => {
     const targetConstObject = {} as { foo?: string } | '1'
     if (isObject(targetConstObject)) {
-      assertType<Equals<{ foo?: string }, typeof targetConstObject>>(true)
+      expectTypeOf(targetConstObject).toEqualTypeOf<{ foo?: string }>()
     } else {
-      assertType<Equals<'1', typeof targetConstObject>>(true)
+      expectTypeOf(targetConstObject).toEqualTypeOf<'1'>()
     }
   })
 
@@ -33,23 +32,20 @@ describe('isObject type tests', () => {
       | (() => void)
       | undefined
     if (isObject(targetConstObject)) {
-      assertType<Equals<{ foo: string } | Date, typeof targetConstObject>>(true)
+      expectTypeOf(targetConstObject).toEqualTypeOf<{ foo: string } | Date>()
     } else {
-      assertType<
-        Equals<
-          null | undefined | unknown[] | string | (() => void) | typeof String,
-          typeof targetConstObject
-        >
-      >(true)
+      expectTypeOf(targetConstObject).toEqualTypeOf<
+        null | undefined | unknown[] | string | (() => void) | typeof String
+      >()
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isObject(targetUnknown)) {
-      assertType<Equals<Record<string, unknown>, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<Record<string, unknown>>()
     } else {
-      assertType<Equals<unknown, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
     }
   })
 })

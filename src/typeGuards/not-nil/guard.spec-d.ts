@@ -1,41 +1,40 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { isNotNil } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('isNotNil type tests', () => {
   test('guard definite types', () => {
     const targetNull = null as null | string
     if (isNotNil(targetNull)) {
-      assertType<Equals<string, typeof targetNull>>(true)
+      expectTypeOf(targetNull).toEqualTypeOf<string>()
     } else {
-      assertType<Equals<null, typeof targetNull>>(true)
+      expectTypeOf(targetNull).toEqualTypeOf<null>()
     }
   })
 
   test('guard definite types 2', () => {
     const targetUndef = undefined as undefined | string
     if (isNotNil(targetUndef)) {
-      assertType<Equals<string, typeof targetUndef>>(true)
+      expectTypeOf(targetUndef).toEqualTypeOf<string>()
     } else {
-      assertType<Equals<undefined, typeof targetUndef>>(true)
+      expectTypeOf(targetUndef).toEqualTypeOf<undefined>()
     }
   })
 
   test('guard definite types 3', () => {
     const targetConstString = 'string' as null | 'string'
     if (isNotNil(targetConstString)) {
-      assertType<Equals<'string', typeof targetConstString>>(true)
+      expectTypeOf(targetConstString).toEqualTypeOf<'string'>()
     } else {
-      assertType<Equals<null, typeof targetConstString>>(true)
+      expectTypeOf(targetConstString).toEqualTypeOf<null>()
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isNotNil(targetUnknown)) {
-      assertType<Equals<{}, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<{}>()
     } else {
-      assertType<Equals<unknown, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
     }
   })
 })

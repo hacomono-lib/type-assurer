@@ -1,23 +1,22 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { assertNumber } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('assertNumber type tests', () => {
   test('guard definite types', () => {
     const targetNumber = 1 as number | string
     assertNumber(targetNumber)
-    assertType<Equals<number, typeof targetNumber>>(true)
+    expectTypeOf(targetNumber).toEqualTypeOf<number>()
   })
 
   test('guard definite types 2', () => {
     const targetConstNumber = 1 as 1 | '1'
     assertNumber(targetConstNumber)
-    assertType<Equals<1, typeof targetConstNumber>>(true)
+    expectTypeOf(targetConstNumber).toEqualTypeOf<1>()
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 123 as unknown
     assertNumber(targetUnknown)
-    assertType<Equals<number, typeof targetUnknown>>(true)
+    expectTypeOf(targetUnknown).toEqualTypeOf<number>()
   })
 })

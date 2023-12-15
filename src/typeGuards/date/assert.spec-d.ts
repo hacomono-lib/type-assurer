@@ -1,18 +1,17 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { assertDate, assertNotDate } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('assertDate type tests', () => {
   test('guard definite types.', () => {
     const targetDate = new Date() as Date | string
     assertDate(targetDate)
-    assertType<Equals<Date, typeof targetDate>>(true)
+    expectTypeOf(targetDate).toEqualTypeOf<Date>()
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     assertDate(targetUnknown)
-    assertType<Equals<Date, typeof targetUnknown>>(true)
+    expectTypeOf(targetUnknown).toEqualTypeOf<Date>()
   })
 })
 
@@ -20,12 +19,12 @@ describe('assertNotDate type tests', () => {
   test('guard definite types.', () => {
     const targetDate = new Date() as Date | string
     assertNotDate(targetDate)
-    assertType<Equals<string, typeof targetDate>>(true)
+    expectTypeOf(targetDate).toEqualTypeOf<string>()
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     assertNotDate(targetUnknown)
-    assertType<Equals<unknown, typeof targetUnknown>>(true)
+    expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
   })
 })

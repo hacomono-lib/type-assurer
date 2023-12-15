@@ -1,35 +1,34 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { ensureString } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('ensureString type tests', () => {
   test('guard definite types', () => {
     const targetString = 'string' as string | object
     const result = ensureString(targetString)
-    assertType<Equals<string, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<string>()
   })
 
   test('guard definite types 2', () => {
     const targetConstString = 'string' as 'string' | object
     const result = ensureString(targetConstString)
-    assertType<Equals<'string', typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<'string'>()
   })
 
   test('guard definite types 3', () => {
     const targetConstString = '3' as `${number}` | number
     const result = ensureString(targetConstString)
-    assertType<Equals<`${number}`, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<`${number}`>()
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     const result = ensureString(targetUnknown)
-    assertType<Equals<string, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<string>()
   })
 
   test('guard unknown with type args', () => {
     const targetUnknown = 'string' as unknown
     const result = ensureString<'foo'>(targetUnknown)
-    assertType<Equals<'foo', typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<'foo'>()
   })
 })

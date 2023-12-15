@@ -1,23 +1,22 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { isBoolean, isNotBoolean } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('isBoolean type tests', () => {
   test('guard definite types.', () => {
     const targetBoolean = true as boolean | string
     if (isBoolean(targetBoolean)) {
-      assertType<Equals<boolean, typeof targetBoolean>>(true)
+      expectTypeOf(targetBoolean).toEqualTypeOf<boolean>()
     } else {
-      assertType<Equals<string, typeof targetBoolean>>(true)
+      expectTypeOf(targetBoolean).toEqualTypeOf<string>()
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isBoolean(targetUnknown)) {
-      assertType<Equals<boolean, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<boolean>()
     } else {
-      assertType<Equals<unknown, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
     }
   })
 })
@@ -26,18 +25,18 @@ describe('isNotBoolean type tests', () => {
   test('guard definite types.', () => {
     const targetBoolean = true as boolean | string
     if (isNotBoolean(targetBoolean)) {
-      assertType<Equals<string, typeof targetBoolean>>(true)
+      expectTypeOf(targetBoolean).toEqualTypeOf<string>()
     } else {
-      assertType<Equals<boolean, typeof targetBoolean>>(true)
+      expectTypeOf(targetBoolean).toEqualTypeOf<boolean>()
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     if (isNotBoolean(targetUnknown)) {
-      assertType<Equals<unknown, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
     } else {
-      assertType<Equals<boolean, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<boolean>()
     }
   })
 })

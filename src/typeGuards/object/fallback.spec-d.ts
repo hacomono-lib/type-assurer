@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { fallbackObject } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('fallbackObject type tests', () => {
   test('guard definite types', () => {
     const targetObject = {} as object | string
     const result = fallbackObject(targetObject, { foo: 'bar' })
-    assertType<Equals<object, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<object>()
   })
 
   test('guard definite types 2', () => {
     const targetConstObject = { foo: 'bar' } as { foo?: string } | '1'
-    assertType<{ foo?: string } | { bar: string }>(
-      fallbackObject(targetConstObject, { bar: 'bar' })
-    )
+    const result = fallbackObject(targetConstObject, { baz: 'qux' })
+    expectTypeOf(result).toEqualTypeOf<{ foo?: string } | { baz: string }>()
   })
 
   test('guard definite types 3', () => {
@@ -28,17 +26,17 @@ describe('fallbackObject type tests', () => {
       | undefined
       | typeof String
     const result = fallbackObject(targetConstObject, { foo: 'bar' })
-    assertType<Equals<{ foo?: string } | Date, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<{ foo?: string } | Date>()
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     const result = fallbackObject(targetUnknown, { foo: 'bar' })
-    assertType<Equals<Record<string, unknown>, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<Record<string, unknown>>()
   })
 
   test('uncorrect fallback value', () => {
     const result = fallbackObject('foo', 'bar')
-    assertType<Equals<never, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<never>()
   })
 })

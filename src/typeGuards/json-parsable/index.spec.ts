@@ -5,7 +5,7 @@ import {
   fallbackJSONParsable,
   isJSONParsable,
   coerceJSON,
-  fixJson
+  fixJSON
 } from '.'
 import {
   allTypes,
@@ -35,6 +35,8 @@ const expected = [
   ValueType.BooleanParsableFalse
 ]
 
+const expectedCoerceType = [ValueType.True, ValueType.False, ValueType.Null]
+
 describe('isJSONParsable', () => {
   testGuard(isJSONParsable, expected, { parsableString: true })
 })
@@ -54,8 +56,12 @@ describe('fallbackJSONParsable', () => {
   })
 })
 
+const notExpected = allTypes().filter(
+  (type) => !expected.includes(type) && !expectedCoerceType.includes(type)
+)
+
 describe('coerceJson', () => {
-  test('coerces JSON', () => {
+  test('coerces string to JSON', () => {
     expect(coerceJSON('{"foo":"bar"}')).toStrictEqual({ foo: 'bar' })
     expect(coerceJSON('123')).toBe(123)
     expect(coerceJSON('true')).toBe(true)
@@ -63,25 +69,37 @@ describe('coerceJson', () => {
     expect(coerceJSON('null')).toBe(null)
   })
 
-  const notExpected = allTypes().filter((type) => !expected.includes(type))
+  test('coerces object or primitive to JSON', () => {
+    expect(coerceJSON({ foo: 'bar' })).toStrictEqual({ foo: 'bar' })
+    expect(coerceJSON(123)).toBe(123)
+    expect(coerceJSON(true)).toBe(true)
+    expect(coerceJSON(false)).toBe(false)
+    expect(coerceJSON(null)).toBe(null)
+  })
 
-  test.each(notExpected)('throw value for %s', (type) => {
+  test.each(notExpected)('test value type %s: should results false', (type) => {
     expect(() => coerceJSON(type)).toThrow()
   })
 })
 
 describe('fixJson', () => {
   test('fixes JSON', () => {
-    expect(fixJson('{"foo":"bar"}', {})).toStrictEqual({ foo: 'bar' })
-    expect(fixJson('123', {})).toBe(123)
-    expect(fixJson('true', {})).toBe(true)
-    expect(fixJson('false', {})).toBe(false)
-    expect(fixJson('null', {})).toBe(null)
+    expect(fixJSON('{"foo":"bar"}', {})).toStrictEqual({ foo: 'bar' })
+    expect(fixJSON('123', {})).toBe(123)
+    expect(fixJSON('true', {})).toBe(true)
+    expect(fixJSON('false', {})).toBe(false)
+    expect(fixJSON('null', {})).toBe(null)
   })
 
-  const notExpected = allTypes().filter((type) => !expected.includes(type))
+  test('fixes object or primitive', () => {
+    expect(fixJSON({ foo: 'bar' }, {})).toStrictEqual({ foo: 'bar' })
+    expect(fixJSON(123, {})).toBe(123)
+    expect(fixJSON(true, {})).toBe(true)
+    expect(fixJSON(false, {})).toBe(false)
+    expect(fixJSON(null, {})).toBe(null)
+  })
 
-  test.each(notExpected)('returns fallback value for %s', (type) => {
-    expect(fixJson(type, {})).toStrictEqual({})
+  test.each(notExpected)('test value type %s: should results false', (type) => {
+    expect(fixJSON(type, {})).toStrictEqual({})
   })
 })

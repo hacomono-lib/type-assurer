@@ -1,14 +1,13 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { isSymbol } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('isSymbol type tests', () => {
   test('guard definite types', () => {
     const targetSymbol = Symbol() as symbol | string
     if (isSymbol(targetSymbol)) {
-      assertType<Equals<symbol, typeof targetSymbol>>(true)
+      expectTypeOf(targetSymbol).toEqualTypeOf<symbol>()
     } else {
-      assertType<Equals<string, typeof targetSymbol>>(true)
+      expectTypeOf(targetSymbol).toEqualTypeOf<string>()
     }
   })
 
@@ -19,18 +18,18 @@ describe('isSymbol type tests', () => {
     type UniqueSymbol2 = typeof uniqueSymbol2
     const targetSymbol = uniqueSymbol as UniqueSymbol | UniqueSymbol2 | string
     if (isSymbol(targetSymbol)) {
-      assertType<Equals<UniqueSymbol | UniqueSymbol2, typeof targetSymbol>>(true)
+      expectTypeOf(targetSymbol).toEqualTypeOf<UniqueSymbol | UniqueSymbol2>()
     } else {
-      assertType<Equals<string, typeof targetSymbol>>(true)
+      expectTypeOf(targetSymbol).toEqualTypeOf<string>()
     }
   })
 
   test('guard unknown types', () => {
     const targetUnknown = Symbol() as unknown
     if (isSymbol(targetUnknown)) {
-      assertType<Equals<symbol, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<symbol>()
     } else {
-      assertType<Equals<unknown, typeof targetUnknown>>(true)
+      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
     }
   })
 })

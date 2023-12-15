@@ -1,16 +1,18 @@
+export type { ParseJSON, JSONParsable } from './type'
+
 import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
 import type {
+  JSON,
   TypeAssertOf,
   TypeEnsureOf,
   TypeErrorMessage,
   TypeFallbackOf,
   TypeGuard
-} from '../../lib/types/type-guards'
+} from '../../lib/types'
 import { TypeAssertionError, errorMessage } from '../../lib/error'
 
 import { isString } from '../string'
 import { isJSON, type JSONifiable, type JSONify } from '../json'
-import { JSON } from '../../lib/types'
 
 import type { JSONParsable, ParseJSON } from './type'
 

@@ -9,7 +9,7 @@ import type {
   TypeFallback,
   TypeGuard,
   Not
-} from '../type'
+} from '../types'
 import { ValueType } from './type'
 import { type TestOption, type PickTypesOption, allTypes, getGenerator, testTypes } from './value'
 

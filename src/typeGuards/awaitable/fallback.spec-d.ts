@@ -1,19 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { fallbackAwaitable, fallbackNotAwaitable } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('fallbackAwaitable type tests', () => {
   test('fallback definite types.', () => {
     const targetAwaitable = Promise.resolve('return') as Promise<string> | string
     const result = fallbackAwaitable(targetAwaitable, Promise.resolve('fallback'))
-    assertType<Equals<Promise<string>, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<Promise<string>>()
   })
 
   test('fallback types as union', () => {
     const targetAwaitable = Promise.resolve('return') as Promise<string> | string
     const result = fallbackAwaitable(targetAwaitable, Promise.resolve(3))
-    assertType<Equals<Promise<string | number>, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<Promise<string | number>>()
   })
 
   test('fallback union types', () => {
@@ -33,19 +32,19 @@ describe('fallbackNotAwaitable type tests', () => {
   test('fallback definite types.', () => {
     const targetAwaitable = Promise.resolve('return') as Promise<string> | string
     const result = fallbackNotAwaitable(targetAwaitable, 'fallback')
-    assertType<Equals<string, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<string>()
   })
 
   test('fallback types as union', () => {
     const targetAwaitable = Promise.resolve('return') as Promise<string> | string
     const result = fallbackNotAwaitable(targetAwaitable, 3)
-    assertType<Equals<string | number, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<string | number>()
   })
 
   test('fallback union types', () => {
     const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
     const result = fallbackNotAwaitable(targetUnion, 'fallback')
-    assertType<Equals<string | number, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<string | number>()
   })
 
   test('uncorrectable types', () => {

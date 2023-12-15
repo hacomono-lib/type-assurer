@@ -1,14 +1,14 @@
 import { JSON } from '../../lib/types'
 import type { JSONPrimitive } from '../../lib/types'
 
-export type JSONifiable = JSONPrimitive | JSONArray | JSONifiableObject
+export type JSONifiable = JSONPrimitive | JSONifiableArray | JSONifiableObject
 
-type JSONArray = JSONifiable[] | readonly JSONifiable[]
+export type JSONifiableArray = JSONifiable[] | readonly JSONifiable[]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type NotJSONifiable = Exclude<any, JSONifiable>
 
-type JSONifiableObject =
+export type JSONifiableObject =
   | ({ [Key in string]: JSONifiable } & { [Key in string]?: JSONifiable | undefined })
   | { toJSON: () => JSONifiable }
 

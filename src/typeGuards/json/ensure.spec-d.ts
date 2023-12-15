@@ -1,24 +1,23 @@
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { ensureJSON } from '.'
-import type { JSON } from './type'
-import type { Equals } from '../../lib/test/type-assert'
+import type { JSONifiable } from './type'
 
 describe('ensureJSON type tests', () => {
   test('ensure definite types.', () => {
     const targetJSON = { foo: 'bar' }
     const result = ensureJSON(targetJSON)
-    assertType<Equals<{ foo: string }, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<{ foo: string }>()
   })
 
   test('ensure unknown types', () => {
     const targetUnknown = { foo: 'bar' } as unknown
     const result = ensureJSON(targetUnknown)
-    assertType<Equals<JSON, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<JSONifiable>()
   })
 
   test('ensure union types', () => {
-    const targetUnion = { foo: 'bar' } as JSON | string | number
+    const targetUnion = { foo: 'bar' } as JSONifiable | string | number
     const result = ensureJSON(targetUnion)
-    assertType<Equals<JSON, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<JSONifiable>()
   })
 })

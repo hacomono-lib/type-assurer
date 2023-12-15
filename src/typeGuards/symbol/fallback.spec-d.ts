@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { test, describe, assertType } from 'vitest'
+import { test, describe, expectTypeOf } from 'vitest'
 import { fallbackSymbol } from '.'
-import type { Equals } from '../../lib/test'
 
 describe('fallbackSymbol type tests', () => {
   test('guard definite types', () => {
     const targetSymbol = Symbol() as symbol | string
     const result = fallbackSymbol(targetSymbol, Symbol('fallback'))
-    assertType<Equals<symbol, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<symbol>()
   })
 
   test('guard unique symbol union tests', () => {
@@ -17,13 +16,13 @@ describe('fallbackSymbol type tests', () => {
     type FallbackSymbol = typeof fallback
     const targetSymbol = uniqueSymbol as UniqueSymbol | string
     const result = fallbackSymbol(targetSymbol, fallback)
-    assertType<Equals<UniqueSymbol | FallbackSymbol, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<UniqueSymbol | FallbackSymbol>()
   })
 
   test('guard unknown types', () => {
     const targetUnknown = 'string' as unknown
     const result = fallbackSymbol(targetUnknown, Symbol('fallback'))
-    assertType<Equals<symbol, typeof result>>(true)
+    expectTypeOf(result).toEqualTypeOf<symbol>()
   })
 
   test('unknown fallback type', () => {
