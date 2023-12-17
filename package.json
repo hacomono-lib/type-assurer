@@ -41,7 +41,7 @@
     "@typescript-eslint/parser": "^6.11.0",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-import": "^2.29.1",
     "lodash": "^4.17.21",
     "prettier": "^3.1.1",
     "tsup": "^8.0.1",
