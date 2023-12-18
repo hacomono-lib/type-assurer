@@ -12,9 +12,9 @@ import type {
 import { TypeAssertionError, errorMessage } from '../../lib/error'
 
 import { isString } from '../string'
-import { isJSON, type JSONifiable, type JSONify } from '../json'
+import { isJSON, type JSONifiable, type JSONify, type NotJSONifiable } from '../json'
 
-import type { JSONParsable, ParseJSON } from './type'
+import type { JSONParsable, ParseJSON, NotJSONParsable } from './type'
 
 type Result = { parsed: JSON; result: boolean; cause?: unknown }
 
@@ -177,7 +177,13 @@ interface CoerceJson {
    * // result2 is { foo: 'bar' }
    * ```
    */
-  <T extends JSONParsable>(target: T, message?: TypeErrorMessage): ParseJSON<T>
+  <T>(target: T, message?: TypeErrorMessage): unknown extends T
+    ? JSON
+    : T extends JSONParsable
+    ? ParseJSON<T>
+    : T extends JSONifiable
+    ? JSONify<T>
+    : JSON
 
   /**
    * If the value specified in the argument is a string, it parses it to JSON.
@@ -200,7 +206,7 @@ interface CoerceJson {
    * // result2 is { foo: 'bar' }
    * ```
    */
-  <T extends JSONifiable>(target: T, message?: TypeErrorMessage): JSONify<T>
+  // <T extends JSONifiable>(target: T | NotJSONifiable, message?: TypeErrorMessage): JSONify<T>
 
   /**
    * If the value specified in the argument is a string, it parses it to JSON.

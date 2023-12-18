@@ -16,4 +16,4 @@ export type JSONGuard<T> = T extends JSONifiable ? T : unknown extends T ? JSONi
 
 // FIXME: Can't express with current typescript
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type JSONify<T extends JSONifiable> = JSON
+export type JSONify<T extends JSONifiable> = JSONGuard<T>
