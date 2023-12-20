@@ -1,4 +1,4 @@
-import type { TypeGuard } from '../../lib/types'
+import type { TypeGuard } from '../../lib'
 
 export type Nil = null | undefined
 

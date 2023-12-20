@@ -1,4 +1,5 @@
-import { createAssertion, createEnsure, createFallback, not } from '../../lib/factory'
+import { createAssertion, createEnsure, createFallback, not } from '../../lib'
+import { errorMessage } from '../../lib'
 import {
   InvertedTypeAssertOf,
   InvertedTypeEnsureOf,
@@ -8,7 +9,6 @@ import {
   TypeFallbackOf,
   TypeGuard,
 } from '../../lib/types'
-import { errorMessage } from '../../lib/error'
 
 /**
  * Checks if a value is an array.

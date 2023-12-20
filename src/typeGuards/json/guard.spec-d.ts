@@ -1,46 +1,44 @@
-/* eslint-disable max-lines-per-function */
-import { test, describe, expectTypeOf } from 'vitest'
-import type { JSONifiable, JSONifiableObject, JSONifiableArray } from './type'
+import { describe, expectTypeOf, test } from 'vitest'
 import { isJSON } from '.'
+import type { JSONifiable, JSONifiableArray, JSONifiableObject } from './type'
 
 describe('isJSON type tests', () => {
   test('guard definite types', () => {
-    const targetObject = {} as object | string
-    if (isJSON(targetObject)) {
-      expectTypeOf(targetObject).toEqualTypeOf<JSONifiableObject | JSONifiableArray | string>()
+    const target = {} as object | string
+    if (isJSON(target)) {
+      expectTypeOf(target).toEqualTypeOf<JSONifiableObject | JSONifiableArray | string>()
     } else {
-      expectTypeOf(targetObject).toEqualTypeOf<object>()
+      expectTypeOf(target).toEqualTypeOf<object>()
     }
   })
 
   test('guard definite types 2', () => {
-    const targetConstObject = {} as { foo?: string } | '1'
-    if (isJSON(targetConstObject)) {
-      expectTypeOf(targetConstObject).toEqualTypeOf<{ foo?: string } | '1'>()
+    const target = {} as { foo?: string } | '1'
+    if (isJSON(target)) {
+      expectTypeOf(target).toEqualTypeOf<{ foo?: string } | '1'>()
     } else {
-      expectTypeOf(targetConstObject).toEqualTypeOf<never>()
+      expectTypeOf(target).toEqualTypeOf<never>()
     }
   })
 
   test('guard definite types 3', () => {
-    const targetConstObject = {} as { foo?: string } | Date | unknown[] | null | (() => void) | undefined
-    if (isJSON(targetConstObject)) {
-      expectTypeOf(targetConstObject).toEqualTypeOf<{ foo?: string } | Date | JSONifiable[] | null>()
+    const target = {} as { foo?: string } | Date | unknown[] | null | (() => void) | undefined
+    if (isJSON(target)) {
+      expectTypeOf(target).toEqualTypeOf<{ foo?: string } | Date | JSONifiable[] | null>()
     } else {
-      expectTypeOf(targetConstObject).toEqualTypeOf<undefined | (() => void) | unknown[]>()
+      expectTypeOf(target).toEqualTypeOf<undefined | (() => void) | unknown[]>()
     }
   })
 
   test('guard definite types 4', () => {
     class Foo {
-      bar: string = 'bar'
+      bar = 'bar'
       baz(): string {
         return 'baz'
       }
     }
     const target = new Foo()
     if (isJSON(target)) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore FIXME: This is a bug
       expectTypeOf(target).toEqualTypeOf<never>()
     } else {
@@ -49,11 +47,11 @@ describe('isJSON type tests', () => {
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    if (isJSON(targetUnknown)) {
-      expectTypeOf(targetUnknown).toEqualTypeOf<JSONifiable>()
+    const target = 'string' as unknown
+    if (isJSON(target)) {
+      expectTypeOf(target).toEqualTypeOf<JSONifiable>()
     } else {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+      expectTypeOf(target).toEqualTypeOf<unknown>()
     }
   })
 })

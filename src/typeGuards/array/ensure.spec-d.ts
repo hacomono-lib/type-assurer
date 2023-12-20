@@ -1,28 +1,28 @@
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { ensureArray, ensureNotArray } from '.'
 
 describe('ensureArray type tests', () => {
   test('ensure definite types.', () => {
-    const targetArray = [] as string[] | string
-    const result = ensureArray(targetArray)
+    const target = [] as string[] | string
+    const result = ensureArray(target)
     expectTypeOf(result).toEqualTypeOf<string[]>()
   })
 
   test('ensure unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    const result = ensureArray(targetUnknown)
+    const target = 'string' as unknown
+    const result = ensureArray(target)
     expectTypeOf(result).toEqualTypeOf<unknown[]>()
   })
 
   test('ensure union types', () => {
-    const targetUnion = [] as string[] | number[] | string
-    const result = ensureArray(targetUnion)
+    const target = [] as string[] | number[] | string
+    const result = ensureArray(target)
     expectTypeOf(result).toEqualTypeOf<string[] | number[]>()
   })
 
   test('ensure union types 2', () => {
-    const targetUnion2 = [] as Array<string | number> | string | number
-    const result = ensureArray(targetUnion2)
+    const target = [] as Array<string | number> | string | number
+    const result = ensureArray(target)
     expectTypeOf(result).toEqualTypeOf<Array<string | number>>()
   })
 
@@ -35,26 +35,26 @@ describe('ensureArray type tests', () => {
 
 describe('ensureNotArray type tests', () => {
   test('ensure definite types.', () => {
-    const targetArray = [] as string[] | string
-    const result = ensureNotArray(targetArray)
+    const target = [] as string[] | string
+    const result = ensureNotArray(target)
     expectTypeOf(result).toEqualTypeOf<string>()
   })
 
   test('ensure unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    const result = ensureNotArray(targetUnknown)
+    const target = 'string' as unknown
+    const result = ensureNotArray(target)
     expectTypeOf(result).toEqualTypeOf<unknown>()
   })
 
   test('ensure union types', () => {
-    const targetUnion = [] as string[] | number[] | string
-    const result = ensureNotArray(targetUnion)
+    const target = [] as string[] | number[] | string
+    const result = ensureNotArray(target)
     expectTypeOf(result).toEqualTypeOf<string>()
   })
 
   test('ensure union types 2', () => {
-    const targetUnion2 = [] as Array<string | number> | string | number
-    const result = ensureNotArray(targetUnion2)
+    const target = [] as Array<string | number> | string | number
+    const result = ensureNotArray(target)
     expectTypeOf(result).toEqualTypeOf<string | number>()
   })
 

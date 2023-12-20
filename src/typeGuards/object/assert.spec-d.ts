@@ -1,21 +1,21 @@
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { assertObject } from '.'
 
 describe('assertObject type tests', () => {
   test('guard definite types', () => {
-    const targetObject = {} as object | string
-    assertObject(targetObject)
-    expectTypeOf(targetObject).toEqualTypeOf<object>()
+    const target = {} as object | string
+    assertObject(target)
+    expectTypeOf(target).toEqualTypeOf<object>()
   })
 
   test('guard definite types 2', () => {
-    const targetConstObject = {} as { foo?: string } | '1'
-    assertObject(targetConstObject)
-    expectTypeOf(targetConstObject).toEqualTypeOf<{ foo?: string }>()
+    const target = {} as { foo?: string } | '1'
+    assertObject(target)
+    expectTypeOf(target).toEqualTypeOf<{ foo?: string }>()
   })
 
   test('guard definite types 3', () => {
-    const targetConstObject = { foo: 'bar' } as
+    const target = { foo: 'bar' } as
       | { foo?: string }
       | Date
       | unknown[]
@@ -24,13 +24,13 @@ describe('assertObject type tests', () => {
       | (() => void)
       | undefined
       | typeof String
-    assertObject(targetConstObject)
-    expectTypeOf(targetConstObject).toEqualTypeOf<{ foo?: string } | Date>()
+    assertObject(target)
+    expectTypeOf(target).toEqualTypeOf<{ foo?: string } | Date>()
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = { foo: 'bar' } as unknown
-    assertObject(targetUnknown)
-    expectTypeOf(targetUnknown).toEqualTypeOf<Record<string, unknown>>()
+    const target = { foo: 'bar' } as unknown
+    assertObject(target)
+    expectTypeOf(target).toEqualTypeOf<Record<string, unknown>>()
   })
 })

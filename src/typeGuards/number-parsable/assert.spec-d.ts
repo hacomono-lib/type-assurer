@@ -1,22 +1,22 @@
-import { test, describe, expectTypeOf } from 'vitest'
-import { assertNumberParsable, type NumberParsable } from '.'
+import { describe, expectTypeOf, test } from 'vitest'
+import { type NumberParsable, assertNumberParsable } from '.'
 
 describe('assertNumberParsable type tests', () => {
   test('assert definite types.', () => {
-    const targetNumberParsable = '1' as string | number
-    assertNumberParsable(targetNumberParsable)
-    expectTypeOf(targetNumberParsable).toEqualTypeOf<NumberParsable>()
+    const target = '1' as string | number
+    assertNumberParsable(target)
+    expectTypeOf(target).toEqualTypeOf<NumberParsable>()
   })
 
   test('assert unknown types', () => {
-    const targetUnknown = '3' as unknown
-    assertNumberParsable(targetUnknown)
-    expectTypeOf(targetUnknown).toEqualTypeOf<NumberParsable>()
+    const target = '3' as unknown
+    assertNumberParsable(target)
+    expectTypeOf(target).toEqualTypeOf<NumberParsable>()
   })
 
   test('assert union types', () => {
-    const targetUnion = '1' as '1' | 1 | 'a' | boolean
-    assertNumberParsable(targetUnion)
-    expectTypeOf(targetUnion).toEqualTypeOf<1 | '1'>()
+    const target = '1' as '1' | 1 | 'a' | boolean
+    assertNumberParsable(target)
+    expectTypeOf(target).toEqualTypeOf<1 | '1'>()
   })
 })

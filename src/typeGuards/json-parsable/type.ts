@@ -1,24 +1,27 @@
-import type { JSON } from '../../lib/types'
+import type { JSONValue } from '../../lib'
 
-export type JSONParsable = JSONStrPrimitive | JSONStrArray | JSONStrObject
+// biome-ignore lint/style/useNamingConvention: <explanation>
+export type JSONParsable = JSONStrPrimitive | JSONStrArray | JsonStrObject
 
+// biome-ignore lint/style/useNamingConvention: <explanation>
 type JSONStrPrimitive = `${number}` | `${boolean}` | `${null}`
 
 // TODO: Can't express with current typescript
+// biome-ignore lint/style/useNamingConvention: <explanation>
 type JSONStrArray = `[${string}]`
 
 // TODO: Can't express with current typescript
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type ParseJSONStrArray<_T extends JSONStrArray> = JSON[]
+// biome-ignore lint/style/useNamingConvention: <explanation>
+type ParseJSONStrArray<_T extends JSONStrArray> = JSONValue[]
 
 // TODO: Can't express with current typescript
-type JSONStrObject = `{${string}}`
+type JsonStrObject = `{${string}}`
 
 // TODO: Can't express with current typescript
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-type ParseJSONStrObject<_T extends JSONStrObject> = JSON
+// biome-ignore lint/style/useNamingConvention: <explanation>
+type ParseJSONStrObject<_T extends JsonStrObject> = JSONValue
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export type ParseJSON<T extends JSONParsable> = T extends `${infer U extends number | boolean | null}`
   ? U
   : T extends `{${string}}`
@@ -27,5 +30,6 @@ export type ParseJSON<T extends JSONParsable> = T extends `${infer U extends num
       ? ParseJSONStrArray<T>
       : never
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/style/useNamingConvention: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type NotJSONParsable = Exclude<any, JSONParsable>

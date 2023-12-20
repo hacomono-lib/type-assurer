@@ -1,30 +1,30 @@
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { assertBoolean, assertNotBoolean } from '.'
 
 describe('assertBoolean type tests', () => {
   test('guard definite types.', () => {
-    const targetBoolean = true as boolean | string
-    assertBoolean(targetBoolean)
-    expectTypeOf(targetBoolean).toEqualTypeOf<boolean>()
+    const target = true as boolean | string
+    assertBoolean(target)
+    expectTypeOf(target).toEqualTypeOf<boolean>()
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    assertBoolean(targetUnknown)
-    expectTypeOf(targetUnknown).toEqualTypeOf<boolean>()
+    const target = 'string' as unknown
+    assertBoolean(target)
+    expectTypeOf(target).toEqualTypeOf<boolean>()
   })
 })
 
 describe('assertNotBoolean type tests', () => {
   test('guard definite types.', () => {
-    const targetBoolean = true as boolean | string
-    assertNotBoolean(targetBoolean)
-    expectTypeOf(targetBoolean).toEqualTypeOf<string>()
+    const target = true as boolean | string
+    assertNotBoolean(target)
+    expectTypeOf(target).toEqualTypeOf<string>()
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    assertNotBoolean(targetUnknown)
-    expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+    const target = 'string' as unknown
+    assertNotBoolean(target)
+    expectTypeOf(target).toEqualTypeOf<unknown>()
   })
 })

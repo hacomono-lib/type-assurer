@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { fallbackFunction } from '.'
 
 describe('fallbackFunction type tests', () => {
   test('fallback definite types', () => {
-    const targetFunction = (() => 'foo') as Function | string
-    const result = fallbackFunction(targetFunction, () => 'bar')
+    const target = (() => 'foo') as Function | string
+    const result = fallbackFunction(target, () => 'bar')
     expectTypeOf(result).toEqualTypeOf<Function | (() => 'bar')>()
   })
 
   test('fallback definite types 2', () => {
-    const targetConstFunction = (() => 'foo') as (() => 'foo') | '1'
-    const result = fallbackFunction(targetConstFunction, () => 'bar')
+    const target = (() => 'foo') as (() => 'foo') | '1'
+    const result = fallbackFunction(target, () => 'bar')
     expectTypeOf(result).toEqualTypeOf<(() => 'foo') | (() => 'bar')>()
   })
 
@@ -25,8 +25,8 @@ describe('fallbackFunction type tests', () => {
   })
 
   test('fallback unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    const result = fallbackFunction(targetUnknown, () => {})
+    const target = 'string' as unknown
+    const result = fallbackFunction(target, () => {})
     expectTypeOf(result).toEqualTypeOf<Function>()
   })
 })

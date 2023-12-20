@@ -1,36 +1,36 @@
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { isArray, isNotArray } from '.'
 
 describe('isArray type tests', () => {
   test('guard definite types.', () => {
-    const targetArray = [] as string[] | string
-    if (isArray(targetArray)) {
-      expectTypeOf(targetArray).toEqualTypeOf<string[]>()
+    const target = [] as string[] | string
+    if (isArray(target)) {
+      expectTypeOf(target).toEqualTypeOf<string[]>()
     } else {
-      expectTypeOf(targetArray).toEqualTypeOf<string>()
+      expectTypeOf(target).toEqualTypeOf<string>()
     }
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    if (isArray(targetUnknown)) {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown[]>()
+    const target = 'string' as unknown
+    if (isArray(target)) {
+      expectTypeOf(target).toEqualTypeOf<unknown[]>()
     } else {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+      expectTypeOf(target).toEqualTypeOf<unknown>()
     }
   })
 
   test('guard union types', () => {
-    const targetUnion = [] as string[] | number[] | string
-    if (isArray(targetUnion)) {
-      expectTypeOf(targetUnion).toEqualTypeOf<string[] | number[]>()
+    const target = [] as string[] | number[] | string
+    if (isArray(target)) {
+      expectTypeOf(target).toEqualTypeOf<string[] | number[]>()
     }
   })
 
   test('guard union types 2', () => {
-    const targetUnion2 = [] as Array<string | number> | string | number
-    if (isArray(targetUnion2)) {
-      expectTypeOf(targetUnion2).toEqualTypeOf<Array<string | number>>()
+    const target = [] as Array<string | number> | string | number
+    if (isArray(target)) {
+      expectTypeOf(target).toEqualTypeOf<Array<string | number>>()
     }
   })
 
@@ -44,34 +44,34 @@ describe('isArray type tests', () => {
 
 describe('isNotArray type tests', () => {
   test('guard definite types.', () => {
-    const targetArray = [] as string[] | string
-    if (isNotArray(targetArray)) {
-      expectTypeOf(targetArray).toEqualTypeOf<string>()
+    const target = [] as string[] | string
+    if (isNotArray(target)) {
+      expectTypeOf(target).toEqualTypeOf<string>()
     } else {
-      expectTypeOf(targetArray).toEqualTypeOf<string[]>()
+      expectTypeOf(target).toEqualTypeOf<string[]>()
     }
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    if (isNotArray(targetUnknown)) {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+    const target = 'string' as unknown
+    if (isNotArray(target)) {
+      expectTypeOf(target).toEqualTypeOf<unknown>()
     } else {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown[]>()
+      expectTypeOf(target).toEqualTypeOf<unknown[]>()
     }
   })
 
   test('guard union types', () => {
-    const targetUnion = [] as string[] | number[] | string
-    if (isNotArray(targetUnion)) {
-      expectTypeOf(targetUnion).toEqualTypeOf<string>()
+    const target = [] as string[] | number[] | string
+    if (isNotArray(target)) {
+      expectTypeOf(target).toEqualTypeOf<string>()
     }
   })
 
   test('guard union types 2', () => {
-    const targetUnion2 = [] as Array<string | number> | string | number
-    if (isNotArray(targetUnion2)) {
-      expectTypeOf(targetUnion2).toEqualTypeOf<string | number>()
+    const target = [] as Array<string | number> | string | number
+    if (isNotArray(target)) {
+      expectTypeOf(target).toEqualTypeOf<string | number>()
     }
   })
 

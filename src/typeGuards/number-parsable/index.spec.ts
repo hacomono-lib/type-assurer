@@ -1,14 +1,14 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import {
   assertNumberParsable,
+  coerceNumber,
   ensureNumberParsable,
   fallbackNumberParsable,
-  isNumberParsable,
-  coerceNumber,
   fixNumber,
+  isNumberParsable,
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard, testTypes, getGenerator, ValueType } from '../../lib/test'
-import { TypeAssertionError } from '../../lib/error'
+import { TypeAssertionError } from '../../lib'
+import { ValueType, getGenerator, testAssert, testEnsure, testFallback, testGuard, testTypes } from '../../lib-test'
 
 const expected = [
   ValueType.True,
@@ -81,9 +81,9 @@ describe('coerceNumber', () => {
     expect(coerceNumber('-Infinity')).toBe(-Infinity)
   })
 
-  const targetValues = testTypes(expected).filter((type) => !expected.includes(type))
+  const target = testTypes(expected).filter((type) => !expected.includes(type))
 
-  it.each(targetValues)('should throw error when argument is %s', (type) => {
+  it.each(target)('should throw error when argument is %s', (type) => {
     const value = getGenerator(type)()
     expect(() => coerceNumber(value)).toThrow(TypeAssertionError)
   })
@@ -109,9 +109,9 @@ describe('fixNumber', () => {
     expect(fixNumber('-Infinity', NaN)).toBe(-Infinity)
   })
 
-  const targetValues = testTypes(expected).filter((type) => !expected.includes(type))
+  const target = testTypes(expected).filter((type) => !expected.includes(type))
 
-  it.each(targetValues)('should return fallback value when argument is %s', (type) => {
+  it.each(target)('should return fallback value when argument is %s', (type) => {
     const value = getGenerator(type)()
     expect(fixNumber(value, NaN)).toBe(NaN)
     expect(fixNumber(value, 123)).toBe(123)

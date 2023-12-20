@@ -1,6 +1,9 @@
 export class TypeAssertionError extends Error {
-  constructor(message: string, public readonly actualData: unknown, opt?: ErrorOptions) {
+  public readonly actualData: unknown
+
+  constructor(message: string, _actualData: unknown, opt?: ErrorOptions) {
     super(message, opt)
+    this.actualData = _actualData
     this.name = 'TypeAssertionError'
   }
 }

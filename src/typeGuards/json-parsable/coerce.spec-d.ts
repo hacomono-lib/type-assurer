@@ -1,6 +1,6 @@
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { coerceJSON } from '.'
-import type { JSON } from '../../lib/types'
+import type { JSONValue } from '../../lib'
 
 // eslint-disable-next-line max-lines-per-function
 describe('coerceJSON type tests', () => {
@@ -9,13 +9,13 @@ describe('coerceJSON type tests', () => {
     test('coerce definite types', () => {
       const target = `{ "foo": "bar" }` as object | string
       const result = coerceJSON(target)
-      expectTypeOf(result).toEqualTypeOf<JSON>()
+      expectTypeOf(result).toEqualTypeOf<JSONValue>()
     })
 
     test('coerce definite types 2', () => {
       const target = `{ "foo": "bar" }` as `{ "foo": "bar" }` | { foo: string }
       const result = coerceJSON(target)
-      expectTypeOf(result).toEqualTypeOf<JSON>()
+      expectTypeOf(result).toEqualTypeOf<JSONValue>()
     })
 
     test('coerce definite types 3', () => {
@@ -48,13 +48,13 @@ describe('coerceJSON type tests', () => {
       test('coerce uncategorized types', () => {
         const target = { foo: 'bar' } as { foo: string } | `{ "baz": "qux" }`
         const result = coerceJSON(target)
-        expectTypeOf(result).toEqualTypeOf<JSON>()
+        expectTypeOf(result).toEqualTypeOf<JSONValue>()
       })
 
       test('coerce unknown types', () => {
         const target = '{ "foo": "bar" }' as unknown
         const result = coerceJSON(target)
-        expectTypeOf(result).toEqualTypeOf<JSON>()
+        expectTypeOf(result).toEqualTypeOf<JSONValue>()
       })
     })
   })

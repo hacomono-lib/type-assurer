@@ -1,6 +1,15 @@
-import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type { TypeAssertOf, TypeEnsureOf, TypeErrorMessage, TypeFallbackOf, TypeGuard } from '../../lib/types'
-import { TypeAssertionError, errorMessage } from '../../lib/error'
+import {
+  type TypeAssertOf,
+  TypeAssertionError,
+  type TypeEnsureOf,
+  type TypeErrorMessage,
+  type TypeFallbackOf,
+  type TypeGuard,
+  createAssertion,
+  createEnsure,
+  createFallback,
+  errorMessage,
+} from '../../lib'
 import { isNumber } from '../number'
 
 export type NumberParsable = number | `${number}`
@@ -22,7 +31,7 @@ function commonTest(target: unknown): Result {
     }
   })()
 
-  return { parsed, result: !isNaN(parsed) }
+  return { parsed, result: !Number.isNaN(parsed) }
 }
 
 /**

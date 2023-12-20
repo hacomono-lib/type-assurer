@@ -1,17 +1,16 @@
-/* eslint-disable max-lines */
 import { expect, test } from 'vitest'
 import type {
   InvertedTypeAssert,
   InvertedTypeEnsure,
   InvertedTypeFallback,
+  Not,
   TypeAssert,
   TypeEnsure,
   TypeFallback,
   TypeGuard,
-  Not,
-} from '../types'
+} from '../lib'
 import { ValueType } from './type'
-import { type TestOption, type PickTypesOption, allTypes, getGenerator, testTypes } from './value'
+import { type PickTypesOption, type TestOption, allTypes, getGenerator, testTypes } from './value'
 
 type ExpectGuard = (v: unknown) => boolean
 
@@ -166,7 +165,7 @@ export function testEnsure(
   })
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type AnyFunction = (...args: any[]) => any
 
 /**

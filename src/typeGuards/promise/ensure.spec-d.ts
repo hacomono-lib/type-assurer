@@ -1,22 +1,22 @@
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { ensurePromise } from '.'
 
 describe('ensurePromise type tests', () => {
   test('ensure definite types.', () => {
-    const targetPromise = Promise.resolve() as Promise<void> | void
-    const result = ensurePromise(targetPromise)
+    const target = Promise.resolve() as Promise<void> | void
+    const result = ensurePromise(target)
     expectTypeOf(result).toEqualTypeOf<Promise<void>>()
   })
 
   test('ensure unknown types', () => {
-    const targetUnknown = Promise.resolve() as unknown
-    const result = ensurePromise(targetUnknown)
+    const target = Promise.resolve() as unknown
+    const result = ensurePromise(target)
     expectTypeOf(result).toEqualTypeOf<Promise<unknown>>()
   })
 
   test('ensure union types', () => {
-    const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
-    const result = ensurePromise(targetUnion)
+    const target = Promise.resolve() as unknown as Promise<string | number> | string | number
+    const result = ensurePromise(target)
     expectTypeOf(result).toEqualTypeOf<Promise<string | number>>()
   })
 })

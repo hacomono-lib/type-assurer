@@ -1,10 +1,12 @@
-import { isObject } from '../object'
 import { isArray } from '../array'
-import { isString } from '../string'
-import { isNumber } from '../number'
 import { isBoolean } from '../boolean'
+import { isNumber } from '../number'
+import { isObject } from '../object'
+import { isString } from '../string'
 
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export function hasToJSON(value: unknown): value is { toJSON: (key: string | number | symbol) => unknown } {
+  // biome-ignore lint/style/useNamingConvention: <explanation>
   return isObject(value) && typeof (value as { toJSON: unknown }).toJSON === 'function'
 }
 
@@ -17,7 +19,7 @@ function getValueByObject(key: string | number | symbol, target: unknown): unkno
     return target.toJSON(key)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   if ('valueof' in (target as any)) {
     return target
   }
@@ -30,7 +32,7 @@ function getValueByObject(key: string | number | symbol, target: unknown): unkno
   return target
 }
 
-// eslint-disable-next-line max-statements
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export function deepJSONEqual(a: unknown, b: unknown): boolean {
   if (a === b) {
     return true
@@ -90,6 +92,7 @@ function arrayEquals(a: unknown[], b: unknown[]): boolean {
   return result
 }
 
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export function isJSONPrimitive(target: unknown): target is number | string | boolean | null {
   return isNumber(target) || isString(target) || isBoolean(target) || target === null
 }

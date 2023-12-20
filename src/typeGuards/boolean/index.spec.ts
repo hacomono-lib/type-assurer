@@ -1,15 +1,15 @@
 import { describe } from 'vitest'
 import {
-  assertNotBoolean,
   assertBoolean,
-  ensureNotBoolean,
+  assertNotBoolean,
   ensureBoolean,
-  fallbackNotBoolean,
+  ensureNotBoolean,
   fallbackBoolean,
+  fallbackNotBoolean,
   isBoolean,
   isNotBoolean,
 } from '.'
-import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
+import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '../../lib-test'
 
 const expected = [ValueType.True, ValueType.False]
 

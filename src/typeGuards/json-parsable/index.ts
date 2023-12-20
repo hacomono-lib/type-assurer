@@ -1,15 +1,22 @@
 export type { ParseJSON, JSONParsable } from './type'
-
-import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type { JSON, TypeAssertOf, TypeEnsureOf, TypeErrorMessage, TypeFallbackOf, TypeGuard } from '../../lib/types'
-import { TypeAssertionError, errorMessage } from '../../lib/error'
-
+import {
+  type JSONValue,
+  type TypeAssertOf,
+  TypeAssertionError,
+  type TypeEnsureOf,
+  type TypeErrorMessage,
+  type TypeFallbackOf,
+  type TypeGuard,
+  createAssertion,
+  createEnsure,
+  createFallback,
+  errorMessage,
+} from '../../lib'
+import { type JSONifiable, type JSONify, isJSON } from '../json'
 import { isString } from '../string'
-import { isJSON, type JSONifiable, type JSONify, type NotJSONifiable } from '../json'
+import type { JSONParsable, ParseJSON } from './type'
 
-import type { JSONParsable, ParseJSON, NotJSONParsable } from './type'
-
-type Result = { parsed: JSON; result: boolean; cause?: unknown }
+type Result = { parsed: JSONValue; result: boolean; cause?: unknown }
 
 function commonTest(target: unknown): Result {
   if (!isString(target)) {
@@ -49,9 +56,11 @@ function commonTest(target: unknown): Result {
  * // result is false
  * ```
  */
+
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export const isJSONParsable = ((target: unknown) => commonTest(target).result) as TypeGuard<JSONParsable>
 
-type IsJSONParsable = typeof isJSONParsable
+type IsJsonParsable = typeof isJSONParsable
 
 /**
  * Asserts that a value is a string that can be parsed as JSON.
@@ -80,7 +89,8 @@ type IsJSONParsable = typeof isJSONParsable
  * // throws TypeAssertionError
  * ```
  */
-export const assertJSONParsable: TypeAssertOf<IsJSONParsable> = createAssertion(
+// biome-ignore lint/style/useNamingConvention: <explanation>
+export const assertJSONParsable: TypeAssertOf<IsJsonParsable> = createAssertion(
   isJSONParsable,
   errorMessage('JSONParsable'),
 )
@@ -113,7 +123,8 @@ export const assertJSONParsable: TypeAssertOf<IsJSONParsable> = createAssertion(
  * // throws TypeAssertionError
  * ```
  */
-export const ensureJSONParsable: TypeEnsureOf<IsJSONParsable> = createEnsure(
+// biome-ignore lint/style/useNamingConvention: <explanation>
+export const ensureJSONParsable: TypeEnsureOf<IsJsonParsable> = createEnsure(
   isJSONParsable,
   errorMessage('JSONParsable'),
 )
@@ -145,9 +156,11 @@ export const ensureJSONParsable: TypeEnsureOf<IsJSONParsable> = createEnsure(
  * // result is '{ "baz": "qux" }'
  * ```
  */
-export const fallbackJSONParsable: TypeFallbackOf<IsJSONParsable> = createFallback(isJSONParsable)
+// biome-ignore lint/style/useNamingConvention: <explanation>
+export const fallbackJSONParsable: TypeFallbackOf<IsJsonParsable> = createFallback(isJSONParsable)
 
-interface CoerceJson {
+// biome-ignore lint/style/useNamingConvention: <explanation>
+interface CoerceJSON {
   /**
    * If the value specified in the argument is a string, it parses it to JSON.
    * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
@@ -170,12 +183,12 @@ interface CoerceJson {
    * ```
    */
   <T>(target: T, message?: TypeErrorMessage): unknown extends T
-    ? JSON
+    ? JSONValue
     : T extends JSONParsable
       ? ParseJSON<T>
       : T extends JSONifiable
         ? JSONify<T>
-        : JSON
+        : JSONValue
 
   /**
    * If the value specified in the argument is a string, it parses it to JSON.
@@ -221,10 +234,11 @@ interface CoerceJson {
    * // result2 is { foo: 'bar' }
    * ```
    */
-  (target: unknown, message?: TypeErrorMessage): JSON
+  (target: unknown, message?: TypeErrorMessage): JSONValue
 }
 
-export const coerceJSON: CoerceJson = (target: unknown, message?: TypeErrorMessage): JSON => {
+// biome-ignore lint/style/useNamingConvention: <explanation>
+export const coerceJSON: CoerceJSON = (target: unknown, message?: TypeErrorMessage): JSONValue => {
   const { parsed, result, cause } = commonTest(target)
 
   if (result) {
@@ -239,6 +253,7 @@ export const coerceJSON: CoerceJson = (target: unknown, message?: TypeErrorMessa
   throw new TypeAssertionError(m, target, { cause })
 }
 
+// biome-ignore lint/style/useNamingConvention: <explanation>
 interface FixJSON {
   /**
    * If the value specified in the argument is a string, it parses it to JSON.
@@ -260,7 +275,7 @@ interface FixJSON {
    * // result2 is { foo: 'bar' } | { baz: 'qux' }
    * ```
    */
-  <T extends JSONParsable, V extends JSON>(target: T, defaultValue: V): ParseJSON<T> | V
+  <T extends JSONParsable, V extends JSONValue>(target: T, defaultValue: V): ParseJSON<T> | V
 
   /**
    * If the value specified in the argument is a string, it parses it to JSON.
@@ -282,7 +297,7 @@ interface FixJSON {
    * // result2 is { foo: 'bar' } | { baz: 'qux' }
    * ```
    */
-  <T extends JSONifiable, V extends JSON>(target: T, defaultValue: V): JSONify<T> | V
+  <T extends JSONifiable, V extends JSONValue>(target: T, defaultValue: V): JSONify<T> | V
 
   /**
    * If the value specified in the argument is a string, it parses it to JSON.
@@ -304,10 +319,11 @@ interface FixJSON {
    * // result2 is { foo: 'bar' } | { baz: 'qux' }
    * ```
    */
-  (target: unknown, defaultValue: JSON): JSON
+  (target: unknown, defaultValue: JSONValue): JSONValue
 }
 
-export const fixJSON: FixJSON = (target: unknown, defaultValue: JSON): JSON => {
+// biome-ignore lint/style/useNamingConvention: <explanation>
+export const fixJSON: FixJSON = (target: unknown, defaultValue: JSONValue): JSONValue => {
   const { parsed, result } = commonTest(target)
 
   if (result) {

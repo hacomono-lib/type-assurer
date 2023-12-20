@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { isFunction } from '.'
 
 describe('isFunction type tests', () => {
   test('guard definite types', () => {
-    const targetFunction = (() => {}) as Function | string
-    if (isFunction(targetFunction)) {
-      expectTypeOf(targetFunction).toEqualTypeOf<Function>()
+    const target = (() => {}) as Function | string
+    if (isFunction(target)) {
+      expectTypeOf(target).toEqualTypeOf<Function>()
     } else {
-      expectTypeOf(targetFunction).toEqualTypeOf<string>()
+      expectTypeOf(target).toEqualTypeOf<string>()
     }
   })
 
   test('guard definite types 2', () => {
-    const targetConstFunction = (() => {}) as (() => void) | '1'
-    if (isFunction(targetConstFunction)) {
-      expectTypeOf(targetConstFunction).toEqualTypeOf<() => void>()
+    const target = (() => {}) as (() => void) | '1'
+    if (isFunction(target)) {
+      expectTypeOf(target).toEqualTypeOf<() => void>()
     } else {
-      expectTypeOf(targetConstFunction).toEqualTypeOf<'1'>()
+      expectTypeOf(target).toEqualTypeOf<'1'>()
     }
   })
 
@@ -33,11 +33,11 @@ describe('isFunction type tests', () => {
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    if (isFunction(targetUnknown)) {
-      expectTypeOf(targetUnknown).toEqualTypeOf<Function>()
+    const target = 'string' as unknown
+    if (isFunction(target)) {
+      expectTypeOf(target).toEqualTypeOf<Function>()
     } else {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+      expectTypeOf(target).toEqualTypeOf<unknown>()
     }
   })
 })

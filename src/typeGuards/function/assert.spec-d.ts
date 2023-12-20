@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { assertFunction } from '.'
 
 describe('assertFunction type tests', () => {
   test('assert definite types', () => {
-    const targetFunction = (() => {}) as Function | string
-    assertFunction(targetFunction)
-    expectTypeOf(targetFunction).toEqualTypeOf<Function>()
+    const target = (() => {}) as Function | string
+    assertFunction(target)
+    expectTypeOf(target).toEqualTypeOf<Function>()
   })
 
   test('assert definite types 2', () => {
-    const targetConstFunction = (() => {}) as (() => void) | '1'
-    assertFunction(targetConstFunction)
-    expectTypeOf(targetConstFunction).toEqualTypeOf<() => void>()
+    const target = (() => {}) as (() => void) | '1'
+    assertFunction(target)
+    expectTypeOf(target).toEqualTypeOf<() => void>()
   })
 
   test('assert definite types 3', () => {
@@ -24,8 +24,8 @@ describe('assertFunction type tests', () => {
   })
 
   test('assert unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    assertFunction(targetUnknown)
-    expectTypeOf(targetUnknown).toEqualTypeOf<Function>()
+    const target = 'string' as unknown
+    assertFunction(target)
+    expectTypeOf(target).toEqualTypeOf<Function>()
   })
 })

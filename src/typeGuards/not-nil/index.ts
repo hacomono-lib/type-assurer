@@ -1,18 +1,19 @@
-import { errorMessage } from '../../lib/error'
-import { createAssertion, createEnsure, not } from '../../lib/factory'
-import type { InvertedTypeAssert, InvertedTypeEnsure, InvertedTypeGuard, TypeErrorMessage } from '../../lib/types'
+import { TypeErrorMessage, createAssertion, createEnsure, errorMessage, not } from '../../lib'
 
-import { isNil, type Nil } from '../nil'
+import { type Nil, isNil } from '../nil'
 
-interface GuardNotNil extends InvertedTypeGuard<Nil> {
+interface GuardNotNil {
+  // biome-ignore lint/complexity/noBannedTypes: <explanation>
   <T>(target: T | {}): target is unknown extends T ? {} : Exclude<T, Nil>
 }
 
-interface AssertNotNil extends InvertedTypeAssert<Nil> {
+interface AssertNotNil {
+  // biome-ignore lint/complexity/noBannedTypes: <explanation>
   <T>(target: T | {}, message?: TypeErrorMessage): asserts target is unknown extends T ? {} : Exclude<T, Nil>
 }
 
-interface EnsureNotNil extends InvertedTypeEnsure<Nil> {
+interface EnsureNotNil {
+  // biome-ignore lint/complexity/noBannedTypes: <explanation>
   <T>(target: T | {}, message?: TypeErrorMessage): unknown extends T ? {} : Exclude<T, Nil>
 }
 

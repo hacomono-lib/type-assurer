@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type { TypeAssert, TypeEnsure, TypeGuard, TypeFallback } from '../../lib/types'
-import { errorMessage } from '../../lib/error'
+import { createAssertion, createEnsure, createFallback } from '../../lib'
+import { errorMessage } from '../../lib'
+import type { TypeAssert, TypeEnsure, TypeFallback, TypeGuard } from '../../lib/types'
 
 export type AnyFunction = AnyPlainFunction | AnyGeneratorFunction | AnyClass | Function
 

@@ -1,6 +1,13 @@
-import { errorMessage } from '../../lib/error'
-import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import { TypeAssertOf, TypeEnsureOf, TypeFallbackOf, TypeGuard } from '../../lib/types'
+import {
+  type TypeAssertOf,
+  type TypeEnsureOf,
+  type TypeFallbackOf,
+  type TypeGuard,
+  createAssertion,
+  createEnsure,
+  createFallback,
+  errorMessage,
+} from '../../lib'
 
 /**
  * Checks if a value is a symbol.

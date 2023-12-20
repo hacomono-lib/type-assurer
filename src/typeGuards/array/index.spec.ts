@@ -1,16 +1,16 @@
-import { describe } from 'vitest'
 import expected from 'lodash/isArray.js'
+import { describe } from 'vitest'
 import {
-  assertNotArray,
   assertArray,
-  ensureNotArray,
+  assertNotArray,
   ensureArray,
-  fallbackNotArray,
+  ensureNotArray,
   fallbackArray,
+  fallbackNotArray,
   isArray,
   isNotArray,
 } from '.'
-import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib-test'
 
 describe('isArray', () => {
   testEquivalentGuard(isArray, expected)

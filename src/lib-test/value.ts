@@ -86,10 +86,10 @@ const generators = {
   [ValueType.EmptyObject]: () => ({}),
   [ValueType.BlankObject]: () => Object.create(null),
   [ValueType.RecursiveObject]: () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const obj: any = {}
     obj.foo = obj
-    return obj as {}
+    return obj
   },
   [ValueType.WellKnownSymbolObject]: () => ({ [Symbol.toStringTag]: () => 'Foo' }),
   [ValueType.IterableObject]: () => ({
@@ -99,26 +99,41 @@ const generators = {
   }),
   [ValueType.AsyncIterableObject]: () => ({
     async *[Symbol.asyncIterator]() {
-      yield 1
+      yield await 1
     },
   }),
   [ValueType.JsonifiableObject]: () => ({
     foo: 'bar',
+    // biome-ignore lint/style/useNamingConvention: <explanation>
     baz: { toJSON: (k: string | number) => `${k}` },
   }),
+  // biome-ignore lint/style/useNamingConvention: <explanation>
   [ValueType.JsonifiableObjectInArray]: () => [{ toJSON: (k: string | number) => `${k}` }],
   [ValueType.RegExp]: () => /foo/,
   [ValueType.Proxy]: () => new Proxy({}, {}),
-  [ValueType.Promise]: () => new Promise(() => void 0),
-  [ValueType.ThenableObject]: () => ({ then: () => void 0 }),
+  [ValueType.Promise]: () =>
+    new Promise(() => {
+      return
+    }),
+  [ValueType.ThenableObject]: () => ({
+    then: () => {
+      return
+    },
+  }),
   [ValueType.ThenableFunction]: () => {
-    const fn = () => void 0
-    fn.then = () => void 0
+    const fn = () => {
+      return
+    }
+    fn.then = () => {
+      return
+    }
     return fn
   },
   [ValueType.ThenableInstance]: () =>
     new (class Foo {
-      then() {}
+      then() {
+        return
+      }
     })(),
   [ValueType.Awaited]: async () => await Promise.resolve(),
   [ValueType.Date]: () => new Date(),
@@ -151,15 +166,20 @@ const generators = {
   [ValueType.EmptySet]: () => new Set(),
   [ValueType.WeakSet]: () => new WeakSet([persistentObject1, persistentObject2]),
   [ValueType.EmptyWeakSet]: () => new WeakSet(),
-  [ValueType.Function]: () => () => void 0,
-  [ValueType.AsyncFunction]: () => async () => void 0,
+  [ValueType.Function]: () => () => {
+    return
+  },
+  [ValueType.AsyncFunction]: () => async () => {
+    await 0
+    return
+  },
   [ValueType.GeneratorFunction]: () =>
     function* () {
       yield 1
     },
   [ValueType.AsyncGeneratorFunction]: () =>
     async function* () {
-      yield 1
+      yield await 1
     },
   [ValueType.Symbol]: () => Symbol('foo'),
   [ValueType.ObjectToPrimitiveSymbol]: () => ({ [Symbol.toPrimitive]: () => Symbol('foo') }),
@@ -189,7 +209,7 @@ export function testTypes(expectTargets: ValueType[], opt: PickTypesOption = {})
     let result = true
 
     if (!opt.parsableString) {
-      result &&= !t.toLocaleLowerCase().includes('parsable') && !t.toLocaleLowerCase().includes('jsonifiable')
+      result &&= !(t.toLocaleLowerCase().includes('parsable') || t.toLocaleLowerCase().includes('jsonifiable'))
     }
 
     if (!opt.typedArray) {
@@ -200,8 +220,11 @@ export function testTypes(expectTargets: ValueType[], opt: PickTypesOption = {})
   })
 
   const cachedValues = targetTypes.reduce(
-    (acc, t): Partial<Record<ValueType, unknown>> => ({ ...acc, [t]: getGenerator(t)() }),
-    {},
+    (acc, t): Partial<Record<ValueType, unknown>> => {
+      acc[t] = getGenerator(t)()
+      return acc
+    },
+    {} as Partial<Record<ValueType, unknown>>,
   ) as Record<ValueType, unknown>
 
   return targetTypes.filter(

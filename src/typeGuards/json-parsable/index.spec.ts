@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { assertJSONParsable, ensureJSONParsable, fallbackJSONParsable, isJSONParsable, coerceJSON, fixJSON } from '.'
-import { allTypes, testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
+import { assertJSONParsable, coerceJSON, ensureJSONParsable, fallbackJSONParsable, fixJSON, isJSONParsable } from '.'
+import { ValueType, allTypes, testAssert, testEnsure, testFallback, testGuard } from '../../lib-test'
 
 const expected = [
   ValueType.JsonParsableArray,

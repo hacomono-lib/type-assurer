@@ -1,9 +1,9 @@
-/* eslint-disable max-lines-per-function */
-import { describe, it, expect } from 'vitest'
-import { hasToJSON, deepJSONEqual } from './internals'
+import { describe, expect, it } from 'vitest'
+import { deepJSONEqual, hasToJSON } from './internals'
 
 describe('hasToJSON', () => {
   it('returns true if the value has a toJSON method', () => {
+    // biome-ignore lint/style/useNamingConvention: <explanation>
     expect(hasToJSON({ toJSON: () => 'foo' })).toBe(true)
   })
 
@@ -42,14 +42,18 @@ describe('deepJSONEqual', () => {
   })
 
   it('returns true if the values are equal objects with toJSON methods', () => {
+    // biome-ignore lint/style/useNamingConvention: <explanation>
     expect(deepJSONEqual({ foo: { toJSON: (k: string) => `${k} ${k}` } }, { foo: 'foo foo' })).toBe(true)
 
+    // biome-ignore lint/style/useNamingConvention: <explanation>
     expect(deepJSONEqual({ foo: 'foo foo' }, { foo: { toJSON: (k: string) => `${k} ${k}` } })).toBe(true)
   })
 
   it('returns true if the values are equal arrays with toJSON methods', () => {
+    // biome-ignore lint/style/useNamingConvention: <explanation>
     expect(deepJSONEqual([{ toJSON: (k: string) => `${k} ${k}` }], ['0 0'])).toBe(true)
 
+    // biome-ignore lint/style/useNamingConvention: <explanation>
     expect(deepJSONEqual(['0 0'], [{ toJSON: (k: string) => `${k} ${k}` }])).toBe(true)
   })
 

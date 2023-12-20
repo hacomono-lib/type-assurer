@@ -1,42 +1,42 @@
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { isDate, isNotDate } from '.'
 
 describe('isDate type tests', () => {
   test('guard definite types.', () => {
-    const targetDate = new Date() as Date | string
-    if (isDate(targetDate)) {
-      expectTypeOf(targetDate).toEqualTypeOf<Date>()
+    const target = new Date() as Date | string
+    if (isDate(target)) {
+      expectTypeOf(target).toEqualTypeOf<Date>()
     } else {
-      expectTypeOf(targetDate).toEqualTypeOf<string>()
+      expectTypeOf(target).toEqualTypeOf<string>()
     }
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    if (isDate(targetUnknown)) {
-      expectTypeOf(targetUnknown).toEqualTypeOf<Date>()
+    const target = 'string' as unknown
+    if (isDate(target)) {
+      expectTypeOf(target).toEqualTypeOf<Date>()
     } else {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+      expectTypeOf(target).toEqualTypeOf<unknown>()
     }
   })
 })
 
 describe('isNotDate type tests', () => {
   test('guard definite types.', () => {
-    const targetDate = new Date() as Date | string
-    if (isNotDate(targetDate)) {
-      expectTypeOf(targetDate).toEqualTypeOf<string>()
+    const target = new Date() as Date | string
+    if (isNotDate(target)) {
+      expectTypeOf(target).toEqualTypeOf<string>()
     } else {
-      expectTypeOf(targetDate).toEqualTypeOf<Date>()
+      expectTypeOf(target).toEqualTypeOf<Date>()
     }
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    if (isNotDate(targetUnknown)) {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+    const target = 'string' as unknown
+    if (isNotDate(target)) {
+      expectTypeOf(target).toEqualTypeOf<unknown>()
     } else {
-      expectTypeOf(targetUnknown).toEqualTypeOf<Date>()
+      expectTypeOf(target).toEqualTypeOf<Date>()
     }
   })
 })

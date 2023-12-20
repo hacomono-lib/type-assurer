@@ -1,31 +1,31 @@
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { isNumber } from '.'
 
 describe('isNumber type tests', () => {
   test('guard definite types', () => {
-    const targetNumber = 1 as number | string
-    if (isNumber(targetNumber)) {
-      expectTypeOf(targetNumber).toEqualTypeOf<number>()
+    const target = 1 as number | string
+    if (isNumber(target)) {
+      expectTypeOf(target).toEqualTypeOf<number>()
     } else {
-      expectTypeOf(targetNumber).toEqualTypeOf<string>()
+      expectTypeOf(target).toEqualTypeOf<string>()
     }
   })
 
   test('guard definite types 2', () => {
-    const targetConstNumber = 1 as 1 | '1'
-    if (isNumber(targetConstNumber)) {
-      expectTypeOf(targetConstNumber).toEqualTypeOf<1>()
+    const target = 1 as 1 | '1'
+    if (isNumber(target)) {
+      expectTypeOf(target).toEqualTypeOf<1>()
     } else {
-      expectTypeOf(targetConstNumber).toEqualTypeOf<'1'>()
+      expectTypeOf(target).toEqualTypeOf<'1'>()
     }
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    if (isNumber(targetUnknown)) {
-      expectTypeOf(targetUnknown).toEqualTypeOf<number>()
+    const target = 'string' as unknown
+    if (isNumber(target)) {
+      expectTypeOf(target).toEqualTypeOf<number>()
     } else {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+      expectTypeOf(target).toEqualTypeOf<unknown>()
     }
   })
 })

@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe } from 'vitest'
 import expected from 'lodash/isNil.js'
+import { describe } from 'vitest'
 import { assertNotNil, ensureNotNil, isNotNil } from '.'
-import { testEquivalentAssert, testEquivalentEnsure, testEquivalentGuard } from '../../lib/test'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentGuard } from '../../lib-test'
 
 describe('assertNotNil', () => {
   testEquivalentAssert(assertNotNil, expected, { negative: true })

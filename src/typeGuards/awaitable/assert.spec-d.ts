@@ -1,42 +1,42 @@
-import { test, describe, expectTypeOf } from 'vitest'
+import { describe, expectTypeOf, test } from 'vitest'
 import { assertAwaitable, assertNotAwaitable } from '.'
 
 describe('isAwaitable type tests', () => {
   test('assert definite types.', () => {
-    const targetAwaitable = Promise.resolve() as Promise<void> | void
-    assertAwaitable(targetAwaitable)
-    expectTypeOf(targetAwaitable).toEqualTypeOf<Promise<void>>()
+    const target = Promise.resolve() as Promise<void> | void
+    assertAwaitable(target)
+    expectTypeOf(target).toEqualTypeOf<Promise<void>>()
   })
 
   test('assert unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    assertAwaitable(targetUnknown)
-    expectTypeOf(targetUnknown).toEqualTypeOf<PromiseLike<unknown>>()
+    const target = 'string' as unknown
+    assertAwaitable(target)
+    expectTypeOf(target).toEqualTypeOf<PromiseLike<unknown>>()
   })
 
   test('assert union types', () => {
-    const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
-    assertAwaitable(targetUnion)
-    expectTypeOf(targetUnion).toEqualTypeOf<Promise<string | number>>()
+    const target = Promise.resolve() as unknown as Promise<string | number> | string | number
+    assertAwaitable(target)
+    expectTypeOf(target).toEqualTypeOf<Promise<string | number>>()
   })
 })
 
 describe('isNotAwaitable type tests', () => {
   test('assert definite types.', () => {
-    const targetAwaitable = Promise.resolve() as Promise<void> | void
-    assertNotAwaitable(targetAwaitable)
-    expectTypeOf(targetAwaitable).toEqualTypeOf<void>()
+    const target = Promise.resolve() as Promise<void> | void
+    assertNotAwaitable(target)
+    expectTypeOf(target).toEqualTypeOf<void>()
   })
 
   test('assert unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    assertNotAwaitable(targetUnknown)
-    expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+    const target = 'string' as unknown
+    assertNotAwaitable(target)
+    expectTypeOf(target).toEqualTypeOf<unknown>()
   })
 
   test('assert union types', () => {
-    const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
-    assertNotAwaitable(targetUnion)
-    expectTypeOf(targetUnion).toEqualTypeOf<string | number>()
+    const target = Promise.resolve() as unknown as Promise<string | number> | string | number
+    assertNotAwaitable(target)
+    expectTypeOf(target).toEqualTypeOf<string | number>()
   })
 })

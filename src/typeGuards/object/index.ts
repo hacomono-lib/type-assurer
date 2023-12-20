@@ -1,11 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-types */
-import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type { TypeAssertOf, TypeEnsureOf, TypeErrorMessage, TypeFallbackOf, TypeGuard } from '../../lib/types'
-import { errorMessage } from '../../lib/error'
+import {
+  type TypeAssertOf,
+  type TypeEnsureOf,
+  type TypeErrorMessage,
+  type TypeFallbackOf,
+  type TypeGuard,
+  createAssertion,
+  createEnsure,
+  createFallback,
+  errorMessage,
+} from '../../lib'
 
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type AnyFunction = Function | ((...args: any[]) => any)
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type AnyArray = any[] | readonly any[]
 
 type DefinitelyObject<T> = unknown extends T
@@ -20,6 +29,7 @@ type DefinitelyObject<T> = unknown extends T
 
 type NotObject = string | number | boolean | symbol | bigint | null | undefined | AnyFunction | AnyArray
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 interface ObjectTypeGuard extends TypeGuard<DefinitelyObject<any>> {
   <T>(target: T | NotObject): target is DefinitelyObject<T> & Exclude<T, NotObject>
 }

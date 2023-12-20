@@ -1,31 +1,31 @@
-import { test, describe, expectTypeOf } from 'vitest'
-import { isNumberParsable, type NumberParsable } from '.'
+import { describe, expectTypeOf, test } from 'vitest'
+import { type NumberParsable, isNumberParsable } from '.'
 
 describe('isNumberParsable type tests', () => {
   test('guard definite types.', () => {
-    const targetNumberParsable = '1' as string | number
-    if (isNumberParsable(targetNumberParsable)) {
-      expectTypeOf(targetNumberParsable).toEqualTypeOf<NumberParsable>()
+    const target = '1' as string | number
+    if (isNumberParsable(target)) {
+      expectTypeOf(target).toEqualTypeOf<NumberParsable>()
     } else {
-      expectTypeOf(targetNumberParsable).toEqualTypeOf<string>()
+      expectTypeOf(target).toEqualTypeOf<string>()
     }
   })
 
   test('guard unknown types', () => {
-    const targetUnknown = 'string' as unknown
-    if (isNumberParsable(targetUnknown)) {
-      expectTypeOf(targetUnknown).toEqualTypeOf<NumberParsable>()
+    const target = 'string' as unknown
+    if (isNumberParsable(target)) {
+      expectTypeOf(target).toEqualTypeOf<NumberParsable>()
     } else {
-      expectTypeOf(targetUnknown).toEqualTypeOf<unknown>()
+      expectTypeOf(target).toEqualTypeOf<unknown>()
     }
   })
 
   test('guard union types', () => {
-    const targetUnion = '1' as '1' | 1 | 'a' | boolean
-    if (isNumberParsable(targetUnion)) {
-      expectTypeOf(targetUnion).toEqualTypeOf<1 | '1'>()
+    const target = '1' as '1' | 1 | 'a' | boolean
+    if (isNumberParsable(target)) {
+      expectTypeOf(target).toEqualTypeOf<1 | '1'>()
     } else {
-      expectTypeOf(targetUnion).toEqualTypeOf<boolean | 'a'>()
+      expectTypeOf(target).toEqualTypeOf<boolean | 'a'>()
     }
   })
 })

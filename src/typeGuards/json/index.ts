@@ -1,27 +1,37 @@
 export type { JSONifiable, NotJSONifiable, JSONify } from './type'
 
-import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type { TypeAssert, TypeEnsure, TypeErrorMessage, TypeFallback, TypeGuard } from '../../lib/types'
-import { errorMessage } from '../../lib/error'
-
-import { deepJSONEqual, isJSONPrimitive } from './internals'
-import type { JSONifiable, JSONGuard, NotJSONifiable } from './type'
-
-import { isNumber } from '../number'
+import {
+  type TypeAssert,
+  type TypeEnsure,
+  type TypeErrorMessage,
+  type TypeFallback,
+  type TypeGuard,
+  createAssertion,
+  createEnsure,
+  createFallback,
+  errorMessage,
+} from '../../lib'
 import { isBoolean } from '../boolean'
+import { isNumber } from '../number'
+import { deepJSONEqual, isJSONPrimitive } from './internals'
+import type { JSONGuard, JSONifiable, NotJSONifiable } from './type'
 
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export interface JSONTypeGuard extends TypeGuard<JSONifiable> {
   <T>(target: T | NotJSONifiable): target is JSONGuard<T>
 }
 
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export interface JSONTypeAssert extends TypeAssert<JSONifiable> {
   <T>(target: T | NotJSONifiable, message?: TypeErrorMessage): asserts target is JSONGuard<T>
 }
 
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export interface JSONTypeEnsure extends TypeEnsure<JSONifiable> {
   <T>(target: T, message?: TypeErrorMessage): JSONGuard<T>
 }
 
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export interface JSONTypeFallback extends TypeFallback<JSONifiable> {
   <T, F>(target: T, defaultValue: F): JSONGuard<T> | JSONGuard<F>
 }
@@ -48,6 +58,8 @@ export interface JSONTypeFallback extends TypeFallback<JSONifiable> {
  * // result is true, because it has toJSON method
  * ```
  */
+
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export const isJSON = ((target: unknown): target is JSONifiable => {
   if (isBoolean(target) || target === null) {
     return true
@@ -65,7 +77,7 @@ export const isJSON = ((target: unknown): target is JSONifiable => {
       }
 
       return deepJSONEqual(target, parsed)
-    } catch (e) {
+    } catch {
       return false
     }
   }
@@ -99,6 +111,7 @@ export const isJSON = ((target: unknown): target is JSONifiable => {
  * ```
  */
 
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export const assertJSON: JSONTypeAssert = createAssertion(isJSON, errorMessage('JSON'))
 
 /**
@@ -123,6 +136,7 @@ export const assertJSON: JSONTypeAssert = createAssertion(isJSON, errorMessage('
  * // result is JSON, because it has toJSON method
  * ```
  */
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export const ensureJSON = createEnsure(isJSON, errorMessage('JSON')) as JSONTypeEnsure
 
 /**
@@ -146,4 +160,5 @@ export const ensureJSON = createEnsure(isJSON, errorMessage('JSON')) as JSONType
  * // result is JSON, because it has toJSON method
  * ```
  */
+// biome-ignore lint/style/useNamingConvention: <explanation>
 export const fallbackJSON: JSONTypeFallback = createFallback(isJSON)

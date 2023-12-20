@@ -1,15 +1,15 @@
 import { describe } from 'vitest'
-import { testGuard, testAssert, testEnsure, testFallback, ValueType } from '../../lib/test'
 import {
-  assertNotAwaitable,
   assertAwaitable,
-  ensureNotAwaitable,
+  assertNotAwaitable,
   ensureAwaitable,
-  fallbackNotAwaitable,
+  ensureNotAwaitable,
   fallbackAwaitable,
-  isNotAwaitable,
+  fallbackNotAwaitable,
   isAwaitable,
+  isNotAwaitable,
 } from '.'
+import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '../../lib-test'
 
 const expectedValueTypes = [
   ValueType.Promise,

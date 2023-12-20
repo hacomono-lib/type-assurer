@@ -1,10 +1,12 @@
 {
-  "folders": [
-    { "path": ".." },
-    { "path": "docs", "name": "@docs" }
-  ],
+  "folders": [{ "path": ".." }, { "path": "docs", "name": "@docs" }],
   "extensions": {
-    "recommendations": ["astro-build.astro-vscode", "DavidAnson.vscode-markdownlint", "biomejs.biome", "ZixuanChen.vitest-explorer"],
+    "recommendations": [
+      "astro-build.astro-vscode",
+      "DavidAnson.vscode-markdownlint",
+      "biomejs.biome",
+      "ZixuanChen.vitest-explorer"
+    ]
   },
   "launch": {
     "version": "0.2.0",
