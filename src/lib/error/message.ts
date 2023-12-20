@@ -10,15 +10,10 @@ function actualTypeOf(target: unknown): string {
   return `object (constructor: ${target.constructor?.name ?? 'object'}) ${suffix}`
 }
 
-export function errorMessage(
-  expectedType: string,
-  { not }: { not?: boolean } = {}
-): (target: unknown) => string {
+export function errorMessage(expectedType: string, { not }: { not?: boolean } = {}): (target: unknown) => string {
   if (not) {
     return (actualValue) => {
-      return `Expected a value not of type ${expectedType}, but received ${actualTypeOf(
-        actualValue
-      )}.`
+      return `Expected a value not of type ${expectedType}, but received ${actualTypeOf(actualValue)}.`
     }
   }
   return (actualValue) => {

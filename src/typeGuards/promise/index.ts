@@ -35,10 +35,7 @@ type IsPromise = typeof isPromise
  * ```
  */
 
-export const assertPromise: TypeAssertOf<IsPromise> = createAssertion(
-  isPromise,
-  errorMessage('promise')
-)
+export const assertPromise: TypeAssertOf<IsPromise> = createAssertion(isPromise, errorMessage('promise'))
 
 /**
  * Ensures that a value is a Promise. (excluding PromiseLike)
@@ -54,10 +51,7 @@ export const assertPromise: TypeAssertOf<IsPromise> = createAssertion(
  * // result is Promise
  * ```
  */
-export const ensurePromise: TypeEnsureOf<IsPromise> = createEnsure(
-  isPromise,
-  errorMessage('promise')
-)
+export const ensurePromise: TypeEnsureOf<IsPromise> = createEnsure(isPromise, errorMessage('promise'))
 
 /**
  * Fallbacks to a default value if the value is not a Promise. (excluding PromiseLike)

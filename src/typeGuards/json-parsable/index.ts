@@ -1,14 +1,7 @@
 export type { ParseJSON, JSONParsable } from './type'
 
 import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type {
-  JSON,
-  TypeAssertOf,
-  TypeEnsureOf,
-  TypeErrorMessage,
-  TypeFallbackOf,
-  TypeGuard
-} from '../../lib/types'
+import type { JSON, TypeAssertOf, TypeEnsureOf, TypeErrorMessage, TypeFallbackOf, TypeGuard } from '../../lib/types'
 import { TypeAssertionError, errorMessage } from '../../lib/error'
 
 import { isString } from '../string'
@@ -56,8 +49,7 @@ function commonTest(target: unknown): Result {
  * // result is false
  * ```
  */
-export const isJSONParsable = ((target: unknown) =>
-  commonTest(target).result) as TypeGuard<JSONParsable>
+export const isJSONParsable = ((target: unknown) => commonTest(target).result) as TypeGuard<JSONParsable>
 
 type IsJSONParsable = typeof isJSONParsable
 
@@ -90,7 +82,7 @@ type IsJSONParsable = typeof isJSONParsable
  */
 export const assertJSONParsable: TypeAssertOf<IsJSONParsable> = createAssertion(
   isJSONParsable,
-  errorMessage('JSONParsable')
+  errorMessage('JSONParsable'),
 )
 
 /**
@@ -123,7 +115,7 @@ export const assertJSONParsable: TypeAssertOf<IsJSONParsable> = createAssertion(
  */
 export const ensureJSONParsable: TypeEnsureOf<IsJSONParsable> = createEnsure(
   isJSONParsable,
-  errorMessage('JSONParsable')
+  errorMessage('JSONParsable'),
 )
 
 /**
@@ -180,10 +172,10 @@ interface CoerceJson {
   <T>(target: T, message?: TypeErrorMessage): unknown extends T
     ? JSON
     : T extends JSONParsable
-    ? ParseJSON<T>
-    : T extends JSONifiable
-    ? JSONify<T>
-    : JSON
+      ? ParseJSON<T>
+      : T extends JSONifiable
+        ? JSONify<T>
+        : JSON
 
   /**
    * If the value specified in the argument is a string, it parses it to JSON.
@@ -243,10 +235,7 @@ export const coerceJSON: CoerceJson = (target: unknown, message?: TypeErrorMessa
     return JSON.parse(JSON.stringify(target))
   }
 
-  const m =
-    typeof message === 'string'
-      ? message
-      : message?.(target) ?? errorMessage('JSONParsable')(target)
+  const m = typeof message === 'string' ? message : message?.(target) ?? errorMessage('JSONParsable')(target)
   throw new TypeAssertionError(m, target, { cause })
 }
 

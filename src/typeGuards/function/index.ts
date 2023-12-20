@@ -55,8 +55,8 @@ interface AssertFunction extends TypeAssert<AnyFunction> {
   <T>(target: T, message?: string): asserts target is unknown extends T
     ? Function & T
     : T extends AnyFunction
-    ? T
-    : never
+      ? T
+      : never
 }
 
 export const assertFunction: AssertFunction = createAssertion(isFunction, errorMessage('function'))
@@ -75,17 +75,10 @@ interface EnsureFunction extends TypeEnsure<AnyFunction> {
    * // result is Function
    * ```
    */
-  <T>(target: T, message?: string): unknown extends T
-    ? Function & T
-    : T extends AnyFunction
-    ? T
-    : never
+  <T>(target: T, message?: string): unknown extends T ? Function & T : T extends AnyFunction ? T : never
 }
 
-export const ensureFunction: EnsureFunction = createEnsure(
-  isFunction,
-  errorMessage('function')
-) as EnsureFunction
+export const ensureFunction: EnsureFunction = createEnsure(isFunction, errorMessage('function')) as EnsureFunction
 
 interface FallbackFunction extends TypeFallback<AnyFunction> {
   /**

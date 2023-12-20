@@ -1,11 +1,5 @@
 import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type {
-  TypeAssertOf,
-  TypeEnsureOf,
-  TypeErrorMessage,
-  TypeFallbackOf,
-  TypeGuard
-} from '../../lib/types'
+import type { TypeAssertOf, TypeEnsureOf, TypeErrorMessage, TypeFallbackOf, TypeGuard } from '../../lib/types'
 import { TypeAssertionError, errorMessage } from '../../lib/error'
 import { isNumber } from '../number'
 
@@ -44,8 +38,7 @@ function commonTest(target: unknown): Result {
  * }
  * ```
  */
-export const isNumberParsable = ((target: unknown) =>
-  commonTest(target).result) as TypeGuard<NumberParsable>
+export const isNumberParsable = ((target: unknown) => commonTest(target).result) as TypeGuard<NumberParsable>
 
 type IsNumberParsable = typeof isNumberParsable
 
@@ -65,7 +58,7 @@ type IsNumberParsable = typeof isNumberParsable
 
 export const assertNumberParsable: TypeAssertOf<IsNumberParsable> = createAssertion(
   isNumberParsable,
-  errorMessage('number')
+  errorMessage('number'),
 )
 
 /**
@@ -84,7 +77,7 @@ export const assertNumberParsable: TypeAssertOf<IsNumberParsable> = createAssert
  */
 export const ensureNumberParsable: TypeEnsureOf<IsNumberParsable> = createEnsure(
   isNumberParsable,
-  errorMessage('number parsable')
+  errorMessage('number parsable'),
 )
 
 /**
@@ -99,8 +92,7 @@ export const ensureNumberParsable: TypeEnsureOf<IsNumberParsable> = createEnsure
  * // result is number or number string (number | `${number}`)
  * ```
  */
-export const fallbackNumberParsable: TypeFallbackOf<IsNumberParsable> =
-  createFallback(isNumberParsable)
+export const fallbackNumberParsable: TypeFallbackOf<IsNumberParsable> = createFallback(isNumberParsable)
 
 interface CoerceNumber {
   /**
@@ -118,9 +110,7 @@ interface CoerceNumber {
    * // result is number
    * ```
    */
-  <N>(target: N, message?: TypeErrorMessage | string): unknown extends N
-    ? number
-    : Parse<Extract<N, NumberParsable>>
+  <N>(target: N, message?: TypeErrorMessage | string): unknown extends N ? number : Parse<Extract<N, NumberParsable>>
 
   /**
    * Coerces a value to number.
@@ -140,16 +130,12 @@ interface CoerceNumber {
   (target: unknown, message?: TypeErrorMessage | string): number
 }
 
-export const coerceNumber: CoerceNumber = (
-  target: unknown,
-  message?: TypeErrorMessage | string
-): number => {
+export const coerceNumber: CoerceNumber = (target: unknown, message?: TypeErrorMessage | string): number => {
   const { parsed, result } = commonTest(target)
   if (result) {
     return parsed
   }
-  const m =
-    typeof message === 'string' ? message : message?.(target) ?? errorMessage('number')(target)
+  const m = typeof message === 'string' ? message : message?.(target) ?? errorMessage('number')(target)
   throw new TypeAssertionError(m, target)
 }
 

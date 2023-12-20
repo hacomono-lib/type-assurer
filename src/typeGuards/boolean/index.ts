@@ -6,7 +6,7 @@ import type {
   TypeAssertOf,
   TypeEnsureOf,
   TypeFallbackOf,
-  TypeGuard
+  TypeGuard,
 } from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
@@ -23,8 +23,7 @@ import { errorMessage } from '../../lib/error'
  * }
  * ```
  */
-export const isBoolean = ((target: unknown): target is boolean =>
-  typeof target === 'boolean') as TypeGuard<boolean>
+export const isBoolean = ((target: unknown): target is boolean => typeof target === 'boolean') as TypeGuard<boolean>
 
 type IsBoolean = typeof isBoolean
 
@@ -42,10 +41,7 @@ type IsBoolean = typeof isBoolean
  * ```
  */
 
-export const assertBoolean: TypeAssertOf<IsBoolean> = createAssertion(
-  isBoolean,
-  errorMessage('boolean')
-)
+export const assertBoolean: TypeAssertOf<IsBoolean> = createAssertion(isBoolean, errorMessage('boolean'))
 
 /**
  * Ensures that a value is a boolean.
@@ -61,10 +57,7 @@ export const assertBoolean: TypeAssertOf<IsBoolean> = createAssertion(
  * // result is boolean
  * ```
  */
-export const ensureBoolean: TypeEnsureOf<IsBoolean> = createEnsure(
-  isBoolean,
-  errorMessage('boolean')
-)
+export const ensureBoolean: TypeEnsureOf<IsBoolean> = createEnsure(isBoolean, errorMessage('boolean'))
 
 /**
  * Fallbacks to a default value if the value is not a boolean.
@@ -112,7 +105,7 @@ export const isNotBoolean = not(isBoolean)
  */
 export const assertNotBoolean: InvertedTypeAssertOf<IsBoolean> = createAssertion(
   not(isBoolean),
-  errorMessage('boolean', { not: true })
+  errorMessage('boolean', { not: true }),
 )
 
 /**
@@ -131,7 +124,7 @@ export const assertNotBoolean: InvertedTypeAssertOf<IsBoolean> = createAssertion
  */
 export const ensureNotBoolean: InvertedTypeEnsureOf<IsBoolean> = createEnsure(
   not(isBoolean),
-  errorMessage('boolean', { not: true })
+  errorMessage('boolean', { not: true }),
 )
 
 /**

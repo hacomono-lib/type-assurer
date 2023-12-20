@@ -31,7 +31,7 @@ const expected = [
   ValueType.ObjectToPrimitiveBigInt,
   ValueType.ObjectToPrimitiveString,
   ValueType.ObjectToPrimitiveSymbol,
-  ValueType.ObjectToPrimitiveUndefined
+  ValueType.ObjectToPrimitiveUndefined,
 ]
 
 describe('isJSON', () => {
@@ -49,6 +49,6 @@ describe('ensureJSON', () => {
 describe('fallbackJSON', () => {
   testFallback(fallbackJSON, expected, {
     parsableString: true,
-    fallbackValue: [{ foo: 'bar' }]
+    fallbackValue: [{ foo: 'bar' }],
   })
 })

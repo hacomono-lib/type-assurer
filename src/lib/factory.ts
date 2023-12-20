@@ -13,7 +13,7 @@ import type {
   TypeErrorMessage,
   TypeFallback,
   TypeGuard,
-  VoidAssert
+  VoidAssert,
 } from './types'
 
 import { TypeAssertionError } from './error'
@@ -119,10 +119,7 @@ export function not(guard: (arg: unknown) => boolean): Not<TypeGuard> {
  * const assertString = createAssertion(isString, 'target must be a string')
  * ```
  */
-export function createAssertion<T extends TypeGuard>(
-  guard: T,
-  message: TypeErrorMessage
-): TypeAssertOf<T>
+export function createAssertion<T extends TypeGuard>(guard: T, message: TypeErrorMessage): TypeAssertOf<T>
 
 /**
  * @description create a type assertion from a inverted type guard.
@@ -136,10 +133,7 @@ export function createAssertion<T extends TypeGuard>(
  * const assertNotString = createAssertion(not(isString), 'target must not be a string')
  * ```
  */
-export function createAssertion<T extends TypeGuard>(
-  guard: Not<T>,
-  message: TypeErrorMessage
-): InvertedTypeAssertOf<T>
+export function createAssertion<T extends TypeGuard>(guard: Not<T>, message: TypeErrorMessage): InvertedTypeAssertOf<T>
 
 /**
  * @description create a type assertion from a type predicate.
@@ -153,10 +147,7 @@ export function createAssertion<T extends TypeGuard>(
  * const assertString = createAssertion((arg: unknown): arg is string => typeof arg === 'string', 'target must be a string')
  * ```
  */
-export function createAssertion<T>(
-  guard: (target: unknown) => target is T,
-  message: TypeErrorMessage
-): TypeAssert<T>
+export function createAssertion<T>(guard: (target: unknown) => target is T, message: TypeErrorMessage): TypeAssert<T>
 
 /**
  * @description create a type assertion from a type predicate. This is a type-unsafe version of `createAssertion`.
@@ -168,14 +159,11 @@ export function createAssertion<T>(
  * const assertString = createAssertion((arg: unknown) => typeof arg === 'string', 'target must be a string')
  * ```
  */
-export function createAssertion(
-  guard: (target: unknown) => boolean,
-  message: TypeErrorMessage
-): VoidAssert
+export function createAssertion(guard: (target: unknown) => boolean, message: TypeErrorMessage): VoidAssert
 
 export function createAssertion(
   guard: (target: unknown) => boolean,
-  message: TypeErrorMessage
+  message: TypeErrorMessage,
 ): TypeAssert | InvertedTypeAssert | VoidAssert {
   return ((target: unknown, overrideMessage?: TypeErrorMessage) => {
     if (!guard(target)) {
@@ -196,10 +184,7 @@ export function createAssertion(
  * const ensureString = createEnsure(isString, 'target must be a string')
  * ```
  */
-export function createEnsure<T extends TypeGuard>(
-  guard: T,
-  message: TypeErrorMessage
-): TypeEnsureOf<T>
+export function createEnsure<T extends TypeGuard>(guard: T, message: TypeErrorMessage): TypeEnsureOf<T>
 
 /**
  * @description create a type ensure from a inverted type guard.
@@ -213,10 +198,7 @@ export function createEnsure<T extends TypeGuard>(
  * const ensureNotString = createEnsure(not(isString), 'target must not be a string')
  * ```
  */
-export function createEnsure<T extends TypeGuard>(
-  guard: Not<T>,
-  message: TypeErrorMessage
-): InvertedTypeEnsureOf<T>
+export function createEnsure<T extends TypeGuard>(guard: Not<T>, message: TypeErrorMessage): InvertedTypeEnsureOf<T>
 
 /**
  * @description create a type ensure from a type predicate.
@@ -230,10 +212,7 @@ export function createEnsure<T extends TypeGuard>(
  * const ensureString = createEnsure((arg: unknown): arg is string => typeof arg === 'string', 'target must be a string')
  * ```
  */
-export function createEnsure<T>(
-  guard: (target: unknown) => target is T,
-  message: TypeErrorMessage
-): TypeEnsure<T>
+export function createEnsure<T>(guard: (target: unknown) => target is T, message: TypeErrorMessage): TypeEnsure<T>
 
 /**
  * @description create a type ensure from a type predicate. This is a type-unsafe version of `createEnsure`.
@@ -245,14 +224,11 @@ export function createEnsure<T>(
  * const ensureString = createEnsure((arg: unknown) => typeof arg === 'string', 'target must be a string')
  * ```
  */
-export function createEnsure(
-  guard: (target: unknown) => boolean,
-  message: TypeErrorMessage
-): TypeEnsure
+export function createEnsure(guard: (target: unknown) => boolean, message: TypeErrorMessage): TypeEnsure
 
 export function createEnsure(
   guard: (target: unknown) => boolean,
-  message: TypeErrorMessage
+  message: TypeErrorMessage,
 ): TypeEnsure | InvertedTypeEnsure {
   return ((target: unknown, overrideMessage?: TypeErrorMessage) => {
     const assert = createAssertion(guard, message)
@@ -285,9 +261,7 @@ export function createFallback<T extends TypeGuard>(guard: T): TypeFallback<Guar
  * const fallbackNotString = createFallback(not(isString))
  * ```
  */
-export function createFallback<T extends TypeGuard>(
-  guard: Not<T>
-): InvertedTypeFallback<GuardedType<T>>
+export function createFallback<T extends TypeGuard>(guard: Not<T>): InvertedTypeFallback<GuardedType<T>>
 
 /**
  * @description create a type fallback from a type predicate.
@@ -313,9 +287,7 @@ export function createFallback<T>(guard: (target: unknown) => target is T): Type
  */
 export function createFallback(guard: (target: unknown) => boolean): TypeFallback
 
-export function createFallback(
-  guard: (target: unknown) => boolean
-): TypeFallback | InvertedTypeFallback {
+export function createFallback(guard: (target: unknown) => boolean): TypeFallback | InvertedTypeFallback {
   return ((target: unknown, fallback: unknown) => (guard(target) ? target : fallback)) as
     | TypeFallback
     | InvertedTypeFallback

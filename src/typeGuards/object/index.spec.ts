@@ -51,7 +51,7 @@ const expected = [
   ValueType.WeakSet,
   ValueType.EmptyWeakSet,
   ValueType.ObjectToPrimitiveSymbol,
-  ValueType.ObjectValueOfSymbol
+  ValueType.ObjectValueOfSymbol,
 ]
 
 describe('isObject', () => {

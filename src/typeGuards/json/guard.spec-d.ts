@@ -23,17 +23,9 @@ describe('isJSON type tests', () => {
   })
 
   test('guard definite types 3', () => {
-    const targetConstObject = {} as
-      | { foo?: string }
-      | Date
-      | unknown[]
-      | null
-      | (() => void)
-      | undefined
+    const targetConstObject = {} as { foo?: string } | Date | unknown[] | null | (() => void) | undefined
     if (isJSON(targetConstObject)) {
-      expectTypeOf(targetConstObject).toEqualTypeOf<
-        { foo?: string } | Date | JSONifiable[] | null
-      >()
+      expectTypeOf(targetConstObject).toEqualTypeOf<{ foo?: string } | Date | JSONifiable[] | null>()
     } else {
       expectTypeOf(targetConstObject).toEqualTypeOf<undefined | (() => void) | unknown[]>()
     }

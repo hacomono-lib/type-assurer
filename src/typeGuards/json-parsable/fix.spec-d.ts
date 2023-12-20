@@ -38,13 +38,7 @@ describe('fixJson type tests', () => {
     })
 
     test('guard definite types 3', () => {
-      const targetConstObject = { foo: 'bar' } as
-        | { foo: string }
-        | Date
-        | unknown[]
-        | null
-        | (() => void)
-        | undefined
+      const targetConstObject = { foo: 'bar' } as { foo: string } | Date | unknown[] | null | (() => void) | undefined
       const result = fixJSON(targetConstObject, { baz: 'qux' })
       expectTypeOf(result).toEqualTypeOf<{ foo: string } | { baz: string } | Date | Json[] | null>()
     })

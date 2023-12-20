@@ -8,7 +8,7 @@ import {
   fallbackNotAwaitable,
   fallbackAwaitable,
   isNotAwaitable,
-  isAwaitable
+  isAwaitable,
 } from '.'
 
 const expectedValueTypes = [
@@ -16,7 +16,7 @@ const expectedValueTypes = [
   ValueType.ThenableFunction,
   ValueType.ThenableInstance,
   ValueType.ThenableObject,
-  ValueType.Awaited
+  ValueType.Awaited,
 ]
 
 describe('isAwaitable', () => {

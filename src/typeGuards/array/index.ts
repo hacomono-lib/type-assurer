@@ -6,7 +6,7 @@ import {
   TypeAssertOf,
   TypeEnsureOf,
   TypeFallbackOf,
-  TypeGuard
+  TypeGuard,
 } from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
@@ -105,7 +105,7 @@ export const isNotArray = not(isArray)
  */
 export const assertNotArray: InvertedTypeAssertOf<IsArray> = createAssertion(
   not(isArray),
-  errorMessage('array', { not: true })
+  errorMessage('array', { not: true }),
 )
 
 /**
@@ -124,7 +124,7 @@ export const assertNotArray: InvertedTypeAssertOf<IsArray> = createAssertion(
  */
 export const ensureNotArray: InvertedTypeEnsureOf<IsArray> = createEnsure(
   not(isArray),
-  errorMessage('array', { not: true })
+  errorMessage('array', { not: true }),
 )
 
 /**

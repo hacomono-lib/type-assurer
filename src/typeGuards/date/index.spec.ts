@@ -8,7 +8,7 @@ import {
   fallbackNotDate,
   fallbackDate,
   isDate,
-  isNotDate
+  isNotDate,
 } from '.'
 import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
 

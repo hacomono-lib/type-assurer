@@ -1,20 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import {
-  assertJSONParsable,
-  ensureJSONParsable,
-  fallbackJSONParsable,
-  isJSONParsable,
-  coerceJSON,
-  fixJSON
-} from '.'
-import {
-  allTypes,
-  testAssert,
-  testEnsure,
-  testFallback,
-  testGuard,
-  ValueType
-} from '../../lib/test'
+import { assertJSONParsable, ensureJSONParsable, fallbackJSONParsable, isJSONParsable, coerceJSON, fixJSON } from '.'
+import { allTypes, testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 
 const expected = [
   ValueType.JsonParsableArray,
@@ -32,7 +18,7 @@ const expected = [
   ValueType.NumberParsablePositiveFloat,
   ValueType.NumberParsableNegativeFloat,
   ValueType.BooleanParsableTrue,
-  ValueType.BooleanParsableFalse
+  ValueType.BooleanParsableFalse,
 ]
 
 const expectedCoerceType = [ValueType.True, ValueType.False, ValueType.Null]
@@ -52,13 +38,11 @@ describe('ensureJSONParsable', () => {
 describe('fallbackJSONParsable', () => {
   testFallback(fallbackJSONParsable, expected, {
     parsableString: true,
-    fallbackValue: [{ foo: 'bar' }]
+    fallbackValue: [{ foo: 'bar' }],
   })
 })
 
-const notExpected = allTypes().filter(
-  (type) => !expected.includes(type) && !expectedCoerceType.includes(type)
-)
+const notExpected = allTypes().filter((type) => !expected.includes(type) && !expectedCoerceType.includes(type))
 
 describe('coerceJson', () => {
   test('coerces string to JSON', () => {

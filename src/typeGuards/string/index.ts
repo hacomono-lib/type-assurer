@@ -32,10 +32,7 @@ type IsString = typeof isString
  * // target is string
  * ```
  */
-export const assertString: TypeAssertOf<IsString> = createAssertion(
-  isString,
-  errorMessage('string')
-)
+export const assertString: TypeAssertOf<IsString> = createAssertion(isString, errorMessage('string'))
 
 /**
  * Ensures that a value is a string.

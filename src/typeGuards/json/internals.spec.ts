@@ -42,13 +42,9 @@ describe('deepJSONEqual', () => {
   })
 
   it('returns true if the values are equal objects with toJSON methods', () => {
-    expect(deepJSONEqual({ foo: { toJSON: (k: string) => `${k} ${k}` } }, { foo: 'foo foo' })).toBe(
-      true
-    )
+    expect(deepJSONEqual({ foo: { toJSON: (k: string) => `${k} ${k}` } }, { foo: 'foo foo' })).toBe(true)
 
-    expect(deepJSONEqual({ foo: 'foo foo' }, { foo: { toJSON: (k: string) => `${k} ${k}` } })).toBe(
-      true
-    )
+    expect(deepJSONEqual({ foo: 'foo foo' }, { foo: { toJSON: (k: string) => `${k} ${k}` } })).toBe(true)
   })
 
   it('returns true if the values are equal arrays with toJSON methods', () => {

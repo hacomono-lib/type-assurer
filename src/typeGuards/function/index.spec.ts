@@ -8,7 +8,7 @@ const expected = [
   ValueType.GeneratorFunction,
   ValueType.AsyncGeneratorFunction,
   ValueType.Class,
-  ValueType.ThenableFunction
+  ValueType.ThenableFunction,
 ]
 
 describe('isFunction', () => {

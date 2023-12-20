@@ -4,7 +4,7 @@
     { "path": "docs", "name": "@docs" }
   ],
   "extensions": {
-    "recommendations": ["astro-build.astro-vscode", "DavidAnson.vscode-markdownlint"],
+    "recommendations": ["astro-build.astro-vscode", "DavidAnson.vscode-markdownlint", "biomejs.biome", "ZixuanChen.vitest-explorer"],
   },
   "launch": {
     "version": "0.2.0",
@@ -18,6 +18,25 @@
     ]
   },
   "settings": {
+    "typescript.tsdk": "node_modules/typescript/lib",
+
+    "[javascript]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+
+    "[typescript]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+
+    "[astro]": {
+      "editor.defaultFormatter": "biomejs.biome"
+    },
+
+    "editor.codeActionsOnSave": {
+      "quickfix.biome": "explicit",
+      "source.organizeImports.biome": "explicit"
+    },
+
     "markdownlint.config": {
       "no-duplicate-heading": false
     }

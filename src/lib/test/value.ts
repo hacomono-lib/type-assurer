@@ -95,16 +95,16 @@ const generators = {
   [ValueType.IterableObject]: () => ({
     *[Symbol.iterator]() {
       yield 1
-    }
+    },
   }),
   [ValueType.AsyncIterableObject]: () => ({
     async *[Symbol.asyncIterator]() {
       yield 1
-    }
+    },
   }),
   [ValueType.JsonifiableObject]: () => ({
     foo: 'bar',
-    baz: { toJSON: (k: string | number) => `${k}` }
+    baz: { toJSON: (k: string | number) => `${k}` },
   }),
   [ValueType.JsonifiableObjectInArray]: () => [{ toJSON: (k: string | number) => `${k}` }],
   [ValueType.RegExp]: () => /foo/,
@@ -163,7 +163,7 @@ const generators = {
     },
   [ValueType.Symbol]: () => Symbol('foo'),
   [ValueType.ObjectToPrimitiveSymbol]: () => ({ [Symbol.toPrimitive]: () => Symbol('foo') }),
-  [ValueType.ObjectValueOfSymbol]: () => ({ valueOf: () => Symbol('foo') })
+  [ValueType.ObjectValueOfSymbol]: () => ({ valueOf: () => Symbol('foo') }),
 } as const satisfies Record<ValueType, Readonly<ValueFactory>>
 
 Object.freeze(generators)
@@ -189,9 +189,7 @@ export function testTypes(expectTargets: ValueType[], opt: PickTypesOption = {})
     let result = true
 
     if (!opt.parsableString) {
-      result &&=
-        !t.toLocaleLowerCase().includes('parsable') &&
-        !t.toLocaleLowerCase().includes('jsonifiable')
+      result &&= !t.toLocaleLowerCase().includes('parsable') && !t.toLocaleLowerCase().includes('jsonifiable')
     }
 
     if (!opt.typedArray) {
@@ -203,12 +201,11 @@ export function testTypes(expectTargets: ValueType[], opt: PickTypesOption = {})
 
   const cachedValues = targetTypes.reduce(
     (acc, t): Partial<Record<ValueType, unknown>> => ({ ...acc, [t]: getGenerator(t)() }),
-    {}
+    {},
   ) as Record<ValueType, unknown>
 
   return targetTypes.filter(
-    (t) =>
-      expectTargets.includes(t) || !expectTargets.some((e) => cachedValues[t] === cachedValues[e])
+    (t) => expectTargets.includes(t) || !expectTargets.some((e) => cachedValues[t] === cachedValues[e]),
   )
 }
 

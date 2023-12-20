@@ -527,5 +527,5 @@ export enum ValueType {
   /**
    * @description `new WeakSet()`
    */
-  EmptyWeakSet = 'emptyWeakSet'
+  EmptyWeakSet = 'emptyWeakSet',
 }

@@ -19,16 +19,13 @@ type JSONStrObject = `{${string}}`
 type ParseJSONStrObject<_T extends JSONStrObject> = JSON
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type ParseJSON<T extends JSONParsable> = T extends `${infer U extends
-  | number
-  | boolean
-  | null}`
+export type ParseJSON<T extends JSONParsable> = T extends `${infer U extends number | boolean | null}`
   ? U
   : T extends `{${string}}`
-  ? ParseJSONStrObject<T>
-  : T extends `[${string}]`
-  ? ParseJSONStrArray<T>
-  : never
+    ? ParseJSONStrObject<T>
+    : T extends `[${string}]`
+      ? ParseJSONStrArray<T>
+      : never
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type NotJSONParsable = Exclude<any, JSONParsable>

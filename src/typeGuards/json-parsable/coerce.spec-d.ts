@@ -38,13 +38,7 @@ describe('coerceJSON type tests', () => {
       })
 
       test('guard definite types 3', () => {
-        const target = { foo: 'bar' } as
-          | { foo: string }
-          | Date
-          | unknown[]
-          | null
-          | (() => void)
-          | undefined
+        const target = { foo: 'bar' } as { foo: string } | Date | unknown[] | null | (() => void) | undefined
         const result = coerceJSON(target)
         expectTypeOf(result).toEqualTypeOf<{ foo: string } | Date | Json[] | null>()
       })

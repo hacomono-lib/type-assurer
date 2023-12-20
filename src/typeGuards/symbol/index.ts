@@ -32,10 +32,7 @@ type IsSymbol = typeof isSymbol
  * // target is symbol
  * ```
  */
-export const assertSymbol: TypeAssertOf<IsSymbol> = createAssertion(
-  isSymbol,
-  errorMessage('symbol')
-)
+export const assertSymbol: TypeAssertOf<IsSymbol> = createAssertion(isSymbol, errorMessage('symbol'))
 
 /**
  * Ensures that a value is a symbol.

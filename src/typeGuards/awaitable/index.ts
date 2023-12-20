@@ -6,7 +6,7 @@ import type {
   TypeAssertOf,
   TypeEnsureOf,
   TypeFallbackOf,
-  TypeGuard
+  TypeGuard,
 } from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
@@ -45,7 +45,7 @@ type IsPromiseLike = typeof isAwaitable
 
 export const assertAwaitable: TypeAssertOf<IsPromiseLike> = createAssertion(
   isAwaitable,
-  errorMessage('promise-like object')
+  errorMessage('promise-like object'),
 )
 
 /**
@@ -64,7 +64,7 @@ export const assertAwaitable: TypeAssertOf<IsPromiseLike> = createAssertion(
  */
 export const ensureAwaitable: TypeEnsureOf<IsPromiseLike> = createEnsure(
   isAwaitable,
-  errorMessage('promise-like object')
+  errorMessage('promise-like object'),
 )
 
 /**
@@ -113,7 +113,7 @@ export const isNotAwaitable = not(isAwaitable)
  */
 export const assertNotAwaitable: InvertedTypeAssertOf<IsPromiseLike> = createAssertion(
   not(isAwaitable),
-  errorMessage('promise-like object', { not: true })
+  errorMessage('promise-like object', { not: true }),
 )
 
 /**
@@ -132,7 +132,7 @@ export const assertNotAwaitable: InvertedTypeAssertOf<IsPromiseLike> = createAss
  */
 export const ensureNotAwaitable: InvertedTypeEnsureOf<IsPromiseLike> = createEnsure(
   not(isAwaitable),
-  errorMessage('promise-like object', { not: true })
+  errorMessage('promise-like object', { not: true }),
 )
 
 /**
@@ -148,6 +148,4 @@ export const ensureNotAwaitable: InvertedTypeEnsureOf<IsPromiseLike> = createEns
  * // result is string
  * ```
  */
-export const fallbackNotAwaitable: InvertedTypeFallbackOf<IsPromiseLike> = createFallback(
-  not(isAwaitable)
-)
+export const fallbackNotAwaitable: InvertedTypeFallbackOf<IsPromiseLike> = createFallback(not(isAwaitable))

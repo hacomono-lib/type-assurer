@@ -32,8 +32,8 @@ export type Not<T extends TypeGuard> = InvertedTypeGuard<GuardedType<T>>
 export type GuardedType<T extends TypeGuard | InvertedTypeGuard> = T extends TypeGuard<infer U>
   ? U
   : T extends InvertedTypeGuard<infer U>
-  ? U
-  : never
+    ? U
+    : never
 
 /**
  * @description type assertion.
@@ -70,11 +70,7 @@ export type InvertedTypeAssertOf<T extends TypeGuard> = InvertedTypeAssert<Guard
  * @description type ensure.
  */
 export interface TypeEnsure<T = unknown> extends Branded<'type_ensurer'> {
-  <U>(target: U, message?: TypeErrorMessage): unknown extends U
-    ? T
-    : Extract<U, T> extends never
-    ? T
-    : Extract<U, T>
+  <U>(target: U, message?: TypeErrorMessage): unknown extends U ? T : Extract<U, T> extends never ? T : Extract<U, T>
 }
 
 /**

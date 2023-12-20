@@ -5,17 +5,9 @@ import {
   fallbackNumberParsable,
   isNumberParsable,
   coerceNumber,
-  fixNumber
+  fixNumber,
 } from '.'
-import {
-  testAssert,
-  testEnsure,
-  testFallback,
-  testGuard,
-  testTypes,
-  getGenerator,
-  ValueType
-} from '../../lib/test'
+import { testAssert, testEnsure, testFallback, testGuard, testTypes, getGenerator, ValueType } from '../../lib/test'
 import { TypeAssertionError } from '../../lib/error'
 
 const expected = [
@@ -50,7 +42,7 @@ const expected = [
   ValueType.EmptyString,
   ValueType.EmptyArray,
   ValueType.EmptyBuffer,
-  ValueType.Date
+  ValueType.Date,
 ]
 
 describe('isNumberParsable', () => {

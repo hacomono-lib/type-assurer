@@ -6,7 +6,7 @@ import {
   TypeAssertOf,
   TypeEnsureOf,
   TypeFallbackOf,
-  TypeGuard
+  TypeGuard,
 } from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
@@ -23,8 +23,7 @@ import { errorMessage } from '../../lib/error'
  * }
  * ```
  */
-export const isDate = ((target: unknown): target is Date =>
-  target instanceof Date) as TypeGuard<Date>
+export const isDate = ((target: unknown): target is Date => target instanceof Date) as TypeGuard<Date>
 
 type IsDate = typeof isDate
 
@@ -106,7 +105,7 @@ export const isNotDate = not(isDate)
  */
 export const assertNotDate: InvertedTypeAssertOf<IsDate> = createAssertion(
   not(isDate),
-  errorMessage('Date', { not: true })
+  errorMessage('Date', { not: true }),
 )
 
 /**
@@ -125,7 +124,7 @@ export const assertNotDate: InvertedTypeAssertOf<IsDate> = createAssertion(
  */
 export const ensureNotDate: InvertedTypeEnsureOf<IsDate> = createEnsure(
   not(isDate),
-  errorMessage('Date', { not: true })
+  errorMessage('Date', { not: true }),
 )
 
 /**

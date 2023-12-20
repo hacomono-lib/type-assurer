@@ -1,13 +1,7 @@
 export type { JSONifiable, NotJSONifiable, JSONify } from './type'
 
 import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type {
-  TypeAssert,
-  TypeEnsure,
-  TypeErrorMessage,
-  TypeFallback,
-  TypeGuard
-} from '../../lib/types'
+import type { TypeAssert, TypeEnsure, TypeErrorMessage, TypeFallback, TypeGuard } from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
 import { deepJSONEqual, isJSONPrimitive } from './internals'

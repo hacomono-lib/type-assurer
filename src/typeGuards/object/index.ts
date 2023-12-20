@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-types */
 import { createAssertion, createEnsure, createFallback } from '../../lib/factory'
-import type {
-  TypeAssertOf,
-  TypeEnsureOf,
-  TypeErrorMessage,
-  TypeFallbackOf,
-  TypeGuard
-} from '../../lib/types'
+import type { TypeAssertOf, TypeEnsureOf, TypeErrorMessage, TypeFallbackOf, TypeGuard } from '../../lib/types'
 import { errorMessage } from '../../lib/error'
 
 type AnyFunction = Function | ((...args: any[]) => any)
@@ -17,36 +11,25 @@ type AnyArray = any[] | readonly any[]
 type DefinitelyObject<T> = unknown extends T
   ? Record<string, unknown>
   : Exclude<Extract<T, object>, AnyFunction | AnyArray> extends infer R
-  ? R extends never
-    ? T extends object
-      ? Record<string, unknown>
-      : never
-    : R
-  : never
+    ? R extends never
+      ? T extends object
+        ? Record<string, unknown>
+        : never
+      : R
+    : never
 
-type NotObject =
-  | string
-  | number
-  | boolean
-  | symbol
-  | bigint
-  | null
-  | undefined
-  | AnyFunction
-  | AnyArray
+type NotObject = string | number | boolean | symbol | bigint | null | undefined | AnyFunction | AnyArray
 
 interface ObjectTypeGuard extends TypeGuard<DefinitelyObject<any>> {
   <T>(target: T | NotObject): target is DefinitelyObject<T> & Exclude<T, NotObject>
 }
 
 interface ObjectTypeAssert extends TypeAssertOf<ObjectTypeGuard> {
-  <T>(target: T | NotObject, message?: TypeErrorMessage): asserts target is DefinitelyObject<T> &
-    Exclude<T, NotObject>
+  <T>(target: T | NotObject, message?: TypeErrorMessage): asserts target is DefinitelyObject<T> & Exclude<T, NotObject>
 }
 
 interface ObjectTypeEnsure extends TypeEnsureOf<ObjectTypeGuard> {
-  <T>(target: T | NotObject, message?: TypeErrorMessage): DefinitelyObject<T> &
-    Exclude<T, NotObject>
+  <T>(target: T | NotObject, message?: TypeErrorMessage): DefinitelyObject<T> & Exclude<T, NotObject>
 }
 
 interface ObjectTypeFallback extends TypeFallbackOf<ObjectTypeGuard> {

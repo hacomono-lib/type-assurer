@@ -7,7 +7,7 @@ import {
   fallbackNotBoolean,
   fallbackBoolean,
   isBoolean,
-  isNotBoolean
+  isNotBoolean,
 } from '.'
 import { testAssert, testEnsure, testFallback, testGuard, ValueType } from '../../lib/test'
 

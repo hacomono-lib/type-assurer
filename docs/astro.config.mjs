@@ -12,7 +12,7 @@ export default defineConfig({
       sidebar: [
         {
           label: 'Home',
-          link: '/'
+          link: '/',
         },
         {
           label: 'Introduction',
@@ -20,7 +20,7 @@ export default defineConfig({
           items: [
             { label: 'Getting Started', link: '/guides/start' },
             { label: 'Concepts', link: '/guides/concepts' },
-          ]
+          ],
         },
         {
           label: 'Reference',
@@ -29,16 +29,16 @@ export default defineConfig({
             {
               label: 'Common',
               collapsed: false,
-              autogenerate: { directory: '/reference/common', collapsed: false }
+              autogenerate: { directory: '/reference/common', collapsed: false },
             },
             {
               label: 'Type Guards',
               collapsed: false,
-              autogenerate: { directory: '/reference/typeGuards', collapsed: false }
-            }
-          ]
-        }
-      ]
-    })
-  ]
+              autogenerate: { directory: '/reference/typeGuards', collapsed: false },
+            },
+          ],
+        },
+      ],
+    }),
+  ],
 })

@@ -18,8 +18,7 @@ import { errorMessage } from '../../lib/error'
  * // false
  * ```
  */
-export const isNumber = ((target: unknown) =>
-  typeof target === 'number' && !Number.isNaN(target)) as TypeGuard<number>
+export const isNumber = ((target: unknown) => typeof target === 'number' && !Number.isNaN(target)) as TypeGuard<number>
 
 type IsNumber = typeof isNumber
 
@@ -36,10 +35,7 @@ type IsNumber = typeof isNumber
  * ```
  */
 
-export const assertNumber: TypeAssertOf<IsNumber> = createAssertion(
-  isNumber,
-  errorMessage('number')
-)
+export const assertNumber: TypeAssertOf<IsNumber> = createAssertion(isNumber, errorMessage('number'))
 
 /**
  * Ensures that a value is a number.

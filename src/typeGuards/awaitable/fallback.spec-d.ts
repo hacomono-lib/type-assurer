@@ -17,9 +17,7 @@ describe('fallbackAwaitable type tests', () => {
 
   test('fallback union types', () => {
     const targetUnion = Promise.resolve() as unknown as Promise<string | number> | string | number
-    assertType<Promise<string | number>>(
-      fallbackAwaitable(targetUnion, Promise.resolve('fallback'))
-    )
+    assertType<Promise<string | number>>(fallbackAwaitable(targetUnion, Promise.resolve('fallback')))
   })
 
   test('uncorrectable types', () => {

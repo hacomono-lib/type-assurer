@@ -8,7 +8,7 @@ import {
   fallbackNotArray,
   fallbackArray,
   isArray,
-  isNotArray
+  isNotArray,
 } from '.'
 import { testEquivalentAssert, testEquivalentEnsure, testEquivalentFallback, testEquivalentGuard } from '../../lib/test'
 

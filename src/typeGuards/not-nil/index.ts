@@ -1,11 +1,6 @@
 import { errorMessage } from '../../lib/error'
 import { createAssertion, createEnsure, not } from '../../lib/factory'
-import type {
-  InvertedTypeAssert,
-  InvertedTypeEnsure,
-  InvertedTypeGuard,
-  TypeErrorMessage
-} from '../../lib/types'
+import type { InvertedTypeAssert, InvertedTypeEnsure, InvertedTypeGuard, TypeErrorMessage } from '../../lib/types'
 
 import { isNil, type Nil } from '../nil'
 
@@ -14,9 +9,7 @@ interface GuardNotNil extends InvertedTypeGuard<Nil> {
 }
 
 interface AssertNotNil extends InvertedTypeAssert<Nil> {
-  <T>(target: T | {}, message?: TypeErrorMessage): asserts target is unknown extends T
-    ? {}
-    : Exclude<T, Nil>
+  <T>(target: T | {}, message?: TypeErrorMessage): asserts target is unknown extends T ? {} : Exclude<T, Nil>
 }
 
 interface EnsureNotNil extends InvertedTypeEnsure<Nil> {
@@ -51,10 +44,7 @@ export const isNotNil = not(isNil) as GuardNotNil
  * // target is string
  * ```
  */
-export const assertNotNil: AssertNotNil = createAssertion(
-  not(isNil),
-  errorMessage('null or undefined', { not: true })
-)
+export const assertNotNil: AssertNotNil = createAssertion(not(isNil), errorMessage('null or undefined', { not: true }))
 
 /**
  * Ensures that a value is not null or undefined.
@@ -70,10 +60,7 @@ export const assertNotNil: AssertNotNil = createAssertion(
  * // result is string
  * ```
  */
-export const ensureNotNil: EnsureNotNil = createEnsure(
-  not(isNil),
-  errorMessage('null or undefined', { not: true })
-)
+export const ensureNotNil: EnsureNotNil = createEnsure(not(isNil), errorMessage('null or undefined', { not: true }))
 
 /**
  * `fallbackNotNil` is not needed because it is not useful.

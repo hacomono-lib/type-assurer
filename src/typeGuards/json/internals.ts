@@ -4,9 +4,7 @@ import { isString } from '../string'
 import { isNumber } from '../number'
 import { isBoolean } from '../boolean'
 
-export function hasToJSON(
-  value: unknown
-): value is { toJSON: (key: string | number | symbol) => unknown } {
+export function hasToJSON(value: unknown): value is { toJSON: (key: string | number | symbol) => unknown } {
   return isObject(value) && typeof (value as { toJSON: unknown }).toJSON === 'function'
 }
 
@@ -63,7 +61,7 @@ function getKeys(a: Record<string, unknown>): Array<string | number | symbol> {
 
 function objectEquals(
   a: Record<string | number | symbol, unknown>,
-  b: Record<string | number | symbol, unknown>
+  b: Record<string | number | symbol, unknown>,
 ): boolean {
   const aKeys = getKeys(a)
   const bKeys = getKeys(b)
