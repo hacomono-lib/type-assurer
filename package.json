@@ -32,8 +32,8 @@
     "test": "yarn test:spec & yarn test:type",
     "test:spec": "vitest --run --typecheck",
     "test:type": "tsc --noEmit -p tsconfig.json",
-    "format": "biome format --write ./src ./test ./docs",
-    "lint": "biome check --apply ./src ./test ./docs"
+    "format": "biome format --write ./src ./docs",
+    "lint": "biome check --apply ./src ./docs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.3.1",

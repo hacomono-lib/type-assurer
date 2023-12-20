@@ -1,7 +1,8 @@
 import { defineConfig } from 'tsup'
 import config from './package.json'
 
-export default defineConfig({
+// biome-ignore lint/nursery/noDefaultExport: <explanation>
+export  default defineConfig({
   name: config.name,
   entry: ['src/index.ts'],
   format: ['cjs', 'esm'],

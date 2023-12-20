@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitest/config'
 
-export default defineConfig({
+// biome-ignore lint/nursery/noDefaultExport: <explanation>
+export  default defineConfig({
   test: {
     include: ['src/**/*.{test,spec}.ts'],
     typecheck: {
