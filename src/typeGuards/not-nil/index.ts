@@ -9,17 +9,17 @@ import type {
 
 import { isNil, type Nil } from '../nil'
 
-export interface GuardNotNil extends InvertedTypeGuard<Nil> {
+interface GuardNotNil extends InvertedTypeGuard<Nil> {
   <T>(target: T | {}): target is unknown extends T ? {} : Exclude<T, Nil>
 }
 
-export interface AssertNotNil extends InvertedTypeAssert<Nil> {
+interface AssertNotNil extends InvertedTypeAssert<Nil> {
   <T>(target: T | {}, message?: TypeErrorMessage): asserts target is unknown extends T
     ? {}
     : Exclude<T, Nil>
 }
 
-export interface EnsureNotNil extends InvertedTypeEnsure<Nil> {
+interface EnsureNotNil extends InvertedTypeEnsure<Nil> {
   <T>(target: T | {}, message?: TypeErrorMessage): unknown extends T ? {} : Exclude<T, Nil>
 }
 

@@ -1,5 +1,7 @@
+export type { Empty } from './type'
+
 import type { TypeGuard } from '../../lib/types'
-import type { Empty, NotEmpty } from './type'
+import type { Empty } from './type'
 
 interface IsEmpty extends TypeGuard<Empty> {
   (target: string): target is ''

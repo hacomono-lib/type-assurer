@@ -24,12 +24,10 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "yarn dev:doc & yarn dev:test",
-    "dev:doc": "astro dev --root ./docs --open",
-    "dev:test": "vitest --ui --coverage --typecheck",
-    "build": "yarn build:src & yarn build:docs",
-    "build:src": "tsup",
-    "build:docs": "astro check --root ./docs && astro build --root ./docs",
+    "dev": "vitest --ui --coverage --typecheck",
+    "doc-dev": "astro dev --root ./docs --open",
+    "build": "tsup",
+    "doc-build": "astro check --root ./docs && astro build --root ./docs",
     "preview": "astro preview --root ./docs",
     "test": "yarn test:spec & yarn test:type",
     "test:spec": "vitest --run --typecheck",
