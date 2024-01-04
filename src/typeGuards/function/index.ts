@@ -1,22 +1,21 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import { createAssertion, createEnsure, createFallback } from '../../lib'
-import { errorMessage } from '../../lib'
-import type { TypeAssert, TypeEnsure, TypeFallback, TypeGuard } from '../../lib/types'
+import { createAssertion, createEnsure, createFallback, errorMessage } from '../../lib'
+import type { TypeAssert, TypeEnsure, TypeFallback, TypeGuard } from '../../lib'
 
+// biome-ignore lint/complexity/noBannedTypes: <explanation>
 export type AnyFunction = AnyPlainFunction | AnyGeneratorFunction | AnyClass | Function
 
 interface AnyPlainFunction {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   (...args: any[]): any
 }
 
 interface AnyGeneratorFunction {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   (...args: any[]): Generator<any, any, any>
 }
 
 interface AnyClass {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   new (...args: any[]): any
 }
 
@@ -34,6 +33,7 @@ interface IsFunction extends TypeGuard<AnyFunction> {
    * // false
    * ```
    */
+  // biome-ignore lint/complexity/noBannedTypes: <explanation>
   <T>(target: T): target is unknown extends T ? Function & T : T extends AnyFunction ? T : never
 }
 
@@ -53,7 +53,8 @@ interface AssertFunction extends TypeAssert<AnyFunction> {
    * ```
    */
   <T>(target: T, message?: string): asserts target is unknown extends T
-    ? Function & T
+    ? // biome-ignore lint/complexity/noBannedTypes: <explanation>
+      Function & T
     : T extends AnyFunction
       ? T
       : never

@@ -42,48 +42,52 @@ describe('fallbackJSONParsable', () => {
   })
 })
 
-const notExpected = allTypes().filter((type) => !expected.includes(type) && !expectedCoerceType.includes(type))
+const caseUnparsableTypes = allTypes().filter((type) => !(expected.includes(type) || expectedCoerceType.includes(type)))
 
 describe('coerceJson', () => {
-  test('coerces string to JSON', () => {
-    expect(coerceJSON('{"foo":"bar"}')).toStrictEqual({ foo: 'bar' })
-    expect(coerceJSON('123')).toBe(123)
-    expect(coerceJSON('true')).toBe(true)
-    expect(coerceJSON('false')).toBe(false)
-    expect(coerceJSON('null')).toBe(null)
+  const caseStrings = [
+    { input: '{"foo": "bar"}', expected: { foo: 'bar' } },
+    { input: '123', expected: 123 },
+    { input: 'true', expected: true },
+    { input: 'false', expected: false },
+    { input: 'null', expected: null },
+  ]
+
+  test.each(caseStrings)('should coerce to json object when the value is $input', ({ input, expected }) => {
+    expect(coerceJSON(input)).toStrictEqual(expected)
   })
 
-  test('coerces object or primitive to JSON', () => {
-    expect(coerceJSON({ foo: 'bar' })).toStrictEqual({ foo: 'bar' })
-    expect(coerceJSON(123)).toBe(123)
-    expect(coerceJSON(true)).toBe(true)
-    expect(coerceJSON(false)).toBe(false)
-    expect(coerceJSON(null)).toBe(null)
+  const caseJsons = [{ foo: 'bar' }, 123, true, false, null]
+
+  test.each(caseJsons)('should coerce to json object when the value is %s', (input) => {
+    expect(coerceJSON(input)).toStrictEqual(input)
   })
 
-  test.each(notExpected)('test value type %s: should results false', (type) => {
+  test.each(caseUnparsableTypes)('should throw error when the value type is %s', (type) => {
     expect(() => coerceJSON(type)).toThrow()
   })
 })
 
 describe('fixJson', () => {
-  test('fixes JSON', () => {
-    expect(fixJSON('{"foo":"bar"}', {})).toStrictEqual({ foo: 'bar' })
-    expect(fixJSON('123', {})).toBe(123)
-    expect(fixJSON('true', {})).toBe(true)
-    expect(fixJSON('false', {})).toBe(false)
-    expect(fixJSON('null', {})).toBe(null)
+  const caseStrings = [
+    { input: '{"foo": "bar"}', expected: { foo: 'bar' } },
+    { input: '123', expected: 123 },
+    { input: 'true', expected: true },
+    { input: 'false', expected: false },
+    { input: 'null', expected: null },
+  ]
+
+  test.each(caseStrings)('should fix to json object when the the value is $input', ({ input, expected }) => {
+    expect(fixJSON(input, {})).toStrictEqual(expected)
   })
 
-  test('fixes object or primitive', () => {
-    expect(fixJSON({ foo: 'bar' }, {})).toStrictEqual({ foo: 'bar' })
-    expect(fixJSON(123, {})).toBe(123)
-    expect(fixJSON(true, {})).toBe(true)
-    expect(fixJSON(false, {})).toBe(false)
-    expect(fixJSON(null, {})).toBe(null)
+  const caseJsons = [{ foo: 'bar' }, 123, true, false, null]
+
+  test.each(caseJsons)('should fix to json object when the value is %s', (input) => {
+    expect(fixJSON(input, {})).toStrictEqual(input)
   })
 
-  test.each(notExpected)('test value type %s: should results false', (type) => {
+  test.each(caseUnparsableTypes)('should fix to fallback value when the value type is %s', (type) => {
     expect(fixJSON(type, {})).toStrictEqual({})
   })
 })

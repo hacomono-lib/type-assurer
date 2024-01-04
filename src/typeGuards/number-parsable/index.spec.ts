@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import {
   assertNumberParsable,
   coerceNumber,
@@ -62,56 +62,58 @@ describe('fallbackNumberParsable', () => {
 })
 
 describe('coerceNumber', () => {
-  it('should coerce number', () => {
-    expect(coerceNumber(123)).toBe(123)
-    expect(coerceNumber(123.456)).toBe(123.456)
-    expect(coerceNumber(Infinity)).toBe(Infinity)
-    expect(coerceNumber(-123)).toBe(-123)
-    expect(coerceNumber(-123.456)).toBe(-123.456)
-    expect(coerceNumber(-Infinity)).toBe(-Infinity)
-    expect(coerceNumber(0)).toBe(0)
+  const caseNumbers = [123, 123.456, Infinity, -123, -123.456, -Infinity, 0]
+
+  test.each(caseNumbers)('should coerce number when argument is %s', (value) => {
+    expect(coerceNumber(value)).toBe(value)
   })
 
-  it('should coerce number from number-like string', () => {
-    expect(coerceNumber('123')).toBe(123)
-    expect(coerceNumber('123.456')).toBe(123.456)
-    expect(coerceNumber('Infinity')).toBe(Infinity)
-    expect(coerceNumber('-123')).toBe(-123)
-    expect(coerceNumber('-123.456')).toBe(-123.456)
-    expect(coerceNumber('-Infinity')).toBe(-Infinity)
+  const caseNumberLikeStrings = [
+    { input: '123', expected: 123 },
+    { input: '123.456', expected: 123.456 },
+    { input: 'Infinity', expected: Infinity },
+    { input: '-123', expected: -123 },
+    { input: '-123.456', expected: -123.456 },
+    { input: '-Infinity', expected: -Infinity },
+    { input: '0', expected: 0 },
+  ]
+
+  test.each(caseNumberLikeStrings)('should coerce number when argument is $input', ({ input, expected }) => {
+    expect(coerceNumber(input)).toBe(expected)
   })
 
-  const target = testTypes(expected).filter((type) => !expected.includes(type))
+  const caseThrown = testTypes(expected).filter((type) => !expected.includes(type))
 
-  it.each(target)('should throw error when argument is %s', (type) => {
+  test.each(caseThrown)('should throw error when argument is %s', (type) => {
     const value = getGenerator(type)()
     expect(() => coerceNumber(value)).toThrow(TypeAssertionError)
   })
 })
 
 describe('fixNumber', () => {
-  it('should fix number', () => {
-    expect(fixNumber(123, NaN)).toBe(123)
-    expect(fixNumber(123.456, NaN)).toBe(123.456)
-    expect(fixNumber(Infinity, NaN)).toBe(Infinity)
-    expect(fixNumber(-123, NaN)).toBe(-123)
-    expect(fixNumber(-123.456, NaN)).toBe(-123.456)
-    expect(fixNumber(-Infinity, NaN)).toBe(-Infinity)
-    expect(fixNumber(0, NaN)).toBe(0)
+  const caseNumbers = [123, 123.456, Infinity, -123, -123.456, -Infinity, 0]
+
+  test.each(caseNumbers)('should fix number when argument is %s', (value) => {
+    expect(fixNumber(value, NaN)).toBe(value)
   })
 
-  it('should fix number from number-like string', () => {
-    expect(fixNumber('123', NaN)).toBe(123)
-    expect(fixNumber('123.456', NaN)).toBe(123.456)
-    expect(fixNumber('Infinity', NaN)).toBe(Infinity)
-    expect(fixNumber('-123', NaN)).toBe(-123)
-    expect(fixNumber('-123.456', NaN)).toBe(-123.456)
-    expect(fixNumber('-Infinity', NaN)).toBe(-Infinity)
+  const caseNumberLikeStrings = [
+    { input: '123', expected: 123 },
+    { input: '123.456', expected: 123.456 },
+    { input: 'Infinity', expected: Infinity },
+    { input: '-123', expected: -123 },
+    { input: '-123.456', expected: -123.456 },
+    { input: '-Infinity', expected: -Infinity },
+    { input: '0', expected: 0 },
+  ]
+
+  test.each(caseNumberLikeStrings)('should fix number when argument is $input', ({ input, expected }) => {
+    expect(fixNumber(input, NaN)).toBe(expected)
   })
 
-  const target = testTypes(expected).filter((type) => !expected.includes(type))
+  const caseThrown = testTypes(expected).filter((type) => !expected.includes(type))
 
-  it.each(target)('should return fallback value when argument is %s', (type) => {
+  test.each(caseThrown)('should return fallback value when argument is %s', (type) => {
     const value = getGenerator(type)()
     expect(fixNumber(value, NaN)).toBe(NaN)
     expect(fixNumber(value, 123)).toBe(123)

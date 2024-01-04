@@ -32,6 +32,9 @@ type NotObject = string | number | boolean | symbol | bigint | null | undefined 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 interface ObjectTypeGuard extends TypeGuard<DefinitelyObject<any>> {
   <T>(target: T | NotObject): target is DefinitelyObject<T> & Exclude<T, NotObject>
+
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  <V extends DefinitelyObject<any>>(target: unknown): target is V
 }
 
 interface ObjectTypeAssert extends TypeAssertOf<ObjectTypeGuard> {

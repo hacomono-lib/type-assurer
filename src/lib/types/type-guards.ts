@@ -35,6 +35,7 @@ export type GuardedType<T extends TypeGuard | InvertedTypeGuard> = T extends Typ
  * @description type assertion.
  */
 export interface TypeAssert<T = unknown> {
+  <U extends T>(target: unknown, message?: TypeErrorMessage): asserts target is U
   (target: unknown, message?: TypeErrorMessage): asserts target is T
 }
 
@@ -54,7 +55,17 @@ export type TypeAssertOf<T extends TypeGuard> = TypeAssert<GuardedType<T>>
  * @description type ensure.
  */
 export interface TypeEnsure<T = unknown> {
-  <U>(target: U, message?: TypeErrorMessage): unknown extends U ? T : Extract<U, T> extends never ? T : Extract<U, T>
+  <U, V extends T>(target: U | V, message?: TypeErrorMessage): unknown extends U
+    ? T
+    : Extract<U, T> extends never
+      ? T
+      : Extract<U, T>
+
+  <W extends T>(target: unknown, message?: TypeErrorMessage): unknown extends W
+    ? T
+    : Extract<W, T> extends never
+      ? T
+      : Extract<W, T>
 }
 
 /**
@@ -69,6 +80,10 @@ export interface TypeFallback<T = unknown> {
   <U, V extends T>(target: U, fallback: V):
     | (unknown extends U ? T : Extract<U, T> extends never ? T : Extract<U, T>)
     | V
+
+  <X extends T>(target: unknown, fallback: X):
+    | (unknown extends X ? T : Extract<X, T> extends never ? T : Extract<X, T>)
+    | X
 }
 
 /**

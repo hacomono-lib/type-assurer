@@ -25,7 +25,7 @@
   },
   "scripts": {
     "dev": "vitest --ui --coverage --typecheck",
-    "doc-dev": "astro dev --root ./docs --open",
+    "doc": "astro dev --root ./docs --open",
     "build": "tsup",
     "doc-build": "astro check --root ./docs && astro build --root ./docs",
     "preview": "astro preview --root ./docs",
