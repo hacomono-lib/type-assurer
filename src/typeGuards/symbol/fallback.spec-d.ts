@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { fallbackSymbol } from '.'
+import { fallbackSymbol } from './guards'
 
 describe('fallback definite types', () => {
   test('should fallback as symbol for symbol type values.', () => {

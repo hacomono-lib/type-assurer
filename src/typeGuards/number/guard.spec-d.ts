@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { isNumber } from '.'
+import { isNumber } from './guards'
 
 describe('guard definite types', () => {
   test('should guard as number for number type values.', () => {

@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { fallbackFunction } from '.'
+import { fallbackFunction } from './guards'
 
 describe('fallback definite types', () => {
   test('should fallback to Function for function type values.', () => {

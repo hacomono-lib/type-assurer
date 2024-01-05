@@ -1,6 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { fixJSON } from '.'
 import type { JSONValue } from '../../lib'
+import { fixJSON } from './guards'
 
 describe('fix definite types', () => {
   test('should fix as json-object for some json-object parsable string value.', () => {

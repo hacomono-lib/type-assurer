@@ -1,6 +1,6 @@
 import { describe } from 'vitest'
-import { assertJSON, ensureJSON, fallbackJSON, isJSON } from '.'
-import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '../../lib-test'
+import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '~/lib-test'
+import { assertJSON, ensureJSON, fallbackJSON, isJSON } from './guards'
 
 const expected = [
   ValueType.JsonifiableObject,

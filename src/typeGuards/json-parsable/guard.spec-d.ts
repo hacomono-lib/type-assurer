@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { type JSONParsable, isJSONParsable } from '.'
+import { type JSONParsable, isJSONParsable } from './guards'
 
 describe('guard definite types', () => {
   test('should guard as JSONParsable for JSONParsable type values.', () => {

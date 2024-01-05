@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { fallbackJSON } from '.'
+import { fallbackJSON } from './guards'
 import type { JSONifiable } from './type'
 
 describe('fallback definite types', () => {

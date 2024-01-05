@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { ensureFunction } from '.'
+import { ensureFunction } from './guards'
 
 describe('ensure definite types', () => {
   test('should ensure as Function for function type values.', () => {

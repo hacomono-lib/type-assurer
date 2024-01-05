@@ -1,6 +1,6 @@
 import { describe } from 'vitest'
-import { assertString, ensureString, fallbackString, isString } from '.'
-import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '../../lib-test'
+import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '~/lib-test'
+import { assertString, ensureString, fallbackString, isString } from './guards'
 
 const expected = [ValueType.String, ValueType.EmptyString, ValueType.NumberStringLeadingZero]
 

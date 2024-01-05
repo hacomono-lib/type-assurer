@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { isJSON } from '.'
+import { isJSON } from './guards'
 import type { JSONifiable, JSONifiableArray, JSONifiableObject } from './type'
 
 describe('guard definite types', () => {

@@ -1,6 +1,6 @@
 import { describe } from 'vitest'
-import { assertObject, ensureObject, fallbackObject, isObject } from '.'
-import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '../../lib-test'
+import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '~/lib-test'
+import { assertObject, ensureObject, fallbackObject, isObject } from './guards'
 
 const expected = [
   ValueType.BooleanObject,

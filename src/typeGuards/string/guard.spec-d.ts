@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { isString } from '.'
+import { isString } from './guards'
 
 describe('guard definite types', () => {
   test('should guard as string for string type values.', () => {

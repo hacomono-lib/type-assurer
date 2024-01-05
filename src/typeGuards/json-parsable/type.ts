@@ -1,4 +1,4 @@
-import type { JSONValue } from '../../lib'
+import type { JSONValue } from '~/lib'
 
 // biome-ignore lint/style/useNamingConvention: <explanation>
 export type JSONParsable = JSONStrPrimitive | JSONStrArray | JsonStrObject

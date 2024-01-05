@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { type JSONParsable, fallbackJSONParsable } from '.'
+import { type JSONParsable, fallbackJSONParsable } from './guards'
 
 describe('fallback definite types', () => {
   test('should fallback to JSONParsable for string type values.', () => {

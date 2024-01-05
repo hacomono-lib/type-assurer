@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { fallbackString } from '.'
+import { fallbackString } from './guards'
 
 describe('fallback definite types', () => {
   test('should fallback as string for string type values.', () => {

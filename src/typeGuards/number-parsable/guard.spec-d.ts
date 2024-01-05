@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { type NumberParsable, isNumberParsable } from '.'
+import { type NumberParsable, isNumberParsable } from './guards'
 
 describe('guard definite types', () => {
   test('should guard as NumberParsable type for NumberParsable type values.', () => {

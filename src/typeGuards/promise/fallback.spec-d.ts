@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { fallbackPromise } from '.'
+import { fallbackPromise } from './guards'
 
 describe('fallback definite types', () => {
   test('should fallback as Promise for Promise type values.', async () => {

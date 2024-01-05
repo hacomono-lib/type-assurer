@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { isNotNil } from '.'
+import { isNotNil } from './guards'
 
 describe('guard definite types', () => {
   test('should guard as not nil for some values with null.', () => {

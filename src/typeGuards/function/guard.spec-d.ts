@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { isFunction } from '.'
+import { isFunction } from './guards'
 
 describe('guard definite types', () => {
   test('should guard as Function for function type values.', () => {

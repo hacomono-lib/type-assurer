@@ -1,6 +1,6 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { coerceJSON } from '.'
 import type { JSONValue } from '../../lib'
+import { coerceJSON } from './guards'
 
 describe('coerce definite types', () => {
   test('should coerce to JSONValue for string type values.', () => {

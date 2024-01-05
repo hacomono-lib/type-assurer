@@ -1,6 +1,6 @@
-import { TypeErrorMessage, createAssertion, createEnsure, errorMessage, not } from '../../lib'
+import { type TypeErrorMessage, createAssertion, createEnsure, errorMessage, not } from '~/lib'
 
-import { type Nil, isNil } from '../nil'
+import { type Nil, isNil } from '../guards'
 
 interface GuardNotNil {
   // biome-ignore lint/complexity/noBannedTypes: <explanation>

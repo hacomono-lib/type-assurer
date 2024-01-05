@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { fallbackObject } from '.'
+import { fallbackObject } from './guards'
 
 describe('fallback definite types', () => {
   test('should fallback to default value for object type values.', () => {

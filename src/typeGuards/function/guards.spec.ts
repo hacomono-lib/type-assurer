@@ -1,6 +1,6 @@
 import { describe } from 'vitest'
-import { assertFunction, ensureFunction, fallbackFunction, isFunction } from '.'
 import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '../../lib-test'
+import { assertFunction, ensureFunction, fallbackFunction, isFunction } from './guards'
 
 const expected = [
   ValueType.Function,

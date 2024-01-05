@@ -2,7 +2,7 @@ export type EmptyString = ''
 
 export type EmptyArray = []
 
-export type EmptyObject = Record<string, never>
+export type EmptyObject = Record<string | number | symbol, never>
 
 export type EmptyPrimitive = null | undefined
 

@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { fixNumber } from '.'
+import { fixNumber } from './guards'
 
 describe('fix definite types', () => {
   test('should fix as number for NumberParsable type values.', () => {

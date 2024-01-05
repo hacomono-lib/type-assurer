@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { coerceNumber } from '.'
+import { coerceNumber } from './guards'
 
 describe('coerce definite types', () => {
   test('should coerce as number for NumberParable type values.', () => {

@@ -1,8 +1,8 @@
-import { isArray } from '../array'
-import { isBoolean } from '../boolean'
-import { isNumber } from '../number'
-import { isObject } from '../object'
-import { isString } from '../string'
+import { isArray } from '~/typeGuards/array'
+import { isBoolean } from '~/typeGuards/boolean'
+import { isNumber } from '~/typeGuards/number'
+import { isObject } from '~/typeGuards/object'
+import { isString } from '~/typeGuards/string'
 
 // biome-ignore lint/style/useNamingConvention: <explanation>
 export function hasToJSON(value: unknown): value is { toJSON: (key: string | number | symbol) => unknown } {

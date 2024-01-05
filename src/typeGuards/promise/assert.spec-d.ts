@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { assertPromise } from '.'
+import { assertPromise } from './guards'
 
 describe('assert definite types', () => {
   test('should assert as Promise for Promise type values.', () => {

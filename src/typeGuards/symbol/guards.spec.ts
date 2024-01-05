@@ -1,6 +1,6 @@
 import { describe } from 'vitest'
-import { assertSymbol, ensureSymbol, fallbackSymbol, isSymbol } from '.'
-import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '../../lib-test'
+import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '~/lib-test'
+import { assertSymbol, ensureSymbol, fallbackSymbol, isSymbol } from './guards'
 
 const expected = [ValueType.Symbol]
 

@@ -1,4 +1,6 @@
 import { describe, expect, test } from 'vitest'
+import { TypeAssertionError } from '~/lib'
+import { ValueType, getGenerator, testAssert, testEnsure, testFallback, testGuard, testTypes } from '~/lib-test'
 import {
   assertNumberParsable,
   coerceNumber,
@@ -6,9 +8,7 @@ import {
   fallbackNumberParsable,
   fixNumber,
   isNumberParsable,
-} from '.'
-import { TypeAssertionError } from '../../lib'
-import { ValueType, getGenerator, testAssert, testEnsure, testFallback, testGuard, testTypes } from '../../lib-test'
+} from './guards'
 
 const expected = [
   ValueType.True,

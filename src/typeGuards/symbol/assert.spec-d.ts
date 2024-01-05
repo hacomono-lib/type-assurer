@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { assertSymbol } from '.'
+import { assertSymbol } from './guards'
 
 describe('assert definite types', () => {
   test('should assert as symbol for symbol type values.', () => {
