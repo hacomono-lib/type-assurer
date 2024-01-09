@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { test, describe, expectTypeOf } from 'vitest'
-import { fallbackDate, fallbackNotDate } from '.'
+import { describe, expectTypeOf, test } from 'vitest'
+import { fallbackDate } from './guards'
 
 describe('fallbackDate type tests', () => {
   test('guard definite types.', () => {
@@ -22,22 +22,3 @@ describe('fallbackDate type tests', () => {
   })
 })
 
-describe('fallbackNotDate type tests', () => {
-  test('guard definite types.', () => {
-    const target = new Date() as Date | string
-    const result = fallbackNotDate(target, 'string')
-    expectTypeOf(result).toEqualTypeOf<string>()
-  })
-
-  test('guard unknown types', () => {
-    const target = 'string' as unknown
-    const result = fallbackNotDate(target, 'string')
-    expectTypeOf(result).toEqualTypeOf<unknown>()
-  })
-
-  test('uncorrect fallback type', () => {
-    const target = 'string' as unknown
-    // @ts-expect-error
-    fallbackNotDate(target, new Date())
-  })
-})

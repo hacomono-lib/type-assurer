@@ -1,7 +1,7 @@
 import expected from 'lodash/isNil.js'
 import { describe } from 'vitest'
+import { testEquivalentAssert, testEquivalentEnsure, testEquivalentGuard } from '~/lib-test'
 import { assertNotNil, ensureNotNil, isNotNil } from '.'
-import { testEquivalentAssert, testEquivalentEnsure, testEquivalentGuard } from '../../lib-test'
 
 describe('assertNotNil', () => {
   testEquivalentAssert(assertNotNil, expected, { negative: true })

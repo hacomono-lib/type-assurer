@@ -1,6 +1,6 @@
 import { describe } from 'vitest'
 import { ValueType, testAssert, testEnsure, testFallback, testGuard } from '~/lib-test'
-import { assertJSON, ensureJSON, fallbackJSON, isJSON } from './guards'
+import { assertJson, ensureJson, fallbackJson, isJson } from './guards'
 
 const expected = [
   ValueType.JsonifiableObject,
@@ -35,19 +35,19 @@ const expected = [
 ]
 
 describe('isJSON', () => {
-  testGuard(isJSON, expected, { parsableString: true })
+  testGuard(isJson, expected, { parsableString: true })
 })
 
 describe('assertJSON', () => {
-  testAssert(assertJSON, expected, { parsableString: true })
+  testAssert(assertJson, expected, { parsableString: true })
 })
 
 describe('ensureJSON', () => {
-  testEnsure(ensureJSON, expected, { parsableString: true })
+  testEnsure(ensureJson, expected, { parsableString: true })
 })
 
 describe('fallbackJSON', () => {
-  testFallback(fallbackJSON, expected, {
+  testFallback(fallbackJson, expected, {
     parsableString: true,
     fallbackValue: [{ foo: 'bar' }],
   })

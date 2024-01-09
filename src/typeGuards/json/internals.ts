@@ -4,19 +4,17 @@ import { isNumber } from '~/typeGuards/number'
 import { isObject } from '~/typeGuards/object'
 import { isString } from '~/typeGuards/string'
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export function hasToJSON(value: unknown): value is { toJSON: (key: string | number | symbol) => unknown } {
-  // biome-ignore lint/style/useNamingConvention: <explanation>
-  return isObject(value) && typeof (value as { toJSON: unknown }).toJSON === 'function'
+export function hasToJson(value: unknown): value is { toJson: (key: string | number | symbol) => unknown } {
+  return isObject(value) && typeof (value as { toJson: unknown }).toJson === 'function'
 }
 
 function getValueByObject(key: string | number | symbol, target: unknown): unknown {
-  if (isJSONPrimitive(target) || target === undefined) {
+  if (isJsonPrimitive(target) || target === undefined) {
     return target
   }
 
-  if (hasToJSON(target)) {
-    return target.toJSON(key)
+  if (hasToJson(target)) {
+    return target.toJson(key)
   }
 
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -32,8 +30,7 @@ function getValueByObject(key: string | number | symbol, target: unknown): unkno
   return target
 }
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export function deepJSONEqual(a: unknown, b: unknown): boolean {
+export function deepJsonEqual(a: unknown, b: unknown): boolean {
   if (a === b) {
     return true
   }
@@ -75,7 +72,7 @@ function objectEquals(
 
   let result = true
   for (const key of keys) {
-    result &&= deepJSONEqual(getValueByObject(key, a[key]), getValueByObject(key, b[key]))
+    result &&= deepJsonEqual(getValueByObject(key, a[key]), getValueByObject(key, b[key]))
   }
   return result
 }
@@ -87,12 +84,11 @@ function arrayEquals(a: unknown[], b: unknown[]): boolean {
 
   let result = true
   for (let index = 0; index < a.length; index++) {
-    result &&= deepJSONEqual(getValueByObject(index, a[index]), getValueByObject(index, b[index]))
+    result &&= deepJsonEqual(getValueByObject(index, a[index]), getValueByObject(index, b[index]))
   }
   return result
 }
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export function isJSONPrimitive(target: unknown): target is number | string | boolean | null {
+export function isJsonPrimitive(target: unknown): target is number | string | boolean | null {
   return isNumber(target) || isString(target) || isBoolean(target) || target === null
 }

@@ -1,5 +1,5 @@
 import {
-  type JSONValue,
+  type JsonValue,
   type TypeAssertOf,
   TypeAssertionError,
   type TypeEnsureOf,
@@ -11,11 +11,12 @@ import {
   createFallback,
   errorMessage,
 } from '~/lib'
-import { type JSONifiable, type JSONify, isJSON } from '~/typeGuards/json/guards'
-import { isString } from '~/typeGuards/string/guards'
-import type { JSONParsable, ParseJSON } from './type'
+import { type Jsonifiable, type Jsonify, isJson } from '~/typeGuards/json'
+import type { WeakJsonifiable } from '~/typeGuards/json/type'
+import { isString } from '~/typeGuards/string'
+import type { JsonParsable, ParseJson, WeakJsonParsable } from './type'
 
-type Result = { parsed: JSONValue; result: boolean; cause?: unknown }
+type Result = { parsed: JsonValue; result: boolean; cause?: unknown }
 
 function commonTest(target: unknown): Result {
   if (!isString(target)) {
@@ -30,144 +31,140 @@ function commonTest(target: unknown): Result {
 }
 
 /**
- * Checks if a value is string, that can be parsed as JSON.
+ * Checks if a value is string, that can be parsed as Json.
  *
  * @param target The value to check.
- * @return True if the value is string, that can be parsed as JSON, false otherwise.
+ * @return True if the value is string, that can be parsed as Json, false otherwise.
  * @example
  * ```ts
- * const result = isJSONParsable('{ "foo": "bar" }')
+ * const result = isJsonParsable('{ "foo": "bar" }')
  * // result is true
  *
- * const result = isJSONParsable('foo')
+ * const result = isJsonParsable('foo')
  * // result is false
  *
- * const result = isJSONParsable('1')
+ * const result = isJsonParsable('1')
  * // result is true
  *
- * const result = isJSONParsable('true')
+ * const result = isJsonParsable('true')
  * // result is true
  *
- * const result = isJSONParsable('null')
+ * const result = isJsonParsable('null')
  * // result is true
  *
- * const result = isJSONParsable('undefined')
+ * const result = isJsonParsable('undefined')
  * // result is false
  * ```
  */
 
 // biome-ignore lint/style/useNamingConvention: <explanation>
-export const isJSONParsable = ((target: unknown) => commonTest(target).result) as TypeGuard<JSONParsable>
+export const isJsonParsable = ((target: unknown) => commonTest(target).result) as TypeGuard<JsonParsable>
 
-type IsJsonParsable = typeof isJSONParsable
+type IsJsonParsable = typeof isJsonParsable
 
 /**
- * Asserts that a value is a string that can be parsed as JSON.
+ * Asserts that a value is a string that can be parsed as Json.
  *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not a string that can be parsed as JSON.
- * @throws A TypeAssertionError with the given message if the value is not a string that can be parsed as JSON.
+ * @param message (optional) The error message to throw if the value is not a string that can be parsed as Json.
+ * @throws A TypeAssertionError with the given message if the value is not a string that can be parsed as Json.
  * @example
  * ```ts
- * assertJSONParsable('{ "foo": "bar" }')
- * // target is JSONParsable
+ * assertJsonParsable('{ "foo": "bar" }')
+ * // target is JsonParsable
  *
- * assertJSONParsable('foo')
+ * assertJsonParsable('foo')
  * // throws TypeAssertionError
  *
- * assertJSONParsable('1')
- * // target is JSONParsable
+ * assertJsonParsable('1')
+ * // target is JsonParsable
  *
- * assertJSONParsable('true')
- * // target is JSONParsable
+ * assertJsonParsable('true')
+ * // target is JsonParsable
  *
- * assertJSONParsable('null')
- * // target is JSONParsable
+ * assertJsonParsable('null')
+ * // target is JsonParsable
  *
- * assertJSONParsable('undefined')
+ * assertJsonParsable('undefined')
  * // throws TypeAssertionError
  * ```
  */
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export const assertJSONParsable: TypeAssertOf<IsJsonParsable> = createAssertion(
-  isJSONParsable,
-  errorMessage('JSONParsable'),
+export const assertJsonParsable: TypeAssertOf<IsJsonParsable> = createAssertion(
+  isJsonParsable,
+  errorMessage('JsonParsable'),
 )
 
 /**
- * Enxures that a value is a string that can be parsed as JSON.
+ * Enxures that a value is a string that can be parsed as Json.
  *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not a string that can be parsed as JSON.
- * @throws A TypeAssertionError with the given message if the value is not a string that can be parsed as JSON.
- * @returns The value if it is a string that can be parsed as JSON.
+ * @param message (optional) The error message to throw if the value is not a string that can be parsed as Json.
+ * @throws A TypeAssertionError with the given message if the value is not a string that can be parsed as Json.
+ * @returns The value if it is a string that can be parsed as Json.
  * @example
  * ```ts
- * const result = ensureJSONParsable('{ "foo": "bar" }')
+ * const result = ensureJsonParsable('{ "foo": "bar" }')
  * // result is '{ "foo": "bar" }'
  *
- * const result = ensureJSONParsable('foo')
+ * const result = ensureJsonParsable('foo')
  * // throws TypeAssertionError
  *
- * const result = ensureJSONParsable('1')
+ * const result = ensureJsonParsable('1')
  * // result is '1'
  *
- * const result = ensureJSONParsable('true')
+ * const result = ensureJsonParsable('true')
  * // result is 'true'
  *
- * const result = ensureJSONParsable('null')
+ * const result = ensureJsonParsable('null')
  * // result is 'null'
  *
- * const result = ensureJSONParsable('undefined')
+ * const result = ensureJsonParsable('undefined')
  * // throws TypeAssertionError
  * ```
  */
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export const ensureJSONParsable: TypeEnsureOf<IsJsonParsable> = createEnsure(
-  isJSONParsable,
-  errorMessage('JSONParsable'),
+export const ensureJsonParsable: TypeEnsureOf<IsJsonParsable> = createEnsure(
+  isJsonParsable,
+  errorMessage('JsonParsable'),
 )
 
 /**
- * Fallbacks to default value if a value is a string that can be parsed as JSON.
+ * Fallbacks to default value if a value is a string that can be parsed as Json.
  *
  * @param target The value to check.
- * @param defaultValue The default value to return if the value is not a string that can be parsed as JSON.
- * @return The value if it is a string that can be parsed as JSON, the default value otherwise.
+ * @param defaultValue The default value to return if the value is not a string that can be parsed as Json.
+ * @return The value if it is a string that can be parsed as Json, the default value otherwise.
  * @example
  * ```ts
- * const result = fallbackJSONParsable('{ "foo": "bar" }', '{ "baz": "qux" }')
+ * const result = fallbackJsonParsable('{ "foo": "bar" }', '{ "baz": "qux" }')
  * // result is '{ "foo": "bar" }'
  *
- * const result = fallbackJSONParsable('foo', '{ "baz": "qux" }')
+ * const result = fallbackJsonParsable('foo', '{ "baz": "qux" }')
  * // result is '{ "baz": "qux" }'
  *
- * const result = fallbackJSONParsable('1', '{ "baz": "qux" }')
+ * const result = fallbackJsonParsable('1', '{ "baz": "qux" }')
  * // result is '1'
  *
- * const result = fallbackJSONParsable('true', '{ "baz": "qux" }')
+ * const result = fallbackJsonParsable('true', '{ "baz": "qux" }')
  * // result is 'true'
  *
- * const result = fallbackJSONParsable('null', '{ "baz": "qux" }')
+ * const result = fallbackJsonParsable('null', '{ "baz": "qux" }')
  * // result is 'null'
  *
- * const result = fallbackJSONParsable('undefined', '{ "baz": "qux" }')
+ * const result = fallbackJsonParsable('undefined', '{ "baz": "qux" }')
  * // result is '{ "baz": "qux" }'
  * ```
  */
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export const fallbackJSONParsable: TypeFallbackOf<IsJsonParsable> = createFallback(isJSONParsable)
+export const fallbackJsonParsable: TypeFallbackOf<IsJsonParsable> = createFallback(isJsonParsable)
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-interface CoerceJSON {
+interface CoerceJson {
   /**
-   * If the value specified in the argument is a string, it parses it to JSON.
-   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * If the value specified in the argument is a string, it parses it to Json.
+   * Otherwise, if it is equivalent to a Json object (Json primitive), it returns that value.
    * Throws a TypeAssertionError in any case.
-   * @param target The value to coerce to JSON.
-   * @param message (optional) The error message to throw if the value cannot be coerced to JSON.
-   * @throws A TypeAssertionError with the given message if the value cannot be coerced to JSON.
-   * @returns The value coerced to JSON.
+   * @param target The value to coerce to Json.
+   * @param message (optional) The error message to throw if the value cannot be coerced to Json.
+   * @throws A TypeAssertionError with the given message if the value cannot be coerced to Json.
+   * @returns The value coerced to Json.
    * @example
    * ```ts
    * function fetchData() { return { foo: 'bar' }}
@@ -182,21 +179,23 @@ interface CoerceJSON {
    * ```
    */
   <T>(target: T, message?: TypeErrorMessage): unknown extends T
-    ? JSONValue
-    : T extends JSONParsable
-      ? ParseJSON<T>
-      : T extends JSONifiable
-        ? JSONify<T>
-        : JSONValue
+    ? JsonValue
+    : T extends JsonParsable
+      ? ParseJson<T>
+      : T extends Jsonifiable
+        ? Jsonify<T>
+        : T extends WeakJsonParsable | WeakJsonifiable
+          ? JsonValue
+          : never
 
   /**
-   * If the value specified in the argument is a string, it parses it to JSON.
-   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * If the value specified in the argument is a string, it parses it to Json.
+   * Otherwise, if it is equivalent to a Json object (Json primitive), it returns that value.
    * Throws a TypeAssertionError in any case.
-   * @param target The value to coerce to JSON.
-   * @param message (optional) The error message to throw if the value cannot be coerced to JSON.
-   * @throws A TypeAssertionError with the given message if the value cannot be coerced to JSON.
-   * @returns The value coerced to JSON.
+   * @param target The value to coerce to Json.
+   * @param message (optional) The error message to throw if the value cannot be coerced to Json.
+   * @throws A TypeAssertionError with the given message if the value cannot be coerced to Json.
+   * @returns The value coerced to Json.
    * @example
    * ```ts
    * function fetchData() { return { foo: 'bar' }}
@@ -210,16 +209,16 @@ interface CoerceJSON {
    * // result2 is { foo: 'bar' }
    * ```
    */
-  // <T extends JSONifiable>(target: T | NotJSONifiable, message?: TypeErrorMessage): JSONify<T>
+  // <T extends Jsonifiable>(target: T | NotJsonifiable, message?: TypeErrorMessage): Jsonify<T>
 
   /**
-   * If the value specified in the argument is a string, it parses it to JSON.
-   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * If the value specified in the argument is a string, it parses it to Json.
+   * Otherwise, if it is equivalent to a Json object (Json primitive), it returns that value.
    * Throws a TypeAssertionError in any case.
-   * @param target The value to coerce to JSON.
-   * @param message (optional) The error message to throw if the value cannot be coerced to JSON.
-   * @throws A TypeAssertionError with the given message if the value cannot be coerced to JSON.
-   * @returns The value coerced to JSON.
+   * @param target The value to coerce to Json.
+   * @param message (optional) The error message to throw if the value cannot be coerced to Json.
+   * @throws A TypeAssertionError with the given message if the value cannot be coerced to Json.
+   * @returns The value coerced to Json.
    * @example
    * ```ts
    * function fetchData() { return { foo: 'bar' }}
@@ -233,34 +232,32 @@ interface CoerceJSON {
    * // result2 is { foo: 'bar' }
    * ```
    */
-  (target: unknown, message?: TypeErrorMessage): JSONValue
+  (target: unknown, message?: TypeErrorMessage): JsonValue
 }
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export const coerceJSON: CoerceJSON = (target: unknown, message?: TypeErrorMessage): JSONValue => {
+export const coerceJson: CoerceJson = (target: unknown, message?: TypeErrorMessage): JsonValue => {
   const { parsed, result, cause } = commonTest(target)
 
   if (result) {
     return parsed
   }
 
-  if (isJSON(target)) {
+  if (isJson(target)) {
     return JSON.parse(JSON.stringify(target))
   }
 
-  const m = typeof message === 'string' ? message : message?.(target) ?? errorMessage('JSONParsable')(target)
+  const m = typeof message === 'string' ? message : message?.(target) ?? errorMessage('JsonParsable')(target)
   throw new TypeAssertionError(m, target, { cause })
 }
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-interface FixJSON {
+interface FixJson {
   /**
-   * If the value specified in the argument is a string, it parses it to JSON.
-   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * If the value specified in the argument is a string, it parses it to Json.
+   * Otherwise, if it is equivalent to a Json object (Json primitive), it returns that value.
    * Otherwise, it returns the default value.
-   * @param target The value to coerce to JSON.
-   * @param defaultValue The default value to return if the value cannot be coerced to JSON.
-   * @returns The value coerced to JSON or the default value.
+   * @param target The value to coerce to Json.
+   * @param defaultValue The default value to return if the value cannot be coerced to Json.
+   * @returns The value coerced to Json or the default value.
    * @example
    * ```ts
    * function fetchData() { return { foo: 'bar' }}
@@ -274,15 +271,15 @@ interface FixJSON {
    * // result2 is { foo: 'bar' } | { baz: 'qux' }
    * ```
    */
-  <T extends JSONParsable, V extends JSONValue>(target: T, defaultValue: V): ParseJSON<T> | V
+  <T extends JsonParsable, V extends JsonValue>(target: T, defaultValue: V): ParseJson<T> | V
 
   /**
-   * If the value specified in the argument is a string, it parses it to JSON.
-   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * If the value specified in the argument is a string, it parses it to Json.
+   * Otherwise, if it is equivalent to a Json object (Json primitive), it returns that value.
    * Otherwise, it returns the default value.
-   * @param target The value to coerce to JSON.
-   * @param defaultValue The default value to return if the value cannot be coerced to JSON.
-   * @returns The value coerced to JSON or the default value.
+   * @param target The value to coerce to Json.
+   * @param defaultValue The default value to return if the value cannot be coerced to Json.
+   * @returns The value coerced to Json or the default value.
    * @example
    * ```ts
    * function fetchData() { return { foo: 'bar' }}
@@ -296,15 +293,15 @@ interface FixJSON {
    * // result2 is { foo: 'bar' } | { baz: 'qux' }
    * ```
    */
-  <T extends JSONifiable, V extends JSONValue>(target: T, defaultValue: V): JSONify<T> | V
+  <W extends Jsonifiable, X extends JsonValue>(target: W, defaultValue: X): Jsonify<W> | X
 
   /**
-   * If the value specified in the argument is a string, it parses it to JSON.
-   * Otherwise, if it is equivalent to a JSON object (JSON primitive), it returns that value.
+   * If the value specified in the argument is a string, it parses it to Json.
+   * Otherwise, if it is equivalent to a Json object (Json primitive), it returns that value.
    * Otherwise, it returns the default value.
-   * @param target The value to coerce to JSON.
-   * @param defaultValue The default value to return if the value cannot be coerced to JSON.
-   * @returns The value coerced to JSON or the default value.
+   * @param target The value to coerce to Json.
+   * @param defaultValue The default value to return if the value cannot be coerced to Json.
+   * @returns The value coerced to Json or the default value.
    * @example
    * ```ts
    * function fetchData() { return { foo: 'bar' }}
@@ -318,18 +315,17 @@ interface FixJSON {
    * // result2 is { foo: 'bar' } | { baz: 'qux' }
    * ```
    */
-  (target: unknown, defaultValue: JSONValue): JSONValue
+  (target: unknown, defaultValue: JsonValue): JsonValue
 }
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export const fixJSON: FixJSON = (target: unknown, defaultValue: JSONValue): JSONValue => {
+export const fixJson: FixJson = (target: unknown, defaultValue: JsonValue): JsonValue => {
   const { parsed, result } = commonTest(target)
 
   if (result) {
     return parsed
   }
 
-  if (isJSON(target)) {
+  if (isJson(target)) {
     return JSON.parse(JSON.stringify(target))
   }
 

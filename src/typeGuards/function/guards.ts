@@ -84,6 +84,8 @@ interface EnsureFunction extends TypeEnsure<AnyFunction> {
    * // result is Function
    * ```
    */
+
+  // biome-ignore lint/complexity/noBannedTypes: <explanation>
   <T>(target: T, message?: string): unknown extends T ? Function & T : T extends AnyFunction ? T : never
 }
 
@@ -103,6 +105,8 @@ interface FallbackFunction extends TypeFallback<AnyFunction> {
    * // result is Function
    * ```
    */
+
+  // biome-ignore lint/complexity/noBannedTypes: <explanation>
   <T, U>(target: T, fallback: U): unknown extends T ? Function & T : T extends AnyFunction ? T : U
 }
 

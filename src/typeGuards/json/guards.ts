@@ -11,54 +11,49 @@ import {
 } from '~/lib'
 import { isBoolean } from '~/typeGuards/boolean'
 import { isNumber } from '~/typeGuards/number'
-import { deepJSONEqual, isJSONPrimitive } from './internals'
-import type { JSONGuard, JSONifiable, NotJSONifiable } from './type'
+import { deepJsonEqual, isJsonPrimitive } from './internals'
+import type { JsonGuard, Jsonifiable, NotJsonifiable } from './type'
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export interface JSONTypeGuard extends TypeGuard<JSONifiable> {
-  <T>(target: T | NotJSONifiable): target is JSONGuard<T>
+export interface JsonTypeGuard extends TypeGuard<Jsonifiable> {
+  <T>(target: T | NotJsonifiable): target is JsonGuard<T>
 }
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export interface JSONTypeAssert extends TypeAssert<JSONifiable> {
-  <T>(target: T | NotJSONifiable, message?: TypeErrorMessage): asserts target is JSONGuard<T>
+export interface JsonTypeAssert extends TypeAssert<Jsonifiable> {
+  <T>(target: T | NotJsonifiable, message?: TypeErrorMessage): asserts target is JsonGuard<T>
 }
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export interface JSONTypeEnsure extends TypeEnsure<JSONifiable> {
-  <T>(target: T, message?: TypeErrorMessage): JSONGuard<T>
+export interface JsonTypeEnsure extends TypeEnsure<Jsonifiable> {
+  <T>(target: T, message?: TypeErrorMessage): JsonGuard<T>
 }
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export interface JSONTypeFallback extends TypeFallback<JSONifiable> {
-  <T, F>(target: T, defaultValue: F): JSONGuard<T> | JSONGuard<F>
+export interface JsonTypeFallback extends TypeFallback<Jsonifiable> {
+  <T, F>(target: T, defaultValue: F): JsonGuard<T> | JsonGuard<F>
 }
 
 /**
- * Checks if a value can be serialized to JSON.
+ * Checks if a value can be serialized to Json.
  *
- * If the argument value is an object, it is determined by whether it is the same as the result serialized to JSON. In other words, if it contains Function, it will be false.
+ * If the argument value is an object, it is determined by whether it is the same as the result serialized to Json. In other words, if it contains Function, it will be false.
  *
  * @param target The value to check.
- * @returns True if the value is an JSON, false otherwise.
+ * @returns True if the value is an Json, false otherwise.
  * @example
  * ```ts
- * const result = isJSON({"foo":"bar"})
+ * const result = isJson({"foo":"bar"})
  * // result is true
  *
- * const result = isJSON({ foo: () => 'bar' })
+ * const result = isJson({ foo: () => 'bar' })
  * // result is false
  *
- * const result = isJSON('{"foo":"bar"}')
+ * const result = isJson('{"foo":"bar"}')
  * // result is false
  *
- * const result = isJSON(new Date())
- * // result is true, because it has toJSON method
+ * const result = isJson(new Date())
+ * // result is true, because it has toJson method
  * ```
  */
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export const isJSON = ((target: unknown): target is JSONifiable => {
+export const isJson = ((target: unknown): target is Jsonifiable => {
   if (isBoolean(target) || target === null) {
     return true
   }
@@ -70,11 +65,11 @@ export const isJSON = ((target: unknown): target is JSONifiable => {
   if (!!target && typeof target === 'object') {
     try {
       const parsed = JSON.parse(JSON.stringify(target))
-      if (isJSONPrimitive(parsed)) {
+      if (isJsonPrimitive(parsed)) {
         return true
       }
 
-      return deepJSONEqual(target, parsed)
+      return deepJsonEqual(target, parsed)
     } catch {
       return false
     }
@@ -85,78 +80,75 @@ export const isJSON = ((target: unknown): target is JSONifiable => {
   } catch {
     return false
   }
-}) as JSONTypeGuard
+}) as JsonTypeGuard
 
 /**
- * Asserts that a value can be serialized to JSON.
+ * Asserts that a value can be serialized to Json.
  *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not an JSON.
- * @throws A TypeError with the given message if the value is not an JSON.
+ * @param message (optional) The error message to throw if the value is not an Json.
+ * @throws A TypeError with the given message if the value is not an Json.
  * @example
  * ```ts
- * assertJSON({"foo":"bar"})
- * // target is JSON
+ * assertJson({"foo":"bar"})
+ * // target is Json
  *
- * assertJSON({ foo: () => 'bar' })
+ * assertJson({ foo: () => 'bar' })
  * // throws TypeAssertionError
  *
- * assertJSON('{"foo":"bar"}')
+ * assertJson('{"foo":"bar"}')
  * // throws TypeAssertionError
  *
- * assertJSON(new Date())
- * // target is JSON, because it has toJSON method
+ * assertJson(new Date())
+ * // target is Json, because it has toJson method
  * ```
  */
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export const assertJSON: JSONTypeAssert = createAssertion(isJSON, errorMessage('JSON'))
+export const assertJson: JsonTypeAssert = createAssertion(isJson, errorMessage('Json'))
 
 /**
- * Enxures that a value can be serialized to JSON.
+ * Enxures that a value can be serialized to Json.
  *
  * @param target The value to check.
- * @param message (optional) The error message to throw if the value is not an JSON.
- * @throws A TypeError with the given message if the value is not an JSON.
- * @returns The value if it is an JSON.
+ * @param message (optional) The error message to throw if the value is not an Json.
+ * @throws A TypeError with the given message if the value is not an Json.
+ * @returns The value if it is an Json.
  * @example
  * ```ts
- * const result = ensureJSON({"foo":"bar"})
+ * const result = ensureJson({"foo":"bar"})
  * // result is {"foo":"bar"}
  *
- * const result = ensureJSON({ foo: () => 'bar' })
+ * const result = ensureJson({ foo: () => 'bar' })
  * // throws TypeAssertionError
  *
- * const result = ensureJSON('{"foo":"bar"}')
+ * const result = ensureJson('{"foo":"bar"}')
  * // throws TypeAssertionError
  *
- * const result = ensureJSON(new Date())
- * // result is JSON, because it has toJSON method
+ * const result = ensureJson(new Date())
+ * // result is Json, because it has toJson method
  * ```
  */
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export const ensureJSON = createEnsure(isJSON, errorMessage('JSON')) as JSONTypeEnsure
+export const ensureJson = createEnsure(isJson, errorMessage('Json')) as JsonTypeEnsure
 
 /**
- * Fallbacks to a default value if the value is not an JSON.
+ * Fallbacks to a default value if the value is not an Json.
  *
  * @param target The value to check.
  * @param defaultValue The default value to fallback to.
- * @return The value if it is an JSON, the default value otherwise.
+ * @return The value if it is an Json, the default value otherwise.
  * @example
  * ```ts
- * const result = fallbackJSON({"foo":"bar"}, {})
- * // result is JSON
+ * const result = fallbackJson({"foo":"bar"}, {})
+ * // result is Json
  *
- * const result = fallbackJSON({ foo: () => 'bar' }, {})
+ * const result = fallbackJson({ foo: () => 'bar' }, {})
  * // result is {}
  *
- * const result = fallbackJSON('{"foo":"bar"}', {})
+ * const result = fallbackJson('{"foo":"bar"}', {})
  * // result is {}
  *
- * const result = fallbackJSON(new Date(), {})
- * // result is JSON, because it has toJSON method
+ * const result = fallbackJson(new Date(), {})
+ * // result is Json, because it has toJson method
  * ```
  */
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export const fallbackJSON: JSONTypeFallback = createFallback(isJSON)
+export const fallbackJson: JsonTypeFallback = createFallback(isJson)

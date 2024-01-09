@@ -1,15 +1,17 @@
 export type { Empty } from './type'
 
-import type { TypeGuard } from '../../lib'
-import type { Empty, EmptyArray, EmptyObject, EmptyString } from './type'
+import type { TypeGuard } from '~/lib'
+import type { Empty, GuardIsEmpty } from './type'
 
 interface IsEmpty extends TypeGuard<Empty> {
-  (target: string): target is EmptyString
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  (target: any[]): target is EmptyArray
-  <T extends Record<string, unknown>>(target: T): target is EmptyObject
-  <V, W extends null | undefined>(target: V | W): target is W
-  (target: unknown): target is Empty
+  // (target: string): target is EmptyString
+  // // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // (target: any[]): target is EmptyArray
+  // <T extends Record<string, unknown>>(target: T): target is EmptyObject
+  // <V, W extends null | undefined>(target: V | W): target is W
+  // (target: unknown): target is Empty
+
+  <T>(target: T): target is GuardIsEmpty<T>
 }
 
 /**

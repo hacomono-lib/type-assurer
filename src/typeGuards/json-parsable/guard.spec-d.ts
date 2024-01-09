@@ -1,41 +1,42 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { type JSONParsable, isJSONParsable } from './guards'
+import { isJsonParsable } from './guards'
+import type { JsonParsable } from './type'
 
 describe('guard definite types', () => {
-  test('should guard as JSONParsable for JSONParsable type values.', () => {
+  test('should guard as JsonParsable for JsonParsable type values.', () => {
     const target = `{ "foo": "bar" }` as object | string
-    if (isJSONParsable(target)) {
-      expectTypeOf(target).toEqualTypeOf<JSONParsable>()
+    if (isJsonParsable(target)) {
+      expectTypeOf(target).toEqualTypeOf<JsonParsable>()
     } else {
       expectTypeOf(target).toEqualTypeOf<string | object>()
     }
   })
 
-  test('should strictly guard as JSONParsable for JSON-string value.', () => {
+  test('should strictly guard as JsonParsable for Json-string value.', () => {
     const target = `{ "foo": "bar" }` as `{ "foo": "bar" }` | { foo: string }
-    if (isJSONParsable(target)) {
+    if (isJsonParsable(target)) {
       expectTypeOf(target).toEqualTypeOf<`{ "foo": "bar" }`>()
     } else {
       expectTypeOf(target).toEqualTypeOf<{ foo: string }>()
     }
   })
 
-  test('should strictly guard as JSONParsable for dynamic JSON-string value.', () => {
+  test('should strictly guard as JsonParsable for dynamic Json-string value.', () => {
     type DynamicJson = `{ "foo": "${string}" }`
     const target = `{ "foo": "bar" }` as DynamicJson | { foo: string }
-    if (isJSONParsable(target)) {
+    if (isJsonParsable(target)) {
       expectTypeOf(target).toEqualTypeOf<DynamicJson>()
     } else {
       expectTypeOf(target).toEqualTypeOf<{ foo: string }>()
     }
   })
 
-  test('should strictly guard as JSONParsable for Branded JSON-string value', () => {
+  test('should strictly guard as JsonParsable for Branded Json-string value', () => {
     type Branded<T> = T & { __brand: 'branded' }
     type BrandedJson = Branded<`{ "foo": "bar" }`>
 
     const target = `{ "foo": "bar" }` as BrandedJson | { foo: string }
-    if (isJSONParsable(target)) {
+    if (isJsonParsable(target)) {
       expectTypeOf(target).toEqualTypeOf<BrandedJson>()
     } else {
       expectTypeOf(target).toEqualTypeOf<{ foo: string }>()
@@ -46,17 +47,17 @@ describe('guard definite types', () => {
 describe('guard unknown types', () => {
   test('guard unknown types', () => {
     const target = 'string' as unknown
-    if (isJSONParsable(target)) {
-      expectTypeOf(target).toEqualTypeOf<JSONParsable>()
+    if (isJsonParsable(target)) {
+      expectTypeOf(target).toEqualTypeOf<JsonParsable>()
     } else {
       expectTypeOf(target).toEqualTypeOf<unknown>()
     }
   })
 
-  test('should strictly guard as JSONParsable when type argument is set.', () => {
+  test('should strictly guard as JsonParsable when type argument is set.', () => {
     type TargetJson = `{ "foo": "bar" }`
     const target = 'string' as unknown
-    if (isJSONParsable<TargetJson>(target)) {
+    if (isJsonParsable<TargetJson>(target)) {
       expectTypeOf(target).toEqualTypeOf<TargetJson>()
     } else {
       expectTypeOf(target).toEqualTypeOf<unknown>()
@@ -65,13 +66,13 @@ describe('guard unknown types', () => {
 })
 
 describe('type error', () => {
-  test('should result in TypeScript type error when the type argument is not match "JSONParsable"', () => {
+  test('should result in TypeScript type error when the type argument is not match "JsonParsable"', () => {
     // @ts-expect-error
-    isJSONParsable<string>('string')
+    isJsonParsable<string>('string')
   })
 
-  test('should result in TypeScript type error when the type argument is not a "JSONParsable"', () => {
+  test('should result in TypeScript type error when the type argument is not a "JsonParsable"', () => {
     // @ts-expect-error
-    isJSONParsable<number>('string')
+    isJsonParsable<number>('string')
   })
 })

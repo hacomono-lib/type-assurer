@@ -1,24 +1,23 @@
-import type { JSONPrimitive } from '../../lib'
+import type { JsonPrimitive } from '~/lib'
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export type JSONifiable = JSONPrimitive | JSONifiableArray | JSONifiableObject
+export type Jsonifiable = JsonPrimitive | JsonifiableArray | JsonifiableObject
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export type JSONifiableArray = JSONifiable[] | readonly JSONifiable[]
+/**
+ * Type that cannot be inferred strictly
+ */
+export type WeakJsonifiable = JsonPrimitive | object
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
+export type JsonifiableArray = Jsonifiable[] | readonly Jsonifiable[]
+
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export type NotJSONifiable = Exclude<any, JSONifiable>
+export type NotJsonifiable = Exclude<any, Jsonifiable>
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export type JSONifiableObject =
-  | ({ [Key in string]: JSONifiable } & { [Key in string]?: JSONifiable | undefined })
+export type JsonifiableObject =
+  | ({ [Key in string]: Jsonifiable } & { [Key in string]?: Jsonifiable | undefined })
   // biome-ignore lint/style/useNamingConvention: <explanation>
-  | { toJSON: () => JSONifiable }
+  | { toJSON: () => Jsonifiable }
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export type JSONGuard<T> = T extends JSONifiable ? T : unknown extends T ? JSONifiable : never
+export type JsonGuard<T> = T extends Jsonifiable ? T : unknown extends T ? Jsonifiable : never
 
 // FIXME: Can't express with current typescript
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export type JSONify<T extends JSONifiable> = JSONGuard<T>
+export type Jsonify<T extends Jsonifiable> = JsonGuard<T>

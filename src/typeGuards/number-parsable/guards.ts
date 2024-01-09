@@ -9,8 +9,8 @@ import {
   createEnsure,
   createFallback,
   errorMessage,
-} from '../../lib'
-import { isNumber } from '../number/guards'
+} from '~/lib'
+import { isNumber } from '~/typeGuards/number/guards'
 
 export type NumberParsable = number | `${number}`
 

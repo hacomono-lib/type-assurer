@@ -1,2 +1,2 @@
 export * from './guards'
-export type { ParseJSON, JSONParsable } from './type'
+export type { ParseJson, JsonParsable } from './type'

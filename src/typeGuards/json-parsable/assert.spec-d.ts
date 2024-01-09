@@ -1,44 +1,45 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { type JSONParsable, assertJSONParsable } from './guards'
+import { assertJsonParsable } from './guards'
+import type { JsonParsable } from './type'
 
 describe('assert definite types', () => {
-  test('should assert to JSONParsable for string type values.', () => {
+  test('should assert to JsonParsable for string type values.', () => {
     const target = `{ "foo": "bar" }` as string | object
-    assertJSONParsable(target)
-    expectTypeOf(target).toEqualTypeOf<JSONParsable>()
+    assertJsonParsable(target)
+    expectTypeOf(target).toEqualTypeOf<JsonParsable>()
   })
 
-  test('should strictly assert to JSONParsable for string literal types.', () => {
+  test('should strictly assert to JsonParsable for string literal types.', () => {
     const target = `{ "foo": "bar" }` as `{ "foo": "bar" }` | { foo: string }
-    assertJSONParsable(target)
+    assertJsonParsable(target)
     expectTypeOf(target).toEqualTypeOf<`{ "foo": "bar" }`>()
   })
 
-  test('should strictly assert to JSONParsable for dynamic string literal types.', () => {
+  test('should strictly assert to JsonParsable for dynamic string literal types.', () => {
     type DynamicJson = `{ "foo": "${string}" }`
     const target = `{ "foo": "bar" }` as DynamicJson | { foo: string }
-    assertJSONParsable(target)
+    assertJsonParsable(target)
     expectTypeOf(target).toEqualTypeOf<DynamicJson>()
   })
 
-  test('should strictly assert to JSONParsable for Branded string type', () => {
-    type BrandedString = string & { __brand: 'branded' }
-    const target = `{ "foo": "bar" }` as BrandedString | object
-    assertJSONParsable(target)
-    expectTypeOf(target).toEqualTypeOf<BrandedString>()
+  test('should strictly assert to JsonParsable for Branded string type', () => {
+    type Branded<T> = T & { __brand: 'branded' }
+    const target = `{ "foo": "bar" }` as Branded<`{ "foo": "${string}" }`> | Branded<{ foo: string }>
+    assertJsonParsable(target)
+    expectTypeOf(target).toEqualTypeOf<Branded<`{ "foo": "${string}" }`>>()
   })
 })
 
 describe('assert unknown types', () => {
-  test('should assert to JSONParsable for unknown type value.', () => {
+  test('should assert to JsonParsable for unknown type value.', () => {
     const target = `{ "foo": "bar" }` as unknown
-    assertJSONParsable(target)
-    expectTypeOf(target).toEqualTypeOf<JSONParsable>()
+    assertJsonParsable(target)
+    expectTypeOf(target).toEqualTypeOf<JsonParsable>()
   })
 
-  test('should strictly assert to JSONParsable when type argument is set.', () => {
+  test('should strictly assert to JsonParsable when type argument is set.', () => {
     const target = `{ "foo": "bar" }` as unknown
-    assertJSONParsable<`{ "foo": "${string}" }`>(target)
+    assertJsonParsable<`{ "foo": "${string}" }`>(target)
     expectTypeOf(target).toEqualTypeOf<`{ "foo": "${string}" }`>()
   })
 })
@@ -46,6 +47,6 @@ describe('assert unknown types', () => {
 describe('type error', () => {
   test('should result in a TypeScript type error when the type argument is not a string', () => {
     // @ts-expect-error
-    assertJSONParsable<number>(`{ "foo": "bar" }`)
+    assertJsonParsable<number>(`{ "foo": "bar" }`)
   })
 })

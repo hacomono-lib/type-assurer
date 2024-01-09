@@ -1,45 +1,45 @@
 import { describe, expectTypeOf, test } from 'vitest'
-import { fallbackJSON } from './guards'
-import type { JSONifiable } from './type'
+import { fallbackJson } from './guards'
+import type { Jsonifiable } from './type'
 
 describe('fallback definite types', () => {
   test.skip('should fallback to JSONifiable for some object.', () => {
     const target = { foo: 'bar' } as object | string
-    const result = fallbackJSON(target, { baz: 'qux' })
+    const result = fallbackJson(target, { baz: 'qux' })
     // @ts-ignore FIXME: This is a bug
-    expectTypeOf(result).toEqualTypeOf<JSONifiable | { baz: string }>()
+    expectTypeOf(result).toEqualTypeOf<Jsonifiable | { baz: string }>()
   })
 
   test('should strictly fallback to JSONifiable for strict object.', () => {
     const target = { foo: 'bar' }
-    const result = fallbackJSON(target, { baz: 'qux' })
+    const result = fallbackJson(target, { baz: 'qux' })
     expectTypeOf(result).toEqualTypeOf<{ foo: string } | { baz: string }>()
   })
 
   test('should strictly fallback to JSONifiable for union types.', () => {
-    const target = { foo: 'bar' } as JSONifiable | string | number
-    const result = fallbackJSON(target, { baz: 'qux' })
-    expectTypeOf(result).toEqualTypeOf<JSONifiable | { baz: string }>()
+    const target = { foo: 'bar' } as Jsonifiable | string | number
+    const result = fallbackJson(target, { baz: 'qux' })
+    expectTypeOf(result).toEqualTypeOf<Jsonifiable | { baz: string }>()
   })
 })
 
 describe('fallback unknown types', () => {
   test('should fallback to JSONifiable for unknown type value.', () => {
     const target = { foo: 'bar' } as unknown
-    const result = fallbackJSON(target, { baz: 'qux' })
-    expectTypeOf(result).toEqualTypeOf<JSONifiable | { baz: string }>()
+    const result = fallbackJson(target, { baz: 'qux' })
+    expectTypeOf(result).toEqualTypeOf<Jsonifiable | { baz: string }>()
   })
 
   test('should strictly fallback to JSONifiable when type argument is set.', () => {
     const target = { foo: 'bar' } as unknown
-    const result = fallbackJSON<{ foo: string }>(target, { foo: 'baz' })
+    const result = fallbackJson<{ foo: string }>(target, { foo: 'baz' })
     expectTypeOf(result).toEqualTypeOf<{ foo: string }>()
   })
 })
 
 describe('type error', () => {
   test.skip('should result in a TypeScript type error when the type argument is not a JSONifiable', () => {
-    fallbackJSON<// // @ts-expect-error FIXME: This is a bug
+    fallbackJson<// // @ts-expect-error FIXME: This is a bug
     number>(
       //
       { foo: 'bar' },
@@ -49,7 +49,7 @@ describe('type error', () => {
   })
 
   test('should result in a TypeScript type error when the argument is not a JSONifiable', () => {
-    fallbackJSON<{ foo: string }>(
+    fallbackJson<{ foo: string }>(
       { foo: 'bar' },
       {
         // @ts-expect-error

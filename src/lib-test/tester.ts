@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import type { Not, TypeAssert, TypeEnsure, TypeFallback, TypeGuard } from '../lib'
+import type { Not, TypeAssert, TypeEnsure, TypeFallback, TypeGuard } from '~/lib'
 import { ValueType } from './type'
 import { type PickTypesOption, type TestOption, allTypes, getGenerator, testTypes } from './value'
 

@@ -1,35 +1,37 @@
-import type { JSONValue } from '~/lib'
+import type { JsonValue } from '~/lib'
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export type JSONParsable = JSONStrPrimitive | JSONStrArray | JsonStrObject
+export type JsonParsable = JsonStrPrimitive | JsonStrArray | JsonStrObject
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-type JSONStrPrimitive = `${number}` | `${boolean}` | `${null}`
+/**
+ * Type that cannot be inferred strictly
+ */
+export type WeakJsonParsable = string
+
+type JsonStrPrimitive = `${number}` | `${boolean}` | `${null}`
 
 // TODO: Can't express with current typescript
-// biome-ignore lint/style/useNamingConvention: <explanation>
-type JSONStrArray = `[${string}]`
+type JsonStrArray = `[${string}]`
 
 // TODO: Can't express with current typescript
-// biome-ignore lint/style/useNamingConvention: <explanation>
-type ParseJSONStrArray<_T extends JSONStrArray> = JSONValue[]
+type ParseJsonStrArray<_T extends JsonStrArray> = JsonValue[]
 
 // TODO: Can't express with current typescript
 type JsonStrObject = `{${string}}`
 
 // TODO: Can't express with current typescript
-// biome-ignore lint/style/useNamingConvention: <explanation>
-type ParseJSONStrObject<_T extends JsonStrObject> = JSONValue
+type ParseJsonStrObject<_T extends JsonStrObject> = JsonValue
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
-export type ParseJSON<T extends JSONParsable> = T extends `${infer U extends number | boolean | null}`
+export type ParseJson<T extends string> = T extends `${infer U extends number}`
   ? U
-  : T extends `{${string}}`
-    ? ParseJSONStrObject<T>
-    : T extends `[${string}]`
-      ? ParseJSONStrArray<T>
-      : never
+  : T extends `${infer V extends boolean}`
+    ? V
+    : T extends `${infer W extends null}`
+      ? W
+      : T extends `{${string}}`
+        ? ParseJsonStrObject<T>
+        : T extends `[${string}]`
+          ? ParseJsonStrArray<T>
+          : JsonValue
 
-// biome-ignore lint/style/useNamingConvention: <explanation>
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export type NotJSONParsable = Exclude<any, JSONParsable>
+export type NotJsonParsable = Exclude<any, JsonParsable>
