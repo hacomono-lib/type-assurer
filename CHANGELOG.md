@@ -1,5 +1,11 @@
 # type-assurer
 
+## 0.2.0
+
+### Minor Changes
+
+- [#140](https://github.com/hacomono-lib/type-assurer/pull/140) [`e7bd116`](https://github.com/hacomono-lib/type-assurer/commit/e7bd1169964da2350a7898021a37276842b5bcb9) Thanks [@mew-ton](https://github.com/mew-ton)! - fix: 型拡充 + tree-shake 時の minify 最適化
+
 ## 0.1.2
 
 ### Patch Changes
