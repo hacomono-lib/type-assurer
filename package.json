@@ -45,7 +45,7 @@
     "lodash": "^4.17.23",
     "prettier": "^3.1.1",
     "tsup": "^8.0.2",
-    "typescript": "^5.2.2",
+    "typescript": "^5.9.3",
     "vitest": "^0.34.6",
     "yarn-run-all": "latest"
   },
