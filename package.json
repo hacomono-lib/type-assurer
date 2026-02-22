@@ -43,7 +43,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.29.1",
     "lodash": "^4.17.23",
-    "prettier": "^3.1.1",
+    "prettier": "^3.8.1",
     "tsup": "^8.0.2",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6",
